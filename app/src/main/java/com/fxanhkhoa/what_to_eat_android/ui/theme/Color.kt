@@ -9,3 +9,11 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+// Fancy colors for the bottom navigation bar
+val GradientStart = Color(0xFF667eea)
+val GradientEnd = Color(0xFF764ba2)
+val BottomNavBackground = Color(0xFF1A1A2E)
+val BottomNavSelectedTint = Color(0xFF00D4FF)
+val BottomNavUnselectedTint = Color(0xFF8E8E8E)
+val BottomNavCardBackground = Color(0xFF16213E)
