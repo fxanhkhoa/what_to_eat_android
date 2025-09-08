@@ -61,11 +61,7 @@ fun GameView() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingView() {
-    ScreenTemplate(
-        title = "Settings",
-        icon = Icons.Filled.Settings,
-        description = "Customize your app experience!"
-    )
+    SettingScreen()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

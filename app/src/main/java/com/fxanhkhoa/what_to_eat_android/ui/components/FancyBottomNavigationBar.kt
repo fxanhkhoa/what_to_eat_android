@@ -23,6 +23,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.luminance
+import com.fxanhkhoa.what_to_eat_android.ui.theme.*
 
 data class BottomNavItem(
     val label: String,
@@ -37,17 +39,28 @@ fun FancyBottomNavigationBar(
     onItemSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Beautiful gradient colors
-    val primaryGradient = listOf(
-        Color(0xFF667eea),
-        Color(0xFF764ba2)
-    )
+    // Use theme-aware colors that work with both light and dark themes
+    val isSystemDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
 
-    val backgroundGradient = listOf(
-        Color(0xFF0F0C29),
-        Color(0xFF24243e),
-        Color(0xFF302B63),
-        Color(0xFF0F0C29)
+    val backgroundGradient = if (isSystemDark) {
+        // Dark theme - Use warm dark neutrals
+        listOf(
+            DarkBackgroundGradientStart,
+            DarkBackgroundGradientMid1,
+            DarkBackgroundGradientMid2,
+            DarkBackgroundGradientEnd
+        )
+    } else {
+        // Light theme - Use warm light neutrals
+        listOf(
+            LightBackgroundGradientStart,
+            LightBackgroundGradientEnd
+        )
+    }
+
+    val primaryGradient = listOf(
+        MaterialTheme.colorScheme.primary,
+        MaterialTheme.colorScheme.secondary
     )
 
     Box(
@@ -57,16 +70,11 @@ fun FancyBottomNavigationBar(
             .shadow(
                 elevation = 24.dp,
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
-                ambientColor = Color(0xFF667eea).copy(alpha = 0.3f),
-                spotColor = Color(0xFF764ba2).copy(alpha = 0.3f)
+                ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                spotColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
             )
             .background(
                 brush = Brush.horizontalGradient(backgroundGradient),
-                shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
-            )
-            .border(
-                width = 1.dp,
-                brush = Brush.horizontalGradient(primaryGradient.map { it.copy(alpha = 0.4f) }),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
             )
     ) {
@@ -88,7 +96,7 @@ fun FancyBottomNavigationBar(
                 .background(
                     brush = Brush.radialGradient(
                         colors = listOf(
-                            Color(0xFF667eea).copy(alpha = glowAlpha * 0.3f),
+                            MaterialTheme.colorScheme.primary.copy(alpha = glowAlpha * 0.3f),
                             Color.Transparent
                         ),
                         radius = 400f
@@ -124,11 +132,11 @@ private fun FancyBottomNavItem(
     modifier: Modifier = Modifier
 ) {
     val selectedColors = listOf(
-        Color(0xFF00D4FF),
-        Color(0xFF5B73FF)
+        BottomNavSelectedStart,
+        BottomNavSelectedEnd
     )
 
-    val unselectedColor = Color(0xFF8E8E93)
+    val unselectedColor = BottomNavUnselected
 
     // Animations
     val animatedScale by animateFloatAsState(
@@ -167,7 +175,7 @@ private fun FancyBottomNavItem(
             )
         } else {
             infiniteRepeatable(
-                animation = tween(0),
+                animation = tween(1000),
                 repeatMode = RepeatMode.Restart
             )
         },
@@ -178,7 +186,7 @@ private fun FancyBottomNavItem(
         modifier = modifier
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null // Using null indication instead of deprecated rememberRipple
+                indication = null
             ) { onClick() }
             .padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
