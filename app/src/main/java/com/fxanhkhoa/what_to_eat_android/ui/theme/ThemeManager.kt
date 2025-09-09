@@ -28,7 +28,7 @@ class ThemeManager(private val context: Context) {
     }
 
     val followSystemTheme: Flow<Boolean> = context.dataStore.data.map { preferences ->
-        preferences[FOLLOW_SYSTEM_THEME_KEY] ?: true
+        preferences[FOLLOW_SYSTEM_THEME_KEY] ?: false
     }
 
     suspend fun setDarkTheme(isDark: Boolean) {
@@ -49,15 +49,3 @@ class ThemeManager(private val context: Context) {
         }
     }
 }
-
-enum class ThemeMode {
-    LIGHT,
-    DARK,
-    SYSTEM
-}
-
-data class ThemeSettings(
-    val themeMode: ThemeMode = ThemeMode.SYSTEM,
-    val useDynamicColor: Boolean = true,
-    val isDarkTheme: Boolean = false
-)

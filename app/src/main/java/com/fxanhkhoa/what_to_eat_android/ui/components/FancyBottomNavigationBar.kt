@@ -23,8 +23,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.graphics.luminance
-import com.fxanhkhoa.what_to_eat_android.ui.theme.*
 
 data class BottomNavItem(
     val label: String,
@@ -39,28 +37,10 @@ fun FancyBottomNavigationBar(
     onItemSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Use theme-aware colors that work with both light and dark themes
-    val isSystemDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-
-    val backgroundGradient = if (isSystemDark) {
-        // Dark theme - Use warm dark neutrals
-        listOf(
-            DarkBackgroundGradientStart,
-            DarkBackgroundGradientMid1,
-            DarkBackgroundGradientMid2,
-            DarkBackgroundGradientEnd
-        )
-    } else {
-        // Light theme - Use warm light neutrals
-        listOf(
-            LightBackgroundGradientStart,
-            LightBackgroundGradientEnd
-        )
-    }
-
-    val primaryGradient = listOf(
-        MaterialTheme.colorScheme.primary,
-        MaterialTheme.colorScheme.secondary
+    // Use Material Theme colors for automatic light/dark mode support
+    val backgroundGradient = listOf(
+        MaterialTheme.colorScheme.surfaceContainer,
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
     )
 
     Box(
@@ -68,21 +48,21 @@ fun FancyBottomNavigationBar(
             .fillMaxWidth()
             .height(90.dp)
             .shadow(
-                elevation = 24.dp,
+                elevation = 8.dp,
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
-                ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                spotColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)
+                ambientColor = Color.Black.copy(alpha = 0.1f),
+                spotColor = Color.Black.copy(alpha = 0.15f)
             )
             .background(
                 brush = Brush.horizontalGradient(backgroundGradient),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
             )
     ) {
-        // Animated background glow effect
+        // Animated background glow effect using Material Theme colors
         val infiniteTransition = rememberInfiniteTransition(label = "glow")
         val glowAlpha by infiniteTransition.animateFloat(
-            initialValue = 0.2f,
-            targetValue = 0.4f,
+            initialValue = 0.05f,
+            targetValue = 0.15f,
             animationSpec = infiniteRepeatable(
                 animation = tween(2000, easing = EaseInOutSine),
                 repeatMode = RepeatMode.Reverse
@@ -96,7 +76,7 @@ fun FancyBottomNavigationBar(
                 .background(
                     brush = Brush.radialGradient(
                         colors = listOf(
-                            MaterialTheme.colorScheme.primary.copy(alpha = glowAlpha * 0.3f),
+                            MaterialTheme.colorScheme.primary.copy(alpha = glowAlpha),
                             Color.Transparent
                         ),
                         radius = 400f
@@ -131,12 +111,8 @@ private fun FancyBottomNavItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val selectedColors = listOf(
-        BottomNavSelectedStart,
-        BottomNavSelectedEnd
-    )
-
-    val unselectedColor = BottomNavUnselected
+    // Use Material Theme colors for selected and unselected states
+    val unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
 
     // Animations
     val animatedScale by animateFloatAsState(
@@ -146,13 +122,13 @@ private fun FancyBottomNavItem(
     )
 
     val animatedIconColor by animateColorAsState(
-        targetValue = if (isSelected) selectedColors[0] else unselectedColor,
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else unselectedColor,
         animationSpec = tween(400, easing = EaseInOutCubic),
         label = "iconColor"
     )
 
     val animatedTextColor by animateColorAsState(
-        targetValue = if (isSelected) selectedColors[1] else unselectedColor,
+        targetValue = if (isSelected) MaterialTheme.colorScheme.onSurface else unselectedColor,
         animationSpec = tween(400, easing = EaseInOutCubic),
         label = "textColor"
     )
@@ -197,17 +173,17 @@ private fun FancyBottomNavItem(
                 .size(52.dp)
                 .scale(animatedScale * pulseScale)
                 .shadow(
-                    elevation = if (isSelected) 16.dp else 0.dp,
+                    elevation = if (isSelected) 8.dp else 0.dp,
                     shape = CircleShape,
-                    ambientColor = selectedColors[0].copy(alpha = 0.4f),
-                    spotColor = selectedColors[1].copy(alpha = 0.4f)
+                    ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                    spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
                 )
                 .background(
                     brush = if (isSelected) {
                         Brush.radialGradient(
                             colors = listOf(
-                                selectedColors[0].copy(alpha = 0.3f * animatedBackgroundAlpha),
-                                selectedColors[1].copy(alpha = 0.1f * animatedBackgroundAlpha),
+                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f * animatedBackgroundAlpha),
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.1f * animatedBackgroundAlpha),
                                 Color.Transparent
                             ),
                             radius = 80f
@@ -220,9 +196,14 @@ private fun FancyBottomNavItem(
                     shape = CircleShape
                 )
                 .border(
-                    width = if (isSelected) 2.dp else 0.dp,
+                    width = if (isSelected) 1.5.dp else 0.dp,
                     brush = if (isSelected) {
-                        Brush.horizontalGradient(selectedColors.map { it.copy(alpha = 0.6f) })
+                        Brush.horizontalGradient(
+                            listOf(
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+                            )
+                        )
                     } else {
                         Brush.horizontalGradient(listOf(Color.Transparent, Color.Transparent))
                     },
@@ -247,14 +228,14 @@ private fun FancyBottomNavItem(
             color = animatedTextColor
         )
 
-        // Animated indicator dot
+        // Animated indicator dot using Material Theme colors
         if (isSelected) {
             Spacer(modifier = Modifier.height(2.dp))
             Box(
                 modifier = Modifier
                     .size(4.dp)
                     .background(
-                        brush = Brush.horizontalGradient(selectedColors),
+                        color = MaterialTheme.colorScheme.primary,
                         shape = CircleShape
                     )
                     .scale(animatedScale)

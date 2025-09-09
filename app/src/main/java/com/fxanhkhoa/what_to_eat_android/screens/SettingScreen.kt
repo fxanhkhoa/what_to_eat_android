@@ -2,6 +2,7 @@ package com.fxanhkhoa.what_to_eat_android.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import com.fxanhkhoa.what_to_eat_android.ui.localization.*
 import com.fxanhkhoa.what_to_eat_android.ui.theme.*
+import com.fxanhkhoa.what_to_eat_android.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,170 +41,192 @@ fun SettingScreen() {
     // Collect language preference
     val currentLanguage by localizationManager.currentLanguage.collectAsStateWithLifecycle(initialValue = Language.ENGLISH)
 
-    Column(
+    // Get localized strings that update immediately when language changes
+    val settingsText = remember(currentLanguage) { localizationManager.getString(R.string.settings, currentLanguage) }
+    val appearanceText = remember(currentLanguage) { localizationManager.getString(R.string.appearance, currentLanguage) }
+    val themeText = remember(currentLanguage) { localizationManager.getString(R.string.theme, currentLanguage) }
+    val lightText = remember(currentLanguage) { localizationManager.getString(R.string.light, currentLanguage) }
+    val darkText = remember(currentLanguage) { localizationManager.getString(R.string.dark, currentLanguage) }
+    val systemText = remember(currentLanguage) { localizationManager.getString(R.string.system, currentLanguage) }
+    val materialYouText = remember(currentLanguage) { localizationManager.getString(R.string.use_material_you, currentLanguage) }
+    val languageText = remember(currentLanguage) { localizationManager.getString(R.string.language, currentLanguage) }
+    val aboutText = remember(currentLanguage) { localizationManager.getString(R.string.about, currentLanguage) }
+    val versionText = remember(currentLanguage) { localizationManager.getString(R.string.version, currentLanguage) }
+
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(GradientStart, GradientEnd)
+                    colors = listOf(
+                        MaterialTheme.colorScheme.background,
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.3f)
+                    )
                 )
-            )
-            .padding(16.dp)
+            ),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Title
-        Text(
-            text = localizationManager.getLocalizedString("settings", currentLanguage),
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-
-        // Appearance Section
-        SettingsCard(
-            title = localizationManager.getLocalizedString("appearance", currentLanguage)
-        ) {
-            // Theme Selection
+        item {
             Text(
-                text = localizationManager.getLocalizedString("theme", currentLanguage),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface,
+                text = settingsText,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
+        }
 
-            // Theme Options
-            Column(
-                modifier = Modifier
-                    .selectableGroup()
-                    .padding(bottom = 16.dp)
+        // Appearance Section
+        item {
+            SettingsCard(
+                title = appearanceText
             ) {
-                ThemeOption(
-                    text = localizationManager.getLocalizedString("light", currentLanguage),
-                    icon = Icons.Filled.WbSunny,
-                    isSelected = !followSystemTheme && !isDarkTheme,
-                    onClick = {
-                        coroutineScope.launch {
-                            themeManager.setFollowSystemTheme(false)
-                            themeManager.setDarkTheme(false)
-                        }
-                    }
+                // Theme Selection
+                Text(
+                    text = themeText,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                ThemeOption(
-                    text = localizationManager.getLocalizedString("dark", currentLanguage),
-                    icon = Icons.Filled.NightsStay,
-                    isSelected = !followSystemTheme && isDarkTheme,
-                    onClick = {
-                        coroutineScope.launch {
-                            themeManager.setFollowSystemTheme(false)
-                            themeManager.setDarkTheme(true)
-                        }
-                    }
-                )
-
-                ThemeOption(
-                    text = localizationManager.getLocalizedString("system", currentLanguage),
-                    icon = Icons.Filled.Settings,
-                    isSelected = followSystemTheme,
-                    onClick = {
-                        coroutineScope.launch {
-                            themeManager.setFollowSystemTheme(true)
-                        }
-                    }
-                )
-            }
-
-            // Dynamic Colors Toggle
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
+                // Theme Options
+                Column(
+                    modifier = Modifier
+                        .selectableGroup()
+                        .padding(bottom = 16.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.Palette,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier
-                            .size(24.dp)
-                            .padding(end = 8.dp)
+                    ThemeOption(
+                        text = lightText,
+                        icon = Icons.Filled.WbSunny,
+                        isSelected = !followSystemTheme && !isDarkTheme,
+                        onClick = {
+                            coroutineScope.launch {
+                                themeManager.setFollowSystemTheme(false)
+                                themeManager.setDarkTheme(false)
+                            }
+                        }
                     )
-                    Text(
-                        text = localizationManager.getLocalizedString("use_material_you", currentLanguage),
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onSurface
+
+                    ThemeOption(
+                        text = darkText,
+                        icon = Icons.Filled.NightsStay,
+                        isSelected = !followSystemTheme && isDarkTheme,
+                        onClick = {
+                            coroutineScope.launch {
+                                themeManager.setFollowSystemTheme(false)
+                                themeManager.setDarkTheme(true)
+                            }
+                        }
+                    )
+
+                    ThemeOption(
+                        text = systemText,
+                        icon = Icons.Filled.Settings,
+                        isSelected = followSystemTheme,
+                        onClick = {
+                            coroutineScope.launch {
+                                themeManager.setFollowSystemTheme(true)
+                            }
+                        }
                     )
                 }
 
-                Switch(
-                    checked = useDynamicColor,
-                    onCheckedChange = { newValue ->
-                        coroutineScope.launch {
-                            themeManager.setDynamicColor(newValue)
-                        }
-                    },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colorScheme.primary,
-                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                // Dynamic Colors Toggle
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Palette,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(end = 8.dp)
+                        )
+                        Text(
+                            text = materialYouText,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+
+                    Switch(
+                        checked = useDynamicColor,
+                        onCheckedChange = { newValue ->
+                            coroutineScope.launch {
+                                themeManager.setDynamicColor(newValue)
+                            }
+                        },
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.primary,
+                            checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                        )
                     )
-                )
+                }
             }
         }
 
         // Language Section
-        SettingsCard(
-            title = localizationManager.getLocalizedString("language", currentLanguage)
-        ) {
-            Column(
-                modifier = Modifier.selectableGroup()
+        item {
+            SettingsCard(
+                title = languageText
             ) {
-                LanguageOption(
-                    language = Language.ENGLISH,
-                    currentLanguage = currentLanguage,
-                    localizationManager = localizationManager,
-                    onClick = { newLanguage ->
-                        coroutineScope.launch {
-                            localizationManager.setLanguage(newLanguage)
+                Column(
+                    modifier = Modifier.selectableGroup()
+                ) {
+                    LanguageOption(
+                        language = Language.ENGLISH,
+                        currentLanguage = currentLanguage,
+                        onClick = { newLanguage ->
+                            coroutineScope.launch {
+                                localizationManager.setLanguage(newLanguage)
+                            }
                         }
-                    }
-                )
+                    )
 
-                LanguageOption(
-                    language = Language.VIETNAMESE,
-                    currentLanguage = currentLanguage,
-                    localizationManager = localizationManager,
-                    onClick = { newLanguage ->
-                        coroutineScope.launch {
-                            localizationManager.setLanguage(newLanguage)
+                    LanguageOption(
+                        language = Language.VIETNAMESE,
+                        currentLanguage = currentLanguage,
+                        onClick = { newLanguage ->
+                            coroutineScope.launch {
+                                localizationManager.setLanguage(newLanguage)
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
 
         // About Section
-        SettingsCard(
-            title = localizationManager.getLocalizedString("about", currentLanguage)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+        item {
+            SettingsCard(
+                title = aboutText
             ) {
-                Text(
-                    text = localizationManager.getLocalizedString("version", currentLanguage),
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "1.0.0",
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = versionText,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "1.0.0",
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
@@ -219,9 +243,8 @@ private fun SettingsCard(
             .clip(RoundedCornerShape(16.dp))
             .padding(bottom = 16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            containerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.7f)
+        )
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -288,10 +311,17 @@ private fun ThemeOption(
 private fun LanguageOption(
     language: Language,
     currentLanguage: Language,
-    localizationManager: LocalizationManager,
     onClick: (Language) -> Unit
 ) {
+    val context = LocalContext.current
+    val localizationManager = remember { LocalizationManager(context) }
+    val englishText = localizationManager.getString(R.string.english, currentLanguage)
+    val vietnameseText = localizationManager.getString(R.string.vietnamese, currentLanguage)
     val isSelected = currentLanguage == language
+    val languageText = when (language) {
+        Language.ENGLISH -> englishText
+        Language.VIETNAMESE -> vietnameseText
+    }
 
     Row(
         modifier = Modifier
@@ -315,7 +345,7 @@ private fun LanguageOption(
         Spacer(modifier = Modifier.width(12.dp))
 
         Text(
-            text = localizationManager.getLocalizedString(language.code, currentLanguage),
+            text = languageText,
             fontSize = 16.sp,
             color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
         )

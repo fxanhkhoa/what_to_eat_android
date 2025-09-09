@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">what_to_eat_android</string>
+
+    <!-- Settings -->
+    <string name="settings">Cài Đặt</string>
+    <string name="appearance">Giao Diện</string>
+    <string name="theme">Chủ Đề</string>
+    <string name="select_theme">Chọn Chủ Đề</string>
+    <string name="light">Sáng</string>
+    <string name="dark">Tối</string>
+    <string name="system">Hệ Thống</string>
+    <string name="dark_mode">Chế Độ Tối</string>
+    <string name="language">Ngôn Ngữ</string>
+    <string name="select_language">Chọn Ngôn Ngữ</string>
+    <string name="english">English</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="about">Thông Tin</string>
+    <string name="version">Phiên Bản</string>
+    <string name="dynamic_colors">Màu Động</string>
+    <string name="follow_system">Theo Hệ Thống</string>
+    <string name="use_material_you">Sử Dụng Màu Của Hệ Thống</string>
+</resources>
+

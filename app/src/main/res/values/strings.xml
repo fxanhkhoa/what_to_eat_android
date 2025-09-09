@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">what_to_eat_android</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="appearance">Appearance</string>
+    <string name="theme">Theme</string>
+    <string name="select_theme">Select Theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="system">System</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language">Language</string>
+    <string name="select_language">Select Language</string>
+    <string name="english">English</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="dynamic_colors">Dynamic Colors</string>
+    <string name="follow_system">Follow System</string>
+    <string name="use_material_you">Use Your System Colors</string>
 </resources>

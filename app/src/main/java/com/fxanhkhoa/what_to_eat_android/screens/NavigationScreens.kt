@@ -60,12 +60,6 @@ fun GameView() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingView() {
-    SettingScreen()
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
 private fun ScreenTemplate(
     title: String,
     icon: ImageVector,
