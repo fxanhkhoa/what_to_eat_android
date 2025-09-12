@@ -4,9 +4,8 @@ import User
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fxanhkhoa.what_to_eat_android.service.AuthService
+import com.fxanhkhoa.what_to_eat_android.services.AuthService
 import com.fxanhkhoa.what_to_eat_android.utils.TokenManager
-import com.fxanhkhoa.what_to_eat_android.utils.UserInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

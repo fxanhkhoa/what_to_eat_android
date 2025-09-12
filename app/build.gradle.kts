@@ -85,7 +85,7 @@ dependencies {
 
     // Google Sign-In
     implementation("com.google.android.gms:play-services-auth:20.7.0")
-
+    
     // JWT parsing for token expiry detection
     implementation("com.auth0:java-jwt:4.4.0")
 

@@ -1,11 +1,12 @@
 package com.fxanhkhoa.what_to_eat_android.services
 
-import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import User
 import com.fxanhkhoa.what_to_eat_android.BuildConfig
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.fxanhkhoa.what_to_eat_android.data.model.LoginResponse
+import com.fxanhkhoa.what_to_eat_android.data.model.RefreshTokenResponse
+import com.fxanhkhoa.what_to_eat_android.network.AuthApiService
+import com.fxanhkhoa.what_to_eat_android.network.AuthInterceptor
+import com.fxanhkhoa.what_to_eat_android.utils.TokenManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,7 +18,6 @@ import retrofit2.http.POST
 // Data classes
 
 data class ResultToken(val accessToken: String, val refreshToken: String)
-data class User(val id: String, val name: String, val email: String, val avatar: String?)
 
 data class LoginRequest(val token: String)
 data class RefreshTokenRequest(val refreshToken: String)
@@ -37,41 +37,109 @@ interface AuthApi {
     suspend fun getProfile(): User
 }
 
-class AuthService(context: Context) {
-    private val _profile = MutableLiveData<User?>(null)
-    val profile: LiveData<User?> = _profile
-
-    private val api: AuthApi
+class AuthService(private val tokenManager: TokenManager) {
+    private val authApi: AuthApiService
 
     init {
-        val logging = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
-        val client = OkHttpClient.Builder().addInterceptor(logging).build()
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
+        }
+
+        // Create AuthInterceptor with TokenManager
+        val authInterceptor = AuthInterceptor(tokenManager)
+
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor) // Add auth interceptor
+            .build()
+
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
             .build()
-        api = retrofit.create(AuthApi::class.java)
+
+        authApi = retrofit.create(AuthApiService::class.java)
     }
 
-    suspend fun login(token: String): ResultToken = withContext(Dispatchers.IO) {
-        api.login(LoginRequest(token))
+    /**
+     * Login with Google ID token
+     */
+    suspend fun login(token: String): Result<LoginResponse> {
+        return try {
+            val response = authApi.login(
+                com.fxanhkhoa.what_to_eat_android.data.model.LoginRequest(
+                    token
+                )
+            )
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Login failed: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
-    suspend fun refreshToken(refreshToken: String): ResultToken = withContext(Dispatchers.IO) {
-        api.refreshToken(RefreshTokenRequest(refreshToken))
+    /**
+     * Get user profile from backend
+     */
+    suspend fun getProfile(): Result<User> {
+        return try {
+            val response = authApi.getProfile()
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Failed to get profile: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
-    suspend fun logout(refreshToken: String) = withContext(Dispatchers.IO) {
-        api.logout(LogoutRequest(refreshToken))
+
+    /**
+     * Refresh access token
+     */
+    suspend fun refreshToken(refreshToken: String): Result<RefreshTokenResponse> {
+        return try {
+            val response = authApi.refreshToken(
+                com.fxanhkhoa.what_to_eat_android.data.model.RefreshTokenRequest(
+                    refreshToken
+                )
+            )
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Token refresh failed: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
-    suspend fun getProfileAPI(): User = withContext(Dispatchers.IO) {
-        api.getProfile()
-    }
-
-    fun setProfile(profile: User?) {
-        _profile.postValue(profile)
+    /**
+     * Logout user
+     */
+    suspend fun logout(refreshToken: String): Result<Unit> {
+        return try {
+            val response = authApi.logout(
+                com.fxanhkhoa.what_to_eat_android.data.model.RefreshTokenRequest(
+                    refreshToken
+                )
+            )
+            if (response.isSuccessful) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Logout failed: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }
-

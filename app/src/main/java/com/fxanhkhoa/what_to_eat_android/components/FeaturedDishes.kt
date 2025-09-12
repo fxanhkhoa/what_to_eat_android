@@ -24,122 +24,165 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.fxanhkhoa.what_to_eat_android.model.DishModel
+import com.fxanhkhoa.what_to_eat_android.services.DishService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import kotlin.math.absoluteValue
-
-data class FeaturedDish(
-    val name: String,
-    val description: String,
-    val imageRes: Int = android.R.drawable.ic_menu_gallery // Placeholder image
-)
+import androidx.compose.ui.platform.LocalContext
+import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
+import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
+import kotlinx.coroutines.flow.first
+import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider.createService
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FeaturedDishes(
     modifier: Modifier = Modifier
 ) {
-    // Sample data for featured dishes
-    val dishes = remember {
-        listOf(
-            FeaturedDish(
-                name = "Spicy Thai Curry",
-                description = "Authentic Thai red curry with coconut milk and fresh herbs"
-            ),
-            FeaturedDish(
-                name = "Italian Pasta",
-                description = "Classic spaghetti carbonara with crispy pancetta"
-            ),
-            FeaturedDish(
-                name = "Japanese Ramen",
-                description = "Rich tonkotsu ramen with tender chashu pork"
-            ),
-            FeaturedDish(
-                name = "Mexican Tacos",
-                description = "Street-style tacos with authentic Mexican flavors"
-            ),
-            FeaturedDish(
-                name = "French Croissant",
-                description = "Buttery, flaky croissants baked fresh daily"
-            )
-        )
+    // State for dishes, loading, and error
+    var dishes by remember { mutableStateOf<List<DishModel>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    // Fetch dishes on first composition
+    LaunchedEffect(Unit) {
+        isLoading = true
+        error = null
+        try {
+            val service = createService<DishService>()
+            val result = withContext(Dispatchers.IO) {
+                service.findRandom(7)
+            }
+            dishes = result
+        } catch (e: Exception) {
+            error = e.localizedMessage ?: "Unknown error"
+        } finally {
+            isLoading = false
+        }
     }
 
+    val context = LocalContext.current
+    val localizationManager = remember { LocalizationManager(context) }
+    var currentLanguage by remember { mutableStateOf(Language.ENGLISH) }
+
+    // Observe language changes
+    LaunchedEffect(Unit) {
+        currentLanguage = localizationManager.currentLanguage.first()
+    }
+
+    // Pager state for carousel
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { dishes.size }
     )
 
+    // Auto-scroll carousel every 5 seconds and loop
+    LaunchedEffect(dishes.size) {
+        if (dishes.isNotEmpty()) {
+            while (true) {
+                delay(5000)
+                val nextPage = (pagerState.currentPage + 1) % dishes.size
+                pagerState.animateScrollToPage(nextPage)
+            }
+        }
+    }
+
     Column(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 3D Carousel
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(280.dp),
-            contentPadding = PaddingValues(horizontal = 0.dp),
-            pageSpacing = 16.dp
-        ) { page ->
-            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+        when {
+            isLoading -> {
+                Box(modifier = Modifier.height(280.dp), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
 
-            // 3D transformation calculations
-            val scale by animateFloatAsState(
-                targetValue = if (pageOffset.absoluteValue < 0.5f) 1.0f else 0.85f,
-                animationSpec = tween(300),
-                label = "scale"
-            )
+            error != null -> {
+                Box(modifier = Modifier.height(280.dp), contentAlignment = Alignment.Center) {
+                    Text(text = error ?: "Error", color = MaterialTheme.colorScheme.error)
+                }
+            }
 
-            val alpha by animateFloatAsState(
-                targetValue = if (pageOffset.absoluteValue < 0.5f) 1.0f else 0.7f,
-                animationSpec = tween(300),
-                label = "alpha"
-            )
+            dishes.isEmpty() -> {
+                Box(modifier = Modifier.height(280.dp), contentAlignment = Alignment.Center) {
+                    Text(text = "No featured dishes found.")
+                }
+            }
 
-            val rotationY = pageOffset * 30f
-            val translationX = pageOffset * 50f
-
-            FeaturedDishCard(
-                dish = dishes[page],
-                modifier = Modifier
-                    .scale(scale)
-                    .graphicsLayer {
-                        this.alpha = alpha
-                        this.rotationY = rotationY
-                        this.translationX = translationX
-                        this.cameraDistance = 12f * density
-                    }
-            )
-        }
-
-        // Page indicators
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            repeat(dishes.size) { index ->
-                val isSelected = pagerState.currentPage == index
-                val animatedSize by animateFloatAsState(
-                    targetValue = if (isSelected) 12f else 8f,
-                    animationSpec = tween(300),
-                    label = "indicatorSize"
-                )
-
-                Box(
+            else -> {
+                HorizontalPager(
+                    state = pagerState,
                     modifier = Modifier
-                        .size(animatedSize.dp)
-                        .clip(RoundedCornerShape(50))
-                        .background(
-                            if (isSelected)
-                                MaterialTheme.colorScheme.primary
-                            else
-                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
-                        )
-                )
+                        .fillMaxWidth()
+                        .height(280.dp),
+                    contentPadding = PaddingValues(horizontal = 0.dp),
+                    pageSpacing = 16.dp
+                ) { page ->
+                    val pageOffset =
+                        (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
 
-                if (index < dishes.size - 1) {
-                    Spacer(modifier = Modifier.width(6.dp))
+                    val scale by animateFloatAsState(
+                        targetValue = if (pageOffset.absoluteValue < 0.5f) 1.0f else 0.85f,
+                        animationSpec = tween(300),
+                        label = "scale"
+                    )
+
+                    val alpha by animateFloatAsState(
+                        targetValue = if (pageOffset.absoluteValue < 0.5f) 1.0f else 0.7f,
+                        animationSpec = tween(300),
+                        label = "alpha"
+                    )
+
+                    val rotationY = pageOffset * 30f
+                    val translationX = pageOffset * 50f
+
+                    FeaturedDishCard(
+                        dish = dishes[page],
+                        language = currentLanguage.code,
+                        modifier = Modifier
+                            .scale(scale)
+                            .graphicsLayer {
+                                this.alpha = alpha
+                                this.rotationY = rotationY
+                                this.translationX = translationX
+                                this.cameraDistance = 12f * density
+                            }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    repeat(dishes.size) { index ->
+                        val isSelected = pagerState.currentPage == index
+                        val animatedSize by animateFloatAsState(
+                            targetValue = if (isSelected) 12f else 8f,
+                            animationSpec = tween(300),
+                            label = "indicatorSize"
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .size(animatedSize.dp)
+                                .clip(RoundedCornerShape(50))
+                                .background(
+                                    if (isSelected)
+                                        MaterialTheme.colorScheme.primary
+                                    else
+                                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                                )
+                        )
+
+                        if (index < dishes.size - 1) {
+                            Spacer(modifier = Modifier.width(6.dp))
+                        }
+                    }
                 }
             }
         }
@@ -148,8 +191,9 @@ fun FeaturedDishes(
 
 @Composable
 private fun FeaturedDishCard(
-    dish: FeaturedDish,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    dish: DishModel,
+    language: String = "en",
 ) {
     Card(
         modifier = modifier
@@ -164,18 +208,29 @@ private fun FeaturedDishCard(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            // Background image
-            Image(
-                painter = painterResource(id = dish.imageRes),
-                contentDescription = dish.name,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(20.dp)),
-                contentScale = ContentScale.Crop,
-                alpha = 0.3f
-            )
+            // Background image (use thumbnail if available, else fallback)
+            if (dish.thumbnail != null && dish.thumbnail.isNotBlank()) {
+                AsyncImage(
+                    model = dish.thumbnail,
+                    contentDescription = dish.getTitle(language) ?: "Dish image",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(20.dp)),
+                    contentScale = ContentScale.Crop,
+                    alpha = 0.8f
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = android.R.drawable.ic_menu_gallery),
+                    contentDescription = dish.getTitle(language) ?: "Dish image",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(20.dp)),
+                    contentScale = ContentScale.Crop,
+                    alpha = 0.8f
+                )
+            }
 
-            // Gradient overlay
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -183,8 +238,8 @@ private fun FeaturedDishCard(
                         brush = Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-                                MaterialTheme.colorScheme.surface
+                                MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                                MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
                             ),
                             startY = 0f,
                             endY = 600f
@@ -192,7 +247,6 @@ private fun FeaturedDishCard(
                     )
             )
 
-            // Content
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -200,7 +254,7 @@ private fun FeaturedDishCard(
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Text(
-                    text = dish.name,
+                    text = dish.getTitle(language) ?: "",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -209,8 +263,16 @@ private fun FeaturedDishCard(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                val description = dish.getShortDescription(language)
                 Text(
-                    text = dish.description,
+                    text = if (description != null) {
+                        if (description.length > 20) {
+                            description.substring(0, 20) + "..."
+                        } else {
+                            description}
+                    } else {
+                        "" // Or some placeholder if description is null
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
                     textAlign = TextAlign.Start,
