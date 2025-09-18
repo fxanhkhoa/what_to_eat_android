@@ -22,13 +22,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
-import com.fxanhkhoa.what_to_eat_android.components.FeaturedDishes
+import androidx.navigation.NavController
+import com.fxanhkhoa.what_to_eat_android.components.home.FeaturedDishes
 import com.fxanhkhoa.what_to_eat_android.components.SearchBar
 import com.fxanhkhoa.what_to_eat_android.components.SearchBarResult
+import com.fxanhkhoa.what_to_eat_android.components.home.HomeBanner
+import com.fxanhkhoa.what_to_eat_android.components.home.RandomDishes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navController: NavController,
+    onSelectBottomBarItem: ((Int) -> Unit)? = null // Add callback for bottom bar selection
+) {
     var searchText by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
@@ -55,8 +61,7 @@ fun HomeScreen() {
             modifier = Modifier.fillMaxWidth()
         )
         SearchBarResult(
-            text = searchText,
-            modifier = Modifier.fillMaxWidth()
+            text = searchText, modifier = Modifier.fillMaxWidth()
         )
         val scrollState = rememberScrollState()
         Column(
@@ -72,30 +77,18 @@ fun HomeScreen() {
             // Add some additional content for scrolling demonstration
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text = "More Content",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(bottom = 16.dp)
+            HomeBanner(
+                navController = navController,
+                modifier = Modifier,
+                onNavigateToDish = {
+                    onSelectBottomBarItem?.invoke(1) // 1 is the index for Dish
+                    navController.navigate("dish")
+                }
             )
 
-            repeat(10) { i ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                    )
-                ) {
-                    Text(
-                        text = "Additional content item #${i + 1}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-            }
+            Spacer(modifier = Modifier.height(24.dp))
+
+            RandomDishes(modifier = Modifier)
         }
         Spacer(modifier = Modifier.height(16.dp))
     }
