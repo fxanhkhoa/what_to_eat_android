@@ -1,6 +1,7 @@
 package com.fxanhkhoa.what_to_eat_android
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,7 +18,6 @@ import com.fxanhkhoa.what_to_eat_android.ui.components.TopAppBarWithUserIcon
 import com.fxanhkhoa.what_to_eat_android.ui.components.bottomNavItems
 import com.fxanhkhoa.what_to_eat_android.screens.*
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
-import com.fxanhkhoa.what_to_eat_android.viewmodel.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +36,21 @@ fun MainScreen() {
     val navController = rememberNavController()
     var selectedItemIndex by remember { mutableIntStateOf(0) }
     val authViewModel = rememberSharedAuthViewModel()
+
+    // Listen to navigation changes to sync selectedItemIndex
+    LaunchedEffect(selectedItemIndex) {
+        Log.d("MainScreen", "Selected Item Index: $selectedItemIndex")
+        navController.navigate(bottomNavItems[selectedItemIndex].route) {
+            // Pop up to start destination to avoid building up a large stack
+            popUpTo(navController.graph.startDestinationId) {
+                saveState = true
+            }
+            // Avoid multiple copies of the same destination
+            launchSingleTop = true
+            // Restore state when re-selecting a previously selected item
+            restoreState = false
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -64,16 +79,6 @@ fun MainScreen() {
                     selectedItemIndex = selectedItemIndex,
                     onItemSelected = { index ->
                         selectedItemIndex = index
-                        navController.navigate(bottomNavItems[index].route) {
-                            // Pop up to start destination to avoid building up a large stack
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            // Avoid multiple copies of the same destination
-                            launchSingleTop = true
-                            // Restore state when re-selecting a previously selected item
-                            restoreState = true
-                        }
                     }
                 )
             }
@@ -84,7 +89,12 @@ fun MainScreen() {
             startDestination = bottomNavItems[0].route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("home") { HomeScreen() }
+            composable("home") {
+                HomeScreen(
+                    navController = navController,
+                    onSelectBottomBarItem = { index -> selectedItemIndex = index }
+                )
+            }
             composable("dish") { DishView() }
             composable("ingredient") { IngredientView() }
             composable("game") { GameView() }

@@ -1,5 +1,6 @@
-package com.fxanhkhoa.what_to_eat_android.components
+package com.fxanhkhoa.what_to_eat_android.components.home
 
+import android.R
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -221,7 +222,7 @@ private fun FeaturedDishCard(
                 )
             } else {
                 Image(
-                    painter = painterResource(id = android.R.drawable.ic_menu_gallery),
+                    painter = painterResource(id = R.drawable.ic_menu_gallery),
                     contentDescription = dish.getTitle(language) ?: "Dish image",
                     modifier = Modifier
                         .fillMaxSize()

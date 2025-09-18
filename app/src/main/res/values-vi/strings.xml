@@ -19,5 +19,21 @@
     <string name="dynamic_colors">Màu Động</string>
     <string name="follow_system">Theo Hệ Thống</string>
     <string name="use_material_you">Sử Dụng Màu Của Hệ Thống</string>
+    <string name="preparation">Chuẩn bị</string>
+    <string name="mins">Phút</string>
+    <string name="cooking">Nấu</string>
+    <string name="difficulty">Độ khó</string>
+    <string name="home_banner_title">Đói Bụng? Ăn Gì?</string>
+    <string name="wheel_of_fortune">Vòng quay may mắn</string>
+    <string name="wheel_of_fortune_desc">Quay vòng để chọn món ăn ngẫu nhiên</string>
+    <string name="flipping_card">Lật thẻ bài</string>
+    <string name="flipping_card_desc">Lật thẻ để biết món ăn của bạn!</string>
+    <string name="vote_game">Bình chọn</string>
+    <string name="vote_game_desc">Bình chọn cùng bạn bè để chọn món ăn.</string>
+    <string name="game_section_title">Trò chơi</string>
+    <string name="easy">Dễ</string>
+    <string name="medium">Trung bình</string>
+    <string name="hard">Khó</string>
+    <string name="home_banner_button">Tìm Món Ăn</string>
 </resources>
 

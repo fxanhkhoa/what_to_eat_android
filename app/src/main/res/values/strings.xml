@@ -19,4 +19,20 @@
     <string name="dynamic_colors">Dynamic Colors</string>
     <string name="follow_system">Follow System</string>
     <string name="use_material_you">Use Your System Colors</string>
+    <string name="preparation">Preparation</string>
+    <string name="mins">Min(s)</string>
+    <string name="cooking">Cooking</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="home_banner_title">Hungry? Eat What</string>
+    <string name="wheel_of_fortune">Wheel of Fortune</string>
+    <string name="wheel_of_fortune_desc">Spin the wheel to discover your next meal!</string>
+    <string name="flipping_card">Flipping Card</string>
+    <string name="flipping_card_desc">Flip cards to reveal delicious dishes!</string>
+    <string name="vote_game">Vote Game</string>
+    <string name="vote_game_desc">Vote for your favorite dishes and see what others think!</string>
+    <string name="game_section_title">Food Games</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="home_banner_button">Find Your Meals</string>
 </resources>
