@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.fxanhkhoa.what_to_eat_android.components.home.FeaturedDishes
 import com.fxanhkhoa.what_to_eat_android.components.SearchBar
 import com.fxanhkhoa.what_to_eat_android.components.SearchBarResult
+import com.fxanhkhoa.what_to_eat_android.components.home.ContactSection
 import com.fxanhkhoa.what_to_eat_android.components.home.HomeBanner
 import com.fxanhkhoa.what_to_eat_android.components.home.RandomDishes
 
@@ -89,6 +90,10 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             RandomDishes(modifier = Modifier)
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            ContactSection(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp))
         }
         Spacer(modifier = Modifier.height(16.dp))
     }
