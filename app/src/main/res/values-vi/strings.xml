@@ -35,5 +35,10 @@
     <string name="medium">Trung bình</string>
     <string name="hard">Khó</string>
     <string name="home_banner_button">Tìm Món Ăn</string>
-</resources>
 
+    <!-- Ingredient categories -->
+    <string name="ingredient_categories">Danh mục nguyên liệu</string>
+    <string name="ingredients">Nguyên Liệu</string>
+    <string name="tags">Nhãn</string>
+    <string name="videos">Video</string>
+</resources>

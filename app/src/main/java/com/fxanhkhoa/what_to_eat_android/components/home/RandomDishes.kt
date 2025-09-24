@@ -20,18 +20,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.foundation.background
 import androidx.compose.ui.Alignment
+import androidx.navigation.NavController
 import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider.createService
 
 @Composable
 fun RandomDishes(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    refreshTrigger: Int = 0, // Add refresh trigger parameter
+    navController: NavController? = null
 ) {
     var dishes by remember { mutableStateOf<List<DishModel>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
 
-    // Fetch dishes on first composition
-    LaunchedEffect(Unit) {
+    // Fetch dishes when refreshTrigger changes
+    LaunchedEffect(refreshTrigger) {
         isLoading = true
         error = null
         val service = createService<DishService>()
@@ -57,16 +60,19 @@ fun RandomDishes(
                     CircularProgressIndicator()
                 }
             }
+
             error != null -> {
                 Box(modifier = Modifier.height(180.dp), contentAlignment = Alignment.Center) {
                     Text(text = error ?: "Error", color = MaterialTheme.colorScheme.error)
                 }
             }
+
             dishes.isEmpty() -> {
                 Box(modifier = Modifier.height(180.dp), contentAlignment = Alignment.Center) {
                     Text(text = "No random dishes found.")
                 }
             }
+
             else -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     dishes.forEach { dish ->
@@ -75,8 +81,11 @@ fun RandomDishes(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp),
-                            onClick = null,
-                        )
+                            onClick = {
+                                navController?.navigate("dish/${dish.slug}")
+                            },
+
+                            )
                     }
                 }
             }

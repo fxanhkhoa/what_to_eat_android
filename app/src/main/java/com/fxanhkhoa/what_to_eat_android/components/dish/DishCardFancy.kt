@@ -33,6 +33,7 @@ import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import kotlinx.coroutines.flow.first
 import androidx.compose.ui.res.colorResource
+import androidx.navigation.NavController
 
 
 @Composable

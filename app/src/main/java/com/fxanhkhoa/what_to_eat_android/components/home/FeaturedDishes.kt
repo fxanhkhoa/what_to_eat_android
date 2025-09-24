@@ -1,11 +1,11 @@
 package com.fxanhkhoa.what_to_eat_android.components.home
 
-import android.R
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -37,19 +37,25 @@ import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import kotlinx.coroutines.flow.first
 import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider.createService
+import androidx.navigation.NavController
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Photo
+import com.fxanhkhoa.what_to_eat_android.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FeaturedDishes(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController? = null,
+    refreshTrigger: Int = 0 // Add refresh trigger parameter
 ) {
     // State for dishes, loading, and error
     var dishes by remember { mutableStateOf<List<DishModel>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf<String?>(null) }
 
-    // Fetch dishes on first composition
-    LaunchedEffect(Unit) {
+    // Fetch dishes when refreshTrigger changes
+    LaunchedEffect(refreshTrigger) {
         isLoading = true
         error = null
         try {
@@ -144,6 +150,7 @@ fun FeaturedDishes(
                     FeaturedDishCard(
                         dish = dishes[page],
                         language = currentLanguage.code,
+                        navController = navController,
                         modifier = Modifier
                             .scale(scale)
                             .graphicsLayer {
@@ -195,9 +202,13 @@ private fun FeaturedDishCard(
     modifier: Modifier = Modifier,
     dish: DishModel,
     language: String = "en",
+    navController: NavController? = null,
 ) {
     Card(
         modifier = modifier
+            .then(
+                if (navController != null) Modifier.clickable { navController.navigate("dish/${dish.slug}") } else Modifier
+            )
             .fillMaxWidth()
             .height(240.dp),
         shape = RoundedCornerShape(20.dp),
@@ -222,7 +233,7 @@ private fun FeaturedDishCard(
                 )
             } else {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_menu_gallery),
+                    imageVector = Icons.Filled.Photo,
                     contentDescription = dish.getTitle(language) ?: "Dish image",
                     modifier = Modifier
                         .fillMaxSize()

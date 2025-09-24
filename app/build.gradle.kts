@@ -80,6 +80,9 @@ dependencies {
     // DataStore for theme persistence
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    // SwipeRefresh for pull-to-refresh functionality
+    implementation("androidx.compose.material:material:1.5.4")
+
     // AppCompat for locale management
     implementation("androidx.appcompat:appcompat:1.6.1")
 

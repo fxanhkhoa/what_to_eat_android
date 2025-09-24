@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fxanhkhoa.what_to_eat_android.screens.dish.DishDetailScreen
 import com.fxanhkhoa.what_to_eat_android.ui.theme.ThemeProvider
 import com.fxanhkhoa.what_to_eat_android.ui.components.FancyBottomNavigationBar
 import com.fxanhkhoa.what_to_eat_android.ui.components.TopAppBarWithUserIcon
@@ -96,6 +97,15 @@ fun MainScreen() {
                 )
             }
             composable("dish") { DishView() }
+            composable(route = "dish/{slug}") { backStackEntry ->
+                val slug = backStackEntry.arguments?.getString("slug") ?: ""
+                if (slug.isNotEmpty()) {
+                    // Pass navController pop back as the onBackPressed handler so the top app bar back button works
+                    DishDetailScreen(slug = slug, onBackPressed = { navController.popBackStack() })
+                } else {
+                    DishView()
+                }
+            }
             composable("ingredient") { IngredientView() }
             composable("game") { GameView() }
             composable("profile") {
