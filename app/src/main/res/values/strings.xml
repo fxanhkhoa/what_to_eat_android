@@ -35,4 +35,22 @@
     <string name="medium">Medium</string>
     <string name="hard">Hard</string>
     <string name="home_banner_button">Find Your Meals</string>
+
+    <!-- Ingredient categories -->
+    <string name="ingredient_categories">Ingredient Categories</string>
+
+    <!-- Ingredients title -->
+    <string name="ingredients">Ingredients</string>
+
+    <!-- Tags -->
+    <string name="tags">Tags</string>
+
+    <!-- Videos -->
+    <string name="videos">Videos</string>
+
+    <!-- Recipe content -->
+    <string name="recipe_content">Recipe</string>
+
+    <!-- Description -->
+    <string name="description">Description</string>
 </resources>
