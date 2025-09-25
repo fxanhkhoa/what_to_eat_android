@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">what_to_eat_android</string>
+    <string name="app_name">Food Pub</string>
 
     <!-- Settings -->
     <string name="settings">Settings</string>
@@ -53,4 +53,43 @@
 
     <!-- Description -->
     <string name="description">Description</string>
+    <string name="filter">Filter</string>
+    <string name="meal_categories">Meal Categories</string>
+    <string name="difficulty_level">Difficulty Level</string>
+
+    <!-- Filter Bottom Sheet -->
+    <string name="clear_all">Clear All</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="add_tag">Add</string>
+    <string name="no_minimum">No minimum</string>
+    <string name="no_maximum">No maximum</string>
+    <string name="reset_range">Reset Range</string>
+
+    <!-- Dish List Screen -->
+    <string name="search_dishes">Search dishes...</string>
+    <string name="clear_search">Clear search</string>
+    <string name="filter_dishes">Filter dishes</string>
+    <string name="clear_all_filters">Clear all</string>
+    <string name="no_dishes_found">No dishes found.</string>
+    <string name="add_tag_placeholder">Add tag...</string>
+    <string name="close">Close</string>
+    <string name="remove_filter">Remove filter</string>
+    <string name="remove_tag">Remove tag</string>
+
+    <!-- Meal Category Translations -->
+    <string name="category_breakfast">Breakfast</string>
+    <string name="category_lunch">Lunch</string>
+    <string name="category_brunch">Brunch</string>
+    <string name="category_dinner">Dinner</string>
+    <string name="category_burger">Burger</string>
+    <string name="category_salad">Salad</string>
+    <string name="category_soup">Soup</string>
+    <string name="category_appetizer">Appetizer</string>
+    <string name="category_dessert">Dessert</string>
+    <string name="category_hotpot">Hotpot</string>
+    <string name="category_north_vn">North Vietnam</string>
+    <string name="category_central_vn">Central Vietnam</string>
+    <string name="category_south_vn">South Vietnam</string>
+    <string name="category_sweet_soup">Sweet Soup</string>
+    <string name="category_vitamin">Vitamin</string>
 </resources>

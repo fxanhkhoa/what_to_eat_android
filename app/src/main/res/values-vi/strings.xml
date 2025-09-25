@@ -41,4 +41,45 @@
     <string name="ingredients">Nguyên Liệu</string>
     <string name="tags">Nhãn</string>
     <string name="videos">Video</string>
+    <string name="description">Mô tả</string>
+    <string name="filter">Bộ Lọc</string>
+    <string name="recipe_content">Công thức</string>
+    <string name="meal_categories">Danh mục món ăn</string>
+    <string name="difficulty_level">Độ khó</string>
+
+    <!-- Filter Bottom Sheet -->
+    <string name="clear_all">Xóa Tất Cả</string>
+    <string name="apply_filters">Áp Dụng Bộ Lọc</string>
+    <string name="add_tag">Thêm</string>
+    <string name="no_minimum">Không tối thiểu</string>
+    <string name="no_maximum">Không tối đa</string>
+    <string name="reset_range">Đặt Lại Khoảng</string>
+
+    <!-- Dish List Screen -->
+    <string name="search_dishes">Tìm kiếm món ăn...</string>
+    <string name="clear_search">Xóa tìm kiếm</string>
+    <string name="filter_dishes">Lọc món ăn</string>
+    <string name="clear_all_filters">Xóa tất cả</string>
+    <string name="no_dishes_found">Không tìm thấy món ăn nào.</string>
+    <string name="add_tag_placeholder">Thêm nhãn...</string>
+    <string name="close">Đóng</string>
+    <string name="remove_filter">Xóa bộ lọc</string>
+    <string name="remove_tag">Xóa nhãn</string>
+
+    <!-- Meal Category Translations -->
+    <string name="category_breakfast">Bữa Sáng</string>
+    <string name="category_lunch">Bữa Trưa</string>
+    <string name="category_brunch">Brunch</string>
+    <string name="category_dinner">Bữa Tối</string>
+    <string name="category_burger">Burger</string>
+    <string name="category_salad">Salad</string>
+    <string name="category_soup">Súp</string>
+    <string name="category_appetizer">Khai Vị</string>
+    <string name="category_dessert">Tráng Miệng</string>
+    <string name="category_hotpot">Lẩu</string>
+    <string name="category_north_vn">Miền Bắc</string>
+    <string name="category_central_vn">Miền Trung</string>
+    <string name="category_south_vn">Miền Nam</string>
+    <string name="category_sweet_soup">Chè</string>
+    <string name="category_vitamin">Vitamin</string>
 </resources>
