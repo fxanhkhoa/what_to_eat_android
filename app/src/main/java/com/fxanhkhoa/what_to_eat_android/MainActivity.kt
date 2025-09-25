@@ -18,6 +18,7 @@ import com.fxanhkhoa.what_to_eat_android.ui.components.FancyBottomNavigationBar
 import com.fxanhkhoa.what_to_eat_android.ui.components.TopAppBarWithUserIcon
 import com.fxanhkhoa.what_to_eat_android.ui.components.bottomNavItems
 import com.fxanhkhoa.what_to_eat_android.screens.*
+import com.fxanhkhoa.what_to_eat_android.screens.dish.DishListScreen
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
 
 class MainActivity : ComponentActivity() {
@@ -96,7 +97,7 @@ fun MainScreen() {
                     onSelectBottomBarItem = { index -> selectedItemIndex = index }
                 )
             }
-            composable("dish") { DishView() }
+            composable("dish") { DishListScreen(navController = navController) }
             composable(route = "dish/{slug}") { backStackEntry ->
                 val slug = backStackEntry.arguments?.getString("slug") ?: ""
                 if (slug.isNotEmpty()) {
