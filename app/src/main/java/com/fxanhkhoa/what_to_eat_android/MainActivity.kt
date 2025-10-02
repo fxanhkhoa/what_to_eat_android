@@ -19,6 +19,8 @@ import com.fxanhkhoa.what_to_eat_android.ui.components.TopAppBarWithUserIcon
 import com.fxanhkhoa.what_to_eat_android.ui.components.bottomNavItems
 import com.fxanhkhoa.what_to_eat_android.screens.*
 import com.fxanhkhoa.what_to_eat_android.screens.dish.DishListScreen
+import com.fxanhkhoa.what_to_eat_android.screens.ingredient.IngredientDetailScreen
+import com.fxanhkhoa.what_to_eat_android.screens.ingredient.IngredientListScreen
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
 
 class MainActivity : ComponentActivity() {
@@ -107,7 +109,23 @@ fun MainScreen() {
                     DishView()
                 }
             }
-            composable("ingredient") { IngredientView() }
+            composable("ingredient") { IngredientListScreen(navController = navController) }
+            composable(route = "ingredient_detail/{ingredientId}") { backStackEntry ->
+                val ingredientId = backStackEntry.arguments?.getString("ingredientId") ?: ""
+                if (ingredientId.isNotEmpty()) {
+                    // Here you would typically fetch the ingredient by ID
+                    // For now, we'll need to modify IngredientDetailScreen to accept an ingredientId
+                    IngredientDetailScreen(
+                        ingredientId = ingredientId,
+                        navController = navController
+                    )
+                } else {
+                    // Fallback - navigate back to ingredient list if no ID provided
+                    LaunchedEffect(Unit) {
+                        navController.popBackStack()
+                    }
+                }
+            }
             composable("game") { GameView() }
             composable("profile") {
                 ProfileScreen(

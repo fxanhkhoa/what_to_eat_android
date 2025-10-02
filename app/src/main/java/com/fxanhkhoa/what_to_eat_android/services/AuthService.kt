@@ -2,8 +2,8 @@ package com.fxanhkhoa.what_to_eat_android.services
 
 import User
 import com.fxanhkhoa.what_to_eat_android.BuildConfig
-import com.fxanhkhoa.what_to_eat_android.data.model.LoginResponse
-import com.fxanhkhoa.what_to_eat_android.data.model.RefreshTokenResponse
+import com.fxanhkhoa.what_to_eat_android.data.dto.LoginResponse
+import com.fxanhkhoa.what_to_eat_android.data.dto.RefreshTokenResponse
 import com.fxanhkhoa.what_to_eat_android.network.AuthApiService
 import com.fxanhkhoa.what_to_eat_android.network.AuthInterceptor
 import com.fxanhkhoa.what_to_eat_android.utils.TokenManager
@@ -72,7 +72,7 @@ class AuthService(private val tokenManager: TokenManager) {
     suspend fun login(token: String): Result<LoginResponse> {
         return try {
             val response = authApi.login(
-                com.fxanhkhoa.what_to_eat_android.data.model.LoginRequest(
+                com.fxanhkhoa.what_to_eat_android.data.dto.LoginRequest(
                     token
                 )
             )
@@ -109,7 +109,7 @@ class AuthService(private val tokenManager: TokenManager) {
     suspend fun refreshToken(refreshToken: String): Result<RefreshTokenResponse> {
         return try {
             val response = authApi.refreshToken(
-                com.fxanhkhoa.what_to_eat_android.data.model.RefreshTokenRequest(
+                com.fxanhkhoa.what_to_eat_android.data.dto.RefreshTokenRequest(
                     refreshToken
                 )
             )
@@ -129,7 +129,7 @@ class AuthService(private val tokenManager: TokenManager) {
     suspend fun logout(refreshToken: String): Result<Unit> {
         return try {
             val response = authApi.logout(
-                com.fxanhkhoa.what_to_eat_android.data.model.RefreshTokenRequest(
+                com.fxanhkhoa.what_to_eat_android.data.dto.RefreshTokenRequest(
                     refreshToken
                 )
             )

@@ -7,6 +7,9 @@ interface IngredientService {
     @GET("ingredient")
     suspend fun findAll(@QueryMap params: Map<String, @JvmSuppressWildcards Any?>): APIPagination<Ingredient>
 
+    @GET
+    suspend fun findAllWithUrl(@Url url: String): APIPagination<Ingredient>
+
     @GET("ingredient/random")
     suspend fun findRandom(
         @Query("limit") limit: Int,

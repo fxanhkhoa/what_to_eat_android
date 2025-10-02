@@ -1,6 +1,4 @@
-package com.fxanhkhoa.what_to_eat_android.data.model
-
-import User
+package com.fxanhkhoa.what_to_eat_android.data.dto
 
 data class LoginRequest(
     val token: String

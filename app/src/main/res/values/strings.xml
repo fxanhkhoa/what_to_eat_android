@@ -77,19 +77,82 @@
     <string name="remove_tag">Remove tag</string>
 
     <!-- Meal Category Translations -->
-    <string name="category_breakfast">Breakfast</string>
-    <string name="category_lunch">Lunch</string>
-    <string name="category_brunch">Brunch</string>
-    <string name="category_dinner">Dinner</string>
-    <string name="category_burger">Burger</string>
-    <string name="category_salad">Salad</string>
-    <string name="category_soup">Soup</string>
-    <string name="category_appetizer">Appetizer</string>
-    <string name="category_dessert">Dessert</string>
-    <string name="category_hotpot">Hotpot</string>
-    <string name="category_north_vn">North Vietnam</string>
-    <string name="category_central_vn">Central Vietnam</string>
-    <string name="category_south_vn">South Vietnam</string>
-    <string name="category_sweet_soup">Sweet Soup</string>
-    <string name="category_vitamin">Vitamin</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="lunch">Lunch</string>
+    <string name="brunch">Brunch</string>
+    <string name="dinner">Dinner</string>
+    <string name="burger">Burger</string>
+    <string name="salad">Salad</string>
+    <string name="soup">Soup</string>
+    <string name="appetizer">Appetizer</string>
+    <string name="dessert">Dessert</string>
+    <string name="hotpot">Hotpot</string>
+    <string name="north_vn">North Vietnam</string>
+    <string name="central_vn">Central Vietnam</string>
+    <string name="south_vn">South Vietnam</string>
+    <string name="sweet_soup">Sweet Soup</string>
+    <string name="vitamin">Vitamin</string>
+
+    <!-- Ingredient categories -->
+    <string name="milk_and_dairy">Milk and Dairy</string>
+    <string name="grains">Grains</string>
+    <string name="beverages_nonalcoholic">Beverages Nonalcoholic</string>
+    <string name="protein_foods">Protein Foods</string>
+    <string name="snacks_and_sweets">Snacks and Sweets</string>
+    <string name="alcoholic_beverages">Alcoholic Beverages</string>
+    <string name="water">Water</string>
+    <string name="fats_and_oils">Fats and Oils</string>
+    <string name="mixed_dishes">Mixed Dishes</string>
+    <string name="fruit">Fruit</string>
+    <string name="condiments_and_sauces">Condiments and Sauces</string>
+    <string name="sugars">Sugars</string>
+    <string name="vegetables">Vegetables</string>
+    <string name="herbs_and_spices">Herbs and Spices</string>
+    <string name="nuts_and_seeds">Nuts and Seeds</string>
+    <string name="baking_ingredients">Baking Ingredients</string>
+    <string name="canned_and_preserved">Canned and Preserved</string>
+    <string name="infant_formula_and_baby_food">Infant Formula and Baby Food</string>
+    <string name="other">Other</string>
+    <string name="search_ingredients">Search ingredients</string>
+    <string name="all">All</string>
+    <string name="filter_ingredients">Filter Ingredients</string>
+    <string name="select_categories_to_filter_ingredients">Select categories to filter ingredients</string>
+    <string name="categories_selected">%d categories selected</string>
+    <string name="apply_filter">Apply Filter</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset">Reset</string>
+    <string name="ok">OK</string>
+    <string name="error">Error</string>
+    <string name="loading">Loading...</string>
+    <string name="no_ingredients_found">No ingredients found</string>
+    <string name="unknown">Unknown</string>
+    <string name="calories">Cal</string>
+    <string name="protein">Protein</string>
+    <string name="carbs">Carbs</string>
+    <string name="ingredient_thumbnail">Ingredient thumbnail</string>
+
+    <!-- Ingredient Detail Screen -->
+    <string name="ingredient">Ingredient</string>
+    <string name="unknown_ingredient">Unknown Ingredient</string>
+    <string name="ingredient_image">Ingredient Image</string>
+    <string name="measure">Measure</string>
+    <string name="weight">Weight</string>
+    <string name="nutrition_information">Nutrition Information</string>
+    <string name="carbohydrates">Carbohydrates</string>
+    <string name="fat">Fat</string>
+    <string name="cholesterol">Cholesterol</string>
+    <string name="sodium">Sodium</string>
+    <string name="kcal">kcal</string>
+    <string name="g">g</string>
+    <string name="mg">mg</string>
+    <string name="categories">Categories</string>
+    <string name="additional_information">Additional Information</string>
+    <string name="slug">Slug</string>
+    <string name="created">Created</string>
+    <string name="updated">Updated</string>
+    <string name="back">Back</string>
+    <string name="share">Share</string>
+    <string name="share_ingredient">Share Ingredient</string>
+    <string name="nutrition_per_measure">Nutrition per measure</string>
+
 </resources>

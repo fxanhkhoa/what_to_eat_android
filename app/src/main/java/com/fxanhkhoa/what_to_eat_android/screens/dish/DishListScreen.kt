@@ -24,7 +24,7 @@ import androidx.navigation.NavController
 import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.components.dish.DishCard
 import com.fxanhkhoa.what_to_eat_android.components.dish.DishFilterBottomSheet
-import com.fxanhkhoa.what_to_eat_android.data.model.QueryDishDto
+import com.fxanhkhoa.what_to_eat_android.data.dto.QueryDishDto
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import com.fxanhkhoa.what_to_eat_android.viewmodel.DishListViewModel
@@ -65,8 +65,6 @@ fun DishListScreen(
     val filterDishesText = localizationManager.getString(R.string.filter_dishes, language)
     val clearAllFiltersText = localizationManager.getString(R.string.clear_all_filters, language)
     val noDishesFoundText = localizationManager.getString(R.string.no_dishes_found, language)
-    val closeText = localizationManager.getString(R.string.close, language)
-    val removeFilterText = localizationManager.getString(R.string.remove_filter, language)
 
     // Observe language changes
     LaunchedEffect(Unit) {
