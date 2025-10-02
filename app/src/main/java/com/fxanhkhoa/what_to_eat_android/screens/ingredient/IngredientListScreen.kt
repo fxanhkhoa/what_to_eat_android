@@ -63,7 +63,7 @@ fun IngredientListScreen(
                     SearchBar(
                         text = searchText,
                         onTextChange = {
-                            searchText = it;
+                            searchText = it
                             viewModel.searchIngredients(searchText)
                         },
                         modifier = Modifier.weight(1f),
