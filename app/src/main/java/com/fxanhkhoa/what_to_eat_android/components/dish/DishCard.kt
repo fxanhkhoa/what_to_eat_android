@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.fxanhkhoa.what_to_eat_android.components.ImagePlaceholder
 import com.fxanhkhoa.what_to_eat_android.model.DishModel
 import com.fxanhkhoa.what_to_eat_android.model.MultiLanguage
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
@@ -129,36 +130,7 @@ private fun DishImage(
             fallback = painterResource(id = android.R.drawable.ic_menu_gallery)
         )
     } else {
-        DishPlaceholder(modifier = modifier)
-    }
-}
-
-@Composable
-private fun DishPlaceholder(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(10.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Restaurant,
-                    contentDescription = "No image",
-                    modifier = Modifier.size(32.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                )
-            }
-        }
+        ImagePlaceholder(modifier = modifier)
     }
 }
 

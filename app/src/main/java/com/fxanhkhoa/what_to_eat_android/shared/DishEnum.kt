@@ -117,21 +117,21 @@ enum class MealCategory(val rawValue: String) {
     fun getDisplayName(language: com.fxanhkhoa.what_to_eat_android.ui.localization.Language, localizationManager: com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager): String {
         return try {
             when (this.localizationKey) {
-                "category_breakfast" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_breakfast, language)
-                "category_lunch" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_lunch, language)
-                "category_brunch" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_brunch, language)
-                "category_dinner" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_dinner, language)
-                "category_burger" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_burger, language)
-                "category_salad" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_salad, language)
-                "category_soup" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_soup, language)
-                "category_appetizer" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_appetizer, language)
-                "category_dessert" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_dessert, language)
-                "category_hotpot" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_hotpot, language)
-                "category_north_vn" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_north_vn, language)
-                "category_central_vn" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_central_vn, language)
-                "category_south_vn" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_south_vn, language)
-                "category_sweet_soup" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_sweet_soup, language)
-                "category_vitamin" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.category_vitamin, language)
+                "category_breakfast" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.breakfast, language)
+                "category_lunch" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.lunch, language)
+                "category_brunch" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.brunch, language)
+                "category_dinner" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.dinner, language)
+                "category_burger" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.burger, language)
+                "category_salad" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.salad, language)
+                "category_soup" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.soup, language)
+                "category_appetizer" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.appetizer, language)
+                "category_dessert" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.dessert, language)
+                "category_hotpot" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.hotpot, language)
+                "category_north_vn" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.north_vn, language)
+                "category_central_vn" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.central_vn, language)
+                "category_south_vn" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.south_vn, language)
+                "category_sweet_soup" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.sweet_soup, language)
+                "category_vitamin" -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.vitamin, language)
                 else -> this.displayName
             }
         } catch (e: Exception) {

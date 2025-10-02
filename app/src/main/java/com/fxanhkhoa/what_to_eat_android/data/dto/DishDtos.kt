@@ -1,7 +1,6 @@
-package com.fxanhkhoa.what_to_eat_android.data.model
+package com.fxanhkhoa.what_to_eat_android.data.dto
 
 import com.fxanhkhoa.what_to_eat_android.model.MultiLanguage
-import com.google.gson.annotations.SerializedName
 
 data class QueryDishDto(
     val page: Int = 1,

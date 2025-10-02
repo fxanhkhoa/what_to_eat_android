@@ -247,7 +247,7 @@ private fun FancyBottomNavItem(
 val bottomNavItems = listOf(
     BottomNavItem("Home", Icons.Filled.Home, "home"),
     BottomNavItem("Dish", Icons.Filled.Restaurant, "dish"),
-    BottomNavItem("Ingredient", Icons.Filled.LocalGroceryStore, "ingredient"),
+    BottomNavItem("Ingredient", Icons.Filled.Egg, "ingredient"),
     BottomNavItem("Game", Icons.Filled.SportsEsports, "game"),
     BottomNavItem("Settings", Icons.Filled.Settings, "settings")
 )

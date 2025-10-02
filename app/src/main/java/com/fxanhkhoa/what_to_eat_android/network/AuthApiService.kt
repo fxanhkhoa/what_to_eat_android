@@ -1,7 +1,7 @@
 package com.fxanhkhoa.what_to_eat_android.network
 
 import User
-import com.fxanhkhoa.what_to_eat_android.data.model.*
+import com.fxanhkhoa.what_to_eat_android.data.dto.*
 import retrofit2.Response
 import retrofit2.http.*
 

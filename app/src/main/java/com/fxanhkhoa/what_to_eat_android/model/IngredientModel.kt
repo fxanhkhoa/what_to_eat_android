@@ -29,13 +29,6 @@ data class Ingredient(
         title.firstOrNull { it.lang == language }?.data
 }
 
-data class QueryIngredientDto(
-    val page: Int? = null,
-    val limit: Int? = null,
-    val keyword: String? = null,
-    val ingredientCategory: List<String>? = null
-)
-
 data class CreateIngredientDto(
     val slug: String,
     val title: List<MultiLanguage<String>>,

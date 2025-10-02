@@ -38,14 +38,47 @@
 
     <!-- Ingredient categories -->
     <string name="ingredient_categories">Danh mục nguyên liệu</string>
+
+    <!-- Ingredients title -->
     <string name="ingredients">Nguyên Liệu</string>
+
+    <!-- Tags -->
     <string name="tags">Nhãn</string>
+
+    <!-- Videos -->
     <string name="videos">Video</string>
+
+    <!-- Recipe content -->
+    <string name="recipe_content">Công thức</string>
+
+    <!-- Description -->
     <string name="description">Mô tả</string>
     <string name="filter">Bộ Lọc</string>
-    <string name="recipe_content">Công thức</string>
     <string name="meal_categories">Danh mục món ăn</string>
     <string name="difficulty_level">Độ khó</string>
+
+    <!-- Ingredient categories -->
+    <string name="milk_and_dairy">Sữa và các sản phẩm từ sữa</string>
+    <string name="grains">Ngũ cốc</string>
+    <string name="beverages_nonalcoholic">Đồ uống không cồn</string>
+    <string name="protein_foods">Thực phẩm giàu đạm</string>
+    <string name="snacks_and_sweets">Đồ ăn vặt &amp; ngọt</string>
+    <string name="alcoholic_beverages">Đồ uống có cồn</string>
+    <string name="water">Nước</string>
+    <string name="fats_and_oils">Chất béo &amp; dầu</string>
+    <string name="mixed_dishes">Món trộn</string>
+    <string name="fruit">Trái cây</string>
+    <string name="condiments_and_sauces">Gia vị &amp; nước sốt</string>
+    <string name="sugars">Đường</string>
+    <string name="vegetables">Rau củ</string>
+    <string name="herbs_and_spices">Rau thơm &amp; gia vị</string>
+    <string name="nuts_and_seeds">Các loại hạt</string>
+    <string name="baking_ingredients">Nguyên liệu làm bánh</string>
+    <string name="canned_and_preserved">Đồ hộp &amp; bảo quản</string>
+    <string name="infant_formula_and_baby_food">Sữa công thức &amp; đồ ăn trẻ em</string>
+    <string name="other">Khác</string>
+    <string name="all">Tất cả</string>
+    <string name="search_ingredients">Tìm kiếm nguyên liệu</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="clear_all">Xóa Tất Cả</string>
@@ -67,19 +100,59 @@
     <string name="remove_tag">Xóa nhãn</string>
 
     <!-- Meal Category Translations -->
-    <string name="category_breakfast">Bữa Sáng</string>
-    <string name="category_lunch">Bữa Trưa</string>
-    <string name="category_brunch">Brunch</string>
-    <string name="category_dinner">Bữa Tối</string>
-    <string name="category_burger">Burger</string>
-    <string name="category_salad">Salad</string>
-    <string name="category_soup">Súp</string>
-    <string name="category_appetizer">Khai Vị</string>
-    <string name="category_dessert">Tráng Miệng</string>
-    <string name="category_hotpot">Lẩu</string>
-    <string name="category_north_vn">Miền Bắc</string>
-    <string name="category_central_vn">Miền Trung</string>
-    <string name="category_south_vn">Miền Nam</string>
-    <string name="category_sweet_soup">Chè</string>
-    <string name="category_vitamin">Vitamin</string>
+    <string name="breakfast">Bữa Sáng</string>
+    <string name="lunch">Bữa Trưa</string>
+    <string name="brunch">Brunch</string>
+    <string name="dinner">Bữa Tối</string>
+    <string name="burger">Burger</string>
+    <string name="salad">Salad</string>
+    <string name="soup">Súp</string>
+    <string name="appetizer">Khai Vị</string>
+    <string name="dessert">Tráng Miệng</string>
+    <string name="hotpot">Lẩu</string>
+    <string name="north_vn">Miền Bắc</string>
+    <string name="central_vn">Miền Trung</string>
+    <string name="south_vn">Miền Nam</string>
+    <string name="sweet_soup">Chè</string>
+    <string name="vitamin">Vitamin</string>
+    <string name="filter_ingredients">Lọc Nguyên Liệu</string>
+    <string name="select_categories_to_filter_ingredients">Chọn danh mục để lọc nguyên liệu</string>
+    <string name="categories_selected">Đã chọn %d danh mục</string>
+    <string name="apply_filter">Áp Dụng Bộ Lọc</string>
+    <string name="cancel">Hủy</string>
+    <string name="reset">Đặt Lại</string>
+    <string name="ok">OK</string>
+    <string name="error">Lỗi</string>
+    <string name="loading">Đang tải...</string>
+    <string name="no_ingredients_found">Không tìm thấy nguyên liệu nào</string>
+    <string name="unknown">Không rõ</string>
+    <string name="calories">Calo</string>
+    <string name="protein">Đạm</string>
+    <string name="carbs">Tinh bột</string>
+    <string name="ingredient_thumbnail">Hình ảnh nguyên liệu</string>
+
+    <!-- Ingredient Detail Screen -->
+    <string name="ingredient">Nguyên Liệu</string>
+    <string name="unknown_ingredient">Nguyên Liệu Không Rõ</string>
+    <string name="ingredient_image">Hình Ảnh Nguyên Liệu</string>
+    <string name="measure">Đơn Vị Đo</string>
+    <string name="weight">Khối Lượng</string>
+    <string name="nutrition_information">Thông Tin Dinh Dưỡng</string>
+    <string name="carbohydrates">Carbohydrate</string>
+    <string name="fat">Chất Béo</string>
+    <string name="cholesterol">Cholesterol</string>
+    <string name="sodium">Natri</string>
+    <string name="kcal">kcal</string>
+    <string name="g">g</string>
+    <string name="mg">mg</string>
+    <string name="categories">Danh Mục</string>
+    <string name="additional_information">Thông Tin Bổ Sung</string>
+    <string name="slug">Slug</string>
+    <string name="created">Được Tạo</string>
+    <string name="updated">Được Cập Nhật</string>
+    <string name="back">Quay Lại</string>
+    <string name="share">Chia Sẻ</string>
+    <string name="share_ingredient">Chia Sẻ Nguyên Liệu</string>
+    <string name="nutrition_per_measure">Dinh dưỡng theo đơn vị đo</string>
+
 </resources>

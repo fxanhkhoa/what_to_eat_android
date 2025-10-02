@@ -3,7 +3,7 @@ package com.fxanhkhoa.what_to_eat_android.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fxanhkhoa.what_to_eat_android.data.model.QueryDishDto
+import com.fxanhkhoa.what_to_eat_android.data.dto.QueryDishDto
 import com.fxanhkhoa.what_to_eat_android.model.DishModel
 import com.fxanhkhoa.what_to_eat_android.services.DishService
 import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
@@ -143,11 +143,7 @@ class DishListViewModel : ViewModel() {
                 // Use the new URL-based approach for search/fuzzy endpoint
                 val url = query.buildSearchFuzzyUrl()
                 Log.d("DishListViewModel", "Loading dishes with URL: $url")
-
                 val response = dishService.searchFuzzy(url)
-                Log.d("DishListViewModel", "Raw API Response: $response")
-                Log.d("DishListViewModel", "Response data field: ${response.data}")
-                Log.d("DishListViewModel", "Response count field: ${response.count}")
 
                 _dishes.value = response.data ?: emptyList()
                 _hasMorePages.value = (response.data?.size ?: 0) >= pageSize
