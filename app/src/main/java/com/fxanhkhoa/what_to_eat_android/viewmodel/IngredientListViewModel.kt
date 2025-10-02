@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class IngredientListViewModel() : ViewModel() {
+class IngredientListViewModel : ViewModel() {
     private val ingredientService = RetrofitProvider.createService<IngredientService>()
     private var searchDebounceJob: Job? = null
 
