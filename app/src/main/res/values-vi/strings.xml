@@ -31,6 +31,10 @@
     <string name="vote_game">Bình chọn</string>
     <string name="vote_game_desc">Bình chọn cùng bạn bè để chọn món ăn.</string>
     <string name="game_section_title">Trò chơi</string>
+    <string name="game_section_subtitle">Chơi các trò chơi vui để giúp bạn chọn món ăn!</string>
+    <string name="featured_games">Trò chơi nổi bật</string>
+    <string name="coming_soon">Sắp ra mắt</string>
+    <string name="play_now">Chơi ngay</string>
     <string name="easy">Dễ</string>
     <string name="medium">Trung bình</string>
     <string name="hard">Khó</string>
@@ -154,5 +158,41 @@
     <string name="share">Chia Sẻ</string>
     <string name="share_ingredient">Chia Sẻ Nguyên Liệu</string>
     <string name="nutrition_per_measure">Dinh dưỡng theo đơn vị đo</string>
+
+    <!-- Wheel Dish Picker -->
+    <string name="pick_dishes_for_wheel">Chọn Món Cho Vòng Quay</string>
+    <string name="selected_dishes">Món Đã Chọn</string>
+    <string name="no_dishes_selected">Chưa chọn món nào. Nhấn vào món bên dưới để thêm.</string>
+    <string name="done">Xong</string>
+    <string name="difficulty_easy">Dễ</string>
+    <string name="difficulty_medium">Trung bình</string>
+    <string name="difficulty_hard">Khó</string>
+
+    <!-- Wheel of Fortune Screen -->
+    <string name="wheel_of_fortune_description">Quay vòng và để số phận quyết định bữa ăn tiếp theo của bạn!</string>
+    <string name="dishes_on_wheel">Món Trên Vòng Quay</string>
+    <string name="no_dishes_on_wheel">Chưa có món nào trên vòng quay.\nThêm món để bắt đầu!</string>
+    <string name="add_dishes">Thêm Món</string>
+    <string name="add_more">Thêm Nữa</string>
+    <string name="spin_the_wheel">Quay Vòng</string>
+    <string name="spinning">Đang Quay...</string>
+    <string name="winner_celebration">🎉 Món Trúng Thưởng! 🎉</string>
+    <string name="tap_to_view_details">Nhấn để xem chi tiết</string>
+    <string name="home">Trang Chủ</string>
+    <string name="search_placeholder">Tìm kiếm</string>
+
+    <!-- Contact Section -->
+    <string name="contact_us">Liên Hệ</string>
+    <string name="name">Tên</string>
+    <string name="email">Email</string>
+    <string name="message">Tin Nhắn</string>
+    <string name="send_message">Gửi Tin Nhắn</string>
+    <string name="or_contact_directly">Hoặc liên hệ trực tiếp:</string>
+    <string name="name_required">Tên là bắt buộc</string>
+    <string name="email_required">Email hợp lệ là bắt buộc</string>
+    <string name="message_required">Tin nhắn là bắt buộc</string>
+    <string name="message_sent_success">Gửi tin nhắn thành công</string>
+    <string name="message_send_failed">Gửi tin nhắn thất bại</string>
+    <string name="success">Thành Công</string>
 
 </resources>

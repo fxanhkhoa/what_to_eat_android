@@ -15,14 +15,19 @@ import androidx.compose.ui.unit.dp
 import com.fxanhkhoa.what_to_eat_android.model.CreateContactDto
 import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider.createService
 import com.fxanhkhoa.what_to_eat_android.services.ContactService
+import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
+import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import kotlinx.coroutines.launch
+import com.fxanhkhoa.what_to_eat_android.R
 
 @Composable
 fun ContactSection(
     modifier: Modifier = Modifier,
-    contactEmail: String = "fxanhkhoa@gmail.com"
+    contactEmail: String = "fxanhkhoa@gmail.com",
+    language: Language = Language.ENGLISH
 ) {
     val context = LocalContext.current
+    val localizationManager = remember { LocalizationManager(context) }
     val coroutineScope = rememberCoroutineScope()
 
     var name by remember { mutableStateOf("") }
@@ -38,7 +43,7 @@ fun ContactSection(
         horizontalAlignment = Alignment.Start
     ) {
         Text(
-            text = "Contact Us", // Replace with localization if available
+            text = localizationManager.getString(R.string.contact_us, language),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -47,7 +52,7 @@ fun ContactSection(
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("Name") },
+            label = { Text(localizationManager.getString(R.string.name, language)) },
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
             singleLine = true,
             shape = RoundedCornerShape(12.dp)
@@ -57,7 +62,7 @@ fun ContactSection(
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text(localizationManager.getString(R.string.email, language)) },
             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
             singleLine = true,
             shape = RoundedCornerShape(12.dp)
@@ -67,7 +72,7 @@ fun ContactSection(
         OutlinedTextField(
             value = message,
             onValueChange = { message = it },
-            label = { Text("Message") },
+            label = { Text(localizationManager.getString(R.string.message, language)) },
             modifier = Modifier.fillMaxWidth().height(120.dp).padding(bottom = 8.dp),
             shape = RoundedCornerShape(12.dp),
             maxLines = 5
@@ -77,19 +82,19 @@ fun ContactSection(
         Button(
             onClick = {
                 if (name.isBlank()) {
-                    alertMessage = "Name is required"
+                    alertMessage = localizationManager.getString(R.string.name_required, language)
                     showAlert = true
                     isSuccess = false
                     return@Button
                 }
                 if (email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    alertMessage = "Valid email is required"
+                    alertMessage = localizationManager.getString(R.string.email_required, language)
                     showAlert = true
                     isSuccess = false
                     return@Button
                 }
                 if (message.isBlank()) {
-                    alertMessage = "Message is required"
+                    alertMessage = localizationManager.getString(R.string.message_required, language)
                     showAlert = true
                     isSuccess = false
                     return@Button
@@ -106,13 +111,13 @@ fun ContactSection(
                             )
                         )
                         isSuccess = true
-                        alertMessage = "Message sent successfully"
+                        alertMessage = localizationManager.getString(R.string.message_sent_success, language)
                         name = ""
                         email = ""
                         message = ""
                     } catch (e: Exception) {
                         isSuccess = false
-                        alertMessage = e.localizedMessage ?: "Failed to send message"
+                        alertMessage = e.localizedMessage ?: localizationManager.getString(R.string.message_send_failed, language)
                     } finally {
                         isSending = false
                         showAlert = true
@@ -129,17 +134,20 @@ fun ContactSection(
                     modifier = Modifier.size(24.dp)
                 )
             } else {
-                Text("Send Message")
+                Text(localizationManager.getString(R.string.send_message, language))
             }
         }
 
         // Contact Info
         Spacer(modifier = Modifier.height(24.dp))
-        Text("Or contact directly:", style = MaterialTheme.typography.titleMedium)
+        Text(
+            localizationManager.getString(R.string.or_contact_directly, language),
+            style = MaterialTheme.typography.titleMedium
+        )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = Icons.Default.Email,
-                contentDescription = "Email",
+                contentDescription = localizationManager.getString(R.string.email, language),
                 tint = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -151,14 +159,19 @@ fun ContactSection(
         AlertDialog(
             onDismissRequest = { showAlert = false },
             title = {
-                Text(if (isSuccess) "Success" else "Error")
+                Text(
+                    if (isSuccess)
+                        localizationManager.getString(R.string.success, language)
+                    else
+                        localizationManager.getString(R.string.error, language)
+                )
             },
             text = {
                 Text(alertMessage)
             },
             confirmButton = {
                 Button(onClick = { showAlert = false }) {
-                    Text("OK")
+                    Text(localizationManager.getString(R.string.ok, language))
                 }
             }
         )

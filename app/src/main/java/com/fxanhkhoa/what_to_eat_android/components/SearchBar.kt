@@ -11,22 +11,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import com.fxanhkhoa.what_to_eat_android.R
+import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
+import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 
 @Composable
 fun SearchBar(
     value: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    language: Language = Language.ENGLISH
 ) {
+    val context = LocalContext.current
+    val localizationManager = remember { LocalizationManager(context) }
+
+    val placeholderText =  localizationManager.getString(
+        R.string.search_placeholder,
+        language
+    )
+
+    val clearText =  localizationManager.getString(
+        R.string.clear_search,
+        language
+    )
+
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
-        placeholder = { Text("Search ...") },
+        placeholder = { Text(placeholderText) },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = "Search",
+                contentDescription = placeholderText,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
@@ -35,7 +54,7 @@ fun SearchBar(
                 IconButton(onClick = { onValueChange("") }) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "Clear",
+                        contentDescription = clearText,
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }

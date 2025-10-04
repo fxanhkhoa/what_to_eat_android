@@ -63,7 +63,9 @@ fun GameMenuItemView(item: GameMenuItem, modifier: Modifier = Modifier) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize().padding(bottom = 8.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 8.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -82,7 +84,9 @@ fun GameMenuItemView(item: GameMenuItem, modifier: Modifier = Modifier) {
                 Image(
                     painter = painterResource(id = item.iconRes),
                     contentDescription = item.title,
-                    modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp)
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
@@ -108,60 +112,61 @@ fun GameMenuItemView(item: GameMenuItem, modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeGames(navController: NavController, modifier: Modifier = Modifier) {
+fun HomeGames(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    language: Language = Language.ENGLISH
+) {
     // Define your game items with string resource IDs and drawable resource IDs
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
-    val currentLanguage by localizationManager.currentLanguage.collectAsStateWithLifecycle(
-        initialValue = Language.ENGLISH
-    )
 
-    val wheelOfFortuneTitle = remember(currentLanguage) {
+    val wheelOfFortuneTitle = remember(language) {
         localizationManager.getString(
             R.string.wheel_of_fortune,
-            currentLanguage
+            language
         )
     }
 
-    val wheelOfFortuneDesc = remember(currentLanguage) {
+    val wheelOfFortuneDesc = remember(language) {
         localizationManager.getString(
             R.string.wheel_of_fortune_desc,
-            currentLanguage
+            language
         )
     }
 
-    val flippingCardTitle = remember(currentLanguage) {
+    val flippingCardTitle = remember(language) {
         localizationManager.getString(
             R.string.flipping_card,
-            currentLanguage
+            language
         )
     }
 
-    val flippingCardDesc = remember(currentLanguage) {
+    val flippingCardDesc = remember(language) {
         localizationManager.getString(
             R.string.flipping_card_desc,
-            currentLanguage
+            language
         )
     }
 
-    val voteGameTitle = remember(currentLanguage) {
+    val voteGameTitle = remember(language) {
         localizationManager.getString(
             R.string.vote_game,
-            currentLanguage
+            language
         )
     }
 
-    val voteGameDesc = remember(currentLanguage) {
+    val voteGameDesc = remember(language) {
         localizationManager.getString(
             R.string.vote_game_desc,
-            currentLanguage
+            language
         )
     }
 
-    val gameSectionText = remember(currentLanguage) {
+    val gameSectionText = remember(language) {
         localizationManager.getString(
             R.string.game_section_title,
-            currentLanguage
+            language
         )
     }
 
@@ -180,15 +185,15 @@ fun HomeGames(navController: NavController, modifier: Modifier = Modifier) {
         ),
         GameMenuItem(
             iconRes = R.drawable.vote_menu, // Replace with your actual drawable
-            title = stringResource(R.string.vote_game),
-            description = stringResource(R.string.vote_game_desc),
+            title = voteGameTitle,
+            description = voteGameDesc,
             onClick = { navController.navigate("vote_game") }
         )
     )
 
     Column(modifier = modifier.padding(vertical = 16.dp)) {
         Text(
-            text = stringResource(R.string.game_section_title),
+            text = gameSectionText,
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
         )

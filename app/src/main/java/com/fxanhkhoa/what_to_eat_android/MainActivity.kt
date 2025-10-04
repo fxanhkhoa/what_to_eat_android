@@ -19,6 +19,8 @@ import com.fxanhkhoa.what_to_eat_android.ui.components.TopAppBarWithUserIcon
 import com.fxanhkhoa.what_to_eat_android.ui.components.bottomNavItems
 import com.fxanhkhoa.what_to_eat_android.screens.*
 import com.fxanhkhoa.what_to_eat_android.screens.dish.DishListScreen
+import com.fxanhkhoa.what_to_eat_android.screens.game.GameScreen
+import com.fxanhkhoa.what_to_eat_android.screens.game.WheelOfFortune.WheelOfFortuneScreen
 import com.fxanhkhoa.what_to_eat_android.screens.ingredient.IngredientDetailScreen
 import com.fxanhkhoa.what_to_eat_android.screens.ingredient.IngredientListScreen
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
@@ -117,7 +119,7 @@ fun MainScreen() {
                     // For now, we'll need to modify IngredientDetailScreen to accept an ingredientId
                     IngredientDetailScreen(
                         ingredientId = ingredientId,
-                        navController = navController
+                        navController = navController,
                     )
                 } else {
                     // Fallback - navigate back to ingredient list if no ID provided
@@ -126,7 +128,22 @@ fun MainScreen() {
                     }
                 }
             }
-            composable("game") { GameView() }
+            composable("game") {
+                GameScreen(
+                    onWheelOfFortune = { navController.navigate("wheel_of_fortune") }
+                )
+            }
+            composable("wheel_of_fortune") {
+                WheelOfFortuneScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onNavigateToDishDetail = { slug ->
+                        navController.navigate("dish/$slug")
+                    },
+                    modifier = Modifier
+                )
+            }
             composable("profile") {
                 ProfileScreen(
                     onBackPressed = { navController.popBackStack() },
