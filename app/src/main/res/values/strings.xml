@@ -168,7 +168,7 @@
     <string name="done">Done</string>
     <string name="difficulty_easy">Easy</string>
     <string name="difficulty_medium">Medium</string>
-    <string name="difficulty_hard">Khó</string>
+    <string name="difficulty_hard">Hard</string>
 
     <!-- Wheel of Fortune Screen -->
     <string name="wheel_of_fortune_description">Spin the wheel and let fate decide your next delicious meal!</string>
