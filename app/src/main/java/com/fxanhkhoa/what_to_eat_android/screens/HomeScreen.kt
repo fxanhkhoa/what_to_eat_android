@@ -52,7 +52,7 @@ fun HomeScreen(
 ) {
     var searchText by remember { mutableStateOf("") }
     var isRefreshing by remember { mutableStateOf(false) }
-    var refreshTrigger by remember { mutableIntStateOf(0) } // Add refresh trigger counter
+    var refreshTrigger by remember { mutableIntStateOf(0) } // Integer state counter to trigger refresh
     val coroutineScope = rememberCoroutineScope()
 
     val context = LocalContext.current
