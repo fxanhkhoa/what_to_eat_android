@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,15 +27,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.components.home.FeaturedDishes
 import com.fxanhkhoa.what_to_eat_android.components.SearchBar
 import com.fxanhkhoa.what_to_eat_android.components.SearchBarResult
 import com.fxanhkhoa.what_to_eat_android.components.home.ContactSection
 import com.fxanhkhoa.what_to_eat_android.components.home.HomeBanner
+import com.fxanhkhoa.what_to_eat_android.components.home.HomeGames
 import com.fxanhkhoa.what_to_eat_android.components.home.RandomDishes
+import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
+import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -45,8 +52,17 @@ fun HomeScreen(
 ) {
     var searchText by remember { mutableStateOf("") }
     var isRefreshing by remember { mutableStateOf(false) }
-    var refreshTrigger by remember { mutableStateOf(0) } // Add refresh trigger counter
+    var refreshTrigger by remember { mutableIntStateOf(0) } // Add refresh trigger counter
     val coroutineScope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+    val localizationManager = remember { LocalizationManager(context) }
+    var language by remember { mutableStateOf(Language.ENGLISH) }
+
+    // Observe language changes
+    LaunchedEffect(Unit) {
+        language = localizationManager.currentLanguage.first()
+    }
 
     // Create pull refresh state
     val pullRefreshState = rememberPullRefreshState(
@@ -61,6 +77,11 @@ fun HomeScreen(
                 isRefreshing = false
             }
         }
+    )
+
+    val homeText = localizationManager.getString(
+        R.string.home,
+        language
     )
 
     Box(
@@ -82,7 +103,7 @@ fun HomeScreen(
                 .padding(16.dp)
         ) {
             Text(
-                text = "Home",
+                text = homeText,
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(bottom = 24.dp)
@@ -90,7 +111,8 @@ fun HomeScreen(
             SearchBar(
                 value = searchText,
                 onValueChange = { searchText = it },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                language = language
             )
             SearchBarResult(
                 text = searchText, modifier = Modifier.fillMaxWidth()
@@ -109,6 +131,14 @@ fun HomeScreen(
                 )
 
                 // Add some additional content for scrolling demonstration
+                Spacer(modifier = Modifier.height(24.dp))
+
+                HomeGames(
+                    navController = navController,
+                    modifier = Modifier.fillMaxWidth(),
+                    language = language
+                )
+
                 Spacer(modifier = Modifier.height(24.dp))
 
                 HomeBanner(
@@ -130,7 +160,12 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                ContactSection(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp))
+                ContactSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    language = language
+                )
             }
             Spacer(modifier = Modifier.height(16.dp))
         }

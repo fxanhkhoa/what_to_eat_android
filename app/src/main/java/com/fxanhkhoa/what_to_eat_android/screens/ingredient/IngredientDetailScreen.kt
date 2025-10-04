@@ -20,6 +20,7 @@ import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
 import com.fxanhkhoa.what_to_eat_android.services.IngredientService
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,7 +28,6 @@ import kotlinx.coroutines.launch
 fun IngredientDetailScreen(
     ingredientId: String,
     navController: NavController,
-    language: Language = Language.ENGLISH
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
@@ -38,6 +38,13 @@ fun IngredientDetailScreen(
 
     val ingredientService = RetrofitProvider.createService<IngredientService>()
     val coroutineScope = rememberCoroutineScope()
+
+    var language by remember { mutableStateOf(Language.ENGLISH) }
+
+    // Observe language changes
+    LaunchedEffect(Unit) {
+        language = localizationManager.currentLanguage.first()
+    }
 
     // Fetch ingredient by ID from service
     LaunchedEffect(ingredientId) {

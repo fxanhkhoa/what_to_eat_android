@@ -36,7 +36,7 @@ fun SettingScreen() {
     // Collect theme preferences
     val isDarkTheme by themeManager.isDarkTheme.collectAsStateWithLifecycle(initialValue = false)
     val useDynamicColor by themeManager.useDynamicColor.collectAsStateWithLifecycle(initialValue = true)
-    val followSystemTheme by themeManager.followSystemTheme.collectAsStateWithLifecycle(initialValue = true)
+    val followSystemTheme by themeManager.followSystemTheme.collectAsStateWithLifecycle(initialValue = false)
 
     // Collect language preference
     val currentLanguage by localizationManager.currentLanguage.collectAsStateWithLifecycle(initialValue = Language.ENGLISH)

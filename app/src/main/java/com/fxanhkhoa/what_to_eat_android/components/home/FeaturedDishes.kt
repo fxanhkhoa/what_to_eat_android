@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,7 +39,6 @@ import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider.createService
 import androidx.navigation.NavController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Photo
-import com.fxanhkhoa.what_to_eat_android.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
