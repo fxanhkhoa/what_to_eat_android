@@ -161,6 +161,7 @@
 
     <!-- Wheel Dish Picker -->
     <string name="pick_dishes_for_wheel">Chọn Món Cho Vòng Quay</string>
+    <string name="pick_dishes_for_cards">Chọn Món Cho Thẻ Bài</string>
     <string name="selected_dishes">Món Đã Chọn</string>
     <string name="no_dishes_selected">Chưa chọn món nào. Nhấn vào món bên dưới để thêm.</string>
     <string name="done">Xong</string>
@@ -180,6 +181,20 @@
     <string name="tap_to_view_details">Nhấn để xem chi tiết</string>
     <string name="home">Trang Chủ</string>
     <string name="search_placeholder">Tìm kiếm</string>
+
+    <!-- Flipping Card Game -->
+    <string name="no_dishes_for_game">Không Có Món Trong Game</string>
+    <string name="add_dishes_to_start_playing">Thêm món để bắt đầu chơi trò lật thẻ bài!</string>
+    <string name="pick_a_card">Chọn Một Thẻ!</string>
+    <string name="tap_card_to_reveal_dish">Nhấn vào thẻ để khám phá món ăn ngon</string>
+    <string name="mystery_dish">Món Bí Ẩn</string>
+    <string name="unknown_dish">Món Không Rõ</string>
+    <string name="choose_your_destiny">Chọn món ăn ngẫu nhiên...</string>
+    <string name="new_game">Trò Chơi Mới</string>
+    <string name="dish_revealed">Đã Khám Phá Món Ăn!</string>
+    <string name="your_random_dish_is">Món ngẫu nhiên của bạn là...</string>
+    <string name="try_again">Thử Lại</string>
+    <string name="dishes_in_game">Món Trong Game</string>
 
     <!-- Contact Section -->
     <string name="contact_us">Liên Hệ</string>

@@ -38,6 +38,7 @@ import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider.createService
 import androidx.navigation.NavController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Photo
+import androidx.compose.ui.layout.ContentScale
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
