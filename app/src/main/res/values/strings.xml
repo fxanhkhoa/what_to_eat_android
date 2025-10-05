@@ -197,6 +197,11 @@
     <string name="your_random_dish_is">Your random dish is...</string>
     <string name="try_again">Try Again</string>
     <string name="dishes_in_game">Dishes in Game</string>
+    <string name="grid_size">Grid Size</string>
+    <string name="grid_size_small">2x3 (6 cards)</string>
+    <string name="grid_size_medium">3x3 (9 cards)</string>
+    <string name="grid_size_large">3x4 (12 cards)</string>
+    <string name="select_grid_size">Select Grid Size</string>
 
     <!-- Contact Section -->
     <string name="contact_us">Contact Us</string>

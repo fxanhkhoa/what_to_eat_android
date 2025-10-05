@@ -3,16 +3,20 @@ package com.fxanhkhoa.what_to_eat_android.screens.game.flipping_card
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,6 +54,7 @@ fun FlippingCardScreen(
     val colorScheme = MaterialTheme.colorScheme
 
     var showDishPicker by remember { mutableStateOf(false) }
+    var showGridSizeDialog by remember { mutableStateOf(false) }
 
     val dishes by viewModel.dishes.collectAsStateWithLifecycle()
     val selectedDishes by viewModel.selectedDishes.collectAsStateWithLifecycle()
@@ -57,6 +62,7 @@ fun FlippingCardScreen(
     val gameState by viewModel.gameState.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val selectedDish by viewModel.selectedDish.collectAsStateWithLifecycle()
+    val numberOfCards by viewModel.numberOfCards.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.loadDishes()
@@ -77,6 +83,13 @@ fun FlippingCardScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = { showGridSizeDialog = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Grid size settings",
+                            tint = colorScheme.primary
+                        )
+                    }
                     IconButton(onClick = { showDishPicker = true }) {
                         Icon(
                             imageVector = Icons.Default.Add,
@@ -185,6 +198,52 @@ fun FlippingCardScreen(
         }
     }
 
+    // Grid size settings dialog
+    if (showGridSizeDialog) {
+        AlertDialog(
+            onDismissRequest = { showGridSizeDialog = false },
+            title = {
+                Text(localizationManager.getString(R.string.select_grid_size, language))
+            },
+            text = {
+                Column(
+                    modifier = Modifier.selectableGroup(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    GridSizeOption(
+                        text = localizationManager.getString(R.string.grid_size_small, language),
+                        selected = numberOfCards == 6,
+                        onClick = {
+                            viewModel.updateNumberOfCards(6)
+                            showGridSizeDialog = false
+                        }
+                    )
+                    GridSizeOption(
+                        text = localizationManager.getString(R.string.grid_size_medium, language),
+                        selected = numberOfCards == 9,
+                        onClick = {
+                            viewModel.updateNumberOfCards(9)
+                            showGridSizeDialog = false
+                        }
+                    )
+                    GridSizeOption(
+                        text = localizationManager.getString(R.string.grid_size_large, language),
+                        selected = numberOfCards == 12,
+                        onClick = {
+                            viewModel.updateNumberOfCards(12)
+                            showGridSizeDialog = false
+                        }
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showGridSizeDialog = false }) {
+                    Text(localizationManager.getString(R.string.close, language))
+                }
+            }
+        )
+    }
+
     // Dish picker dialog
     if (showDishPicker) {
         Dialog(onDismissRequest = { showDishPicker = false }) {
@@ -197,5 +256,34 @@ fun FlippingCardScreen(
                 language = language
             )
         }
+    }
+}
+
+@Composable
+private fun GridSizeOption(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .selectable(
+                selected = selected,
+                onClick = onClick,
+                role = Role.RadioButton
+            )
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selected,
+            onClick = null
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }

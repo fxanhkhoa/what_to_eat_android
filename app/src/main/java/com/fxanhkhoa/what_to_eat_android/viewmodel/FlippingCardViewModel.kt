@@ -52,9 +52,19 @@ class FlippingCardViewModel : ViewModel() {
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
     // Game configuration
-    private val numberOfCards = 12 // 3x4 grid of cards
+    private val _numberOfCards = MutableStateFlow(12) // Default: 3x4 grid
+    val numberOfCards: StateFlow<Int> = _numberOfCards.asStateFlow()
 
     // MARK: - Public Methods
+
+    fun updateNumberOfCards(count: Int) {
+        _numberOfCards.value = count
+        // Reset game when card count changes
+        if (_dishes.value.isNotEmpty()) {
+            resetGame()
+            setupGame()
+        }
+    }
 
     fun updateSelectedDish(dish: DishModel?) {
         _selectedDish.value = dish
@@ -73,7 +83,7 @@ class FlippingCardViewModel : ViewModel() {
 
             viewModelScope.launch {
                 try {
-                    val randomDishes = dishService.findRandom(limit = numberOfCards)
+                    val randomDishes = dishService.findRandom(limit = _numberOfCards.value)
                     _dishes.value = randomDishes
                     _selectedDishes.value = randomDishes // Sync with selected dishes
                     setupGame()
@@ -138,7 +148,7 @@ class FlippingCardViewModel : ViewModel() {
         }
 
         // Create cards for available dishes (up to numberOfCards)
-        val gameCards = _dishes.value.take(numberOfCards).map { dish ->
+        val gameCards = _dishes.value.take(_numberOfCards.value).map { dish ->
             GameCard(dish = dish, isFlipped = false)
         }
 

@@ -128,7 +128,7 @@ fun DishCardView(
                         Icon(
                             painter = painterResource(R.drawable.what_to_eat_high_resolution_logo_transparent),
                             contentDescription = null,
-                            modifier = Modifier.size(40.dp).graphicsLayer{ rotationY = 180f },
+                            modifier = Modifier.size(40.dp).graphicsLayer { rotationY = 180f },
                             tint = Color.White
                         )
 

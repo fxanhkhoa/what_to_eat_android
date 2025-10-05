@@ -30,7 +30,7 @@ fun GameHeaderView(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_launcher_foreground),
+                painter = painterResource(R.drawable.flipping_card_menu),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp),
                 tint = MaterialTheme.colorScheme.primary

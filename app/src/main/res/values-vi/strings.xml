@@ -195,6 +195,11 @@
     <string name="your_random_dish_is">Món ngẫu nhiên của bạn là...</string>
     <string name="try_again">Thử Lại</string>
     <string name="dishes_in_game">Món Trong Game</string>
+    <string name="grid_size">Kích Thước Lưới</string>
+    <string name="grid_size_small">2x3 (6 thẻ)</string>
+    <string name="grid_size_medium">3x3 (9 thẻ)</string>
+    <string name="grid_size_large">3x4 (12 thẻ)</string>
+    <string name="select_grid_size">Chọn Kích Thước Lưới</string>
 
     <!-- Contact Section -->
     <string name="contact_us">Liên Hệ</string>
