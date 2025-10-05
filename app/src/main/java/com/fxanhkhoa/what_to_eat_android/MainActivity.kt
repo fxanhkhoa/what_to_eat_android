@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fxanhkhoa.what_to_eat_android.screens.game.flipping_card.FlippingCardScreen
 import com.fxanhkhoa.what_to_eat_android.screens.dish.DishDetailScreen
 import com.fxanhkhoa.what_to_eat_android.ui.theme.ThemeProvider
 import com.fxanhkhoa.what_to_eat_android.ui.components.FancyBottomNavigationBar
@@ -20,7 +21,7 @@ import com.fxanhkhoa.what_to_eat_android.ui.components.bottomNavItems
 import com.fxanhkhoa.what_to_eat_android.screens.*
 import com.fxanhkhoa.what_to_eat_android.screens.dish.DishListScreen
 import com.fxanhkhoa.what_to_eat_android.screens.game.GameScreen
-import com.fxanhkhoa.what_to_eat_android.screens.game.WheelOfFortune.WheelOfFortuneScreen
+import com.fxanhkhoa.what_to_eat_android.screens.game.wheel_of_fortune.WheelOfFortuneScreen
 import com.fxanhkhoa.what_to_eat_android.screens.ingredient.IngredientDetailScreen
 import com.fxanhkhoa.what_to_eat_android.screens.ingredient.IngredientListScreen
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
@@ -130,7 +131,8 @@ fun MainScreen() {
             }
             composable("game") {
                 GameScreen(
-                    onWheelOfFortune = { navController.navigate("wheel_of_fortune") }
+                    onWheelOfFortune = { navController.navigate("wheel_of_fortune") },
+                    onFlippingCard = { navController.navigate("flipping_card") }
                 )
             }
             composable("wheel_of_fortune") {
@@ -142,6 +144,14 @@ fun MainScreen() {
                         navController.navigate("dish/$slug")
                     },
                     modifier = Modifier
+                )
+            }
+            composable("flipping_card") {
+                FlippingCardScreen(
+                    onDismiss = { navController.popBackStack() },
+                    onNavigateToDishDetail = { dish ->
+                        navController.navigate("dish/${dish.slug}")
+                    }
                 )
             }
             composable("profile") {

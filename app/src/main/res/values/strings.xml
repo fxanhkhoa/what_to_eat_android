@@ -163,6 +163,7 @@
 
     <!-- Wheel Dish Picker -->
     <string name="pick_dishes_for_wheel">Pick Dishes for Wheel</string>
+    <string name="pick_dishes_for_cards">Pick Dishes for Cards</string>
     <string name="selected_dishes">Selected Dishes</string>
     <string name="no_dishes_selected">No dishes selected yet. Tap dishes below to add them.</string>
     <string name="done">Done</string>
@@ -182,6 +183,25 @@
     <string name="tap_to_view_details">Tap to view details</string>
     <string name="home">Home</string>
     <string name="search_placeholder">Search for something</string>
+
+    <!-- Flipping Card Game -->
+    <string name="no_dishes_for_game">No Dishes in Game</string>
+    <string name="add_dishes_to_start_playing">Add dishes to start playing the flipping card game!</string>
+    <string name="pick_a_card">Pick a Card!</string>
+    <string name="tap_card_to_reveal_dish">Tap any card to reveal a delicious dish</string>
+    <string name="mystery_dish">Mystery Dish</string>
+    <string name="unknown_dish">Unknown Dish</string>
+    <string name="choose_your_destiny">Choose your destiny...</string>
+    <string name="new_game">New Game</string>
+    <string name="dish_revealed">Dish Revealed!</string>
+    <string name="your_random_dish_is">Your random dish is...</string>
+    <string name="try_again">Try Again</string>
+    <string name="dishes_in_game">Dishes in Game</string>
+    <string name="grid_size">Grid Size</string>
+    <string name="grid_size_small">2x3 (6 cards)</string>
+    <string name="grid_size_medium">3x3 (9 cards)</string>
+    <string name="grid_size_large">3x4 (12 cards)</string>
+    <string name="select_grid_size">Select Grid Size</string>
 
     <!-- Contact Section -->
     <string name="contact_us">Contact Us</string>

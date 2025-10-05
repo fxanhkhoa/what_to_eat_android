@@ -1,4 +1,4 @@
-package com.fxanhkhoa.what_to_eat_android.components.game.WheelOfFortune
+package com.fxanhkhoa.what_to_eat_android.components.game.wheel_of_fortune
 
 import androidx.compose.ui.graphics.Color
 

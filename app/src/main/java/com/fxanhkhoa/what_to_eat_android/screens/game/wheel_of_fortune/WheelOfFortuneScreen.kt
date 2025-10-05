@@ -1,4 +1,4 @@
-package com.fxanhkhoa.what_to_eat_android.screens.game.WheelOfFortune
+package com.fxanhkhoa.what_to_eat_android.screens.game.wheel_of_fortune
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,11 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.fxanhkhoa.what_to_eat_android.R
-import com.fxanhkhoa.what_to_eat_android.components.game.WheelOfFortune.*
+import com.fxanhkhoa.what_to_eat_android.components.game.wheel_of_fortune.*
 import com.fxanhkhoa.what_to_eat_android.model.DishModel
 import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
 import com.fxanhkhoa.what_to_eat_android.services.DishService

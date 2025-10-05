@@ -1,10 +1,9 @@
-package com.fxanhkhoa.what_to_eat_android.components.game.WheelOfFortune
+package com.fxanhkhoa.what_to_eat_android.components.game.wheel_of_fortune
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
