@@ -30,6 +30,7 @@
     <string name="flipping_card_desc">Lật thẻ để biết món ăn của bạn!</string>
     <string name="vote_game">Bình chọn</string>
     <string name="vote_game_desc">Bình chọn cùng bạn bè để chọn món ăn.</string>
+    <string name="filter_vote_games">Lọc Trò Chơi Bình Chọn</string>
     <string name="game_section_title">Trò chơi</string>
     <string name="game_section_subtitle">Chơi các trò chơi vui để giúp bạn chọn món ăn!</string>
     <string name="featured_games">Trò chơi nổi bật</string>
@@ -152,8 +153,8 @@
     <string name="categories">Danh Mục</string>
     <string name="additional_information">Thông Tin Bổ Sung</string>
     <string name="slug">Slug</string>
-    <string name="created">Được Tạo</string>
-    <string name="updated">Được Cập Nhật</string>
+    <string name="created">Tạo</string>
+    <string name="updated">Cập Nhật</string>
     <string name="back">Quay Lại</string>
     <string name="share">Chia Sẻ</string>
     <string name="share_ingredient">Chia Sẻ Nguyên Liệu</string>
@@ -176,8 +177,9 @@
     <string name="add_dishes">Thêm Món</string>
     <string name="add_more">Thêm Nữa</string>
     <string name="spin_the_wheel">Quay Vòng</string>
-    <string name="spinning">Đang Quay...</string>
-    <string name="winner_celebration">🎉 Món Trúng Thưởng! 🎉</string>
+    <string name="spinning">Đang Quay…</string>
+    <string name="winner_celebration">🎉 Món Chiến Thắng! 🎉</string>
+    <string name="winner">Chiến Thắng</string>
     <string name="tap_to_view_details">Nhấn để xem chi tiết</string>
     <string name="home">Trang Chủ</string>
     <string name="search_placeholder">Tìm kiếm</string>
@@ -201,6 +203,27 @@
     <string name="grid_size_large">3x4 (12 thẻ)</string>
     <string name="select_grid_size">Chọn Kích Thước Lưới</string>
 
+    <!-- Dish Search and Select View -->
+    <string name="search_and_add">Tìm Kiếm và Thêm Món</string>
+    <string name="dishes_selected">món đã chọn</string>
+    <string name="add_more_dishes">Thêm món vào bình chọn</string>
+    <string name="try_adjusting_search_criteria">Thử điều chỉnh tiêu chí tìm kiếm</string>
+
+    <!-- Custom Dish Add View -->
+    <string name="add_custom_dish">Thêm Món Tùy Chỉnh</string>
+    <string name="custom_dish">Món Tùy Chỉnh</string>
+    <string name="custom_dish_header_desc">Thêm món không có trong cơ sở dữ liệu. Bạn có thể thêm bất kỳ món nào!</string>
+    <string name="custom_dish_title">Tên Món Ăn</string>
+    <string name="custom_dish_title_placeholder">Nhập tên món ăn</string>
+    <string name="custom_dish_url">URL Hình Ảnh (Tùy chọn)</string>
+    <string name="custom_dish_url_placeholder">https://example.com/image.jpg</string>
+    <string name="custom_dish_url_helper">Bạn có thể thêm URL hình ảnh của món ăn để xem trước tốt hơn</string>
+    <string name="custom_dish_preview_placeholder">Nhập tiêu đề để xem trước</string>
+    <string name="custom_dish_bottom_desc">Sẽ được thêm vào bình chọn của bạn</string>
+    <string name="custom_dish_alert_empty_title">Vui lòng nhập tên món ăn</string>
+    <string name="custom_dish_alert_duplicate_title">Món tùy chỉnh với tên này đã tồn tại</string>
+    <string name="custom_dish_alert_invalid_url">Vui lòng nhập URL hợp lệ</string>
+    <string name="Preview">Xem Trước</string>
     <!-- Contact Section -->
     <string name="contact_us">Liên Hệ</string>
     <string name="name">Tên</string>
@@ -214,5 +237,90 @@
     <string name="message_sent_success">Gửi tin nhắn thành công</string>
     <string name="message_send_failed">Gửi tin nhắn thất bại</string>
     <string name="success">Thành Công</string>
+
+    <!-- Vote Game Filter -->
+    <string name="filter_and_sort">Lọc và Sắp Xếp</string>
+    <string name="customize_vote_games_display">Tùy chỉnh cách hiển thị trò chơi bình chọn</string>
+    <string name="sort_options">Tùy Chọn Sắp Xếp</string>
+    <string name="sort_by">Sắp Xếp Theo</string>
+    <string name="creation_date">Ngày Tạo</string>
+    <string name="sort_by_creation_date">Sắp xếp theo thời gian tạo</string>
+    <string name="title">Tiêu Đề</string>
+    <string name="sort_by_title">Sắp xếp theo bảng chữ cái</string>
+    <string name="vote_count">Số Lượt Bình Chọn</string>
+    <string name="sort_by_vote_count">Sắp xếp theo số lượt bình chọn</string>
+    <string name="dish_count">Số Món Ăn</string>
+    <string name="sort_by_dish_count">Sắp xếp theo số món ăn</string>
+    <string name="sort_order">Thứ Tự Sắp Xếp</string>
+    <string name="newest_first">Mới Nhất Trước</string>
+    <string name="oldest_first">Cũ Nhất Trước</string>
+    <string name="quick_filters">Bộ Lọc Nhanh</string>
+    <string name="most_popular">Phổ Biến Nhất</string>
+    <string name="sort_by_vote_count_desc">Sắp xếp theo số bình chọn (cao đến thấp)</string>
+    <string name="recently_created">Mới Tạo Gần Đây</string>
+    <string name="show_newest_first">Hiển thị bình chọn mới nhất trước</string>
+    <string name="most_dishes">Nhiều Món Nhất</string>
+    <string name="votes_with_most_dishes">Bình chọn có nhiều món nhất</string>
+    <string name="alphabetical">Theo Bảng Chữ Cái</string>
+    <string name="sort_by_title_az">Sắp xếp theo tiêu đề (A-Z)</string>
+
+    <!-- Vote Game List Screen -->
+    <string name="search_vote_games">Tìm kiếm trò chơi bình chọn...</string>
+    <string name="clear">Xóa</string>
+    <string name="create_vote">Tạo Bình Chọn</string>
+    <string name="no_vote_games_found">Không tìm thấy trò chơi bình chọn</string>
+    <string name="try_adjusting_search">Thử điều chỉnh tìm kiếm hoặc bộ lọc</string>
+    <string name="create_first_vote_game">Tạo trò chơi bình chọn đầu tiên của bạn</string>
+    <string name="login_required">Yêu Cầu Đăng Nhập</string>
+    <string name="login_required_message">Vui lòng đăng nhập để truy cập trò chơi bình chọn và tạo bình chọn của riêng bạn</string>
+    <string name="login_to_continue">Đăng Nhập Để Tiếp Tục</string>
+    <string name="go_back">Quay Lại</string>
+    <string name="active">Đang Hoạt Động</string>
+    <string name="votes">lượt bình chọn</string>
+    <string name="view_results">Xem Kết Quả</string>
+    <string name="vote_now">Bình Chọn Ngay</string>
+    <string name="dishes_in_this_vote">Món ăn trong bình chọn</string>
+    <string name="more">thêm</string>
+    <string name="custom">Tùy Chỉnh</string>
+    <string name="voting_game">Trò Chơi Bình Chọn</string>
+    <string name="dishes">Món ăn</string>
+    <string name="live">Trực Tiếp</string>
+    <string name="disconnected">Mất Kết Nối</string>
+    <string name="reconnect">Kết Nối Lại</string>
+
+    <!-- Voting Create Screen -->
+    <string name="confirm_clear">Xác Nhận Xóa</string>
+    <string name="clear_all_dishes_confirmation">Bạn có chắc chắn muốn xóa tất cả món ăn đã chọn?</string>
+    <string name="add_dish_prompt">Thêm ít nhất 2 món ăn để tạo bình chọn. Để bạn bè quyết định!</string>
+    <string name="vote_title">Tiêu Đề Bình Chọn</string>
+    <string name="enter_vote_title">Nhập tiêu đề bình chọn</string>
+    <string name="vote_description">Mô Tả (Tùy Chọn)</string>
+    <string name="vote_description_optional">Thêm mô tả...</string>
+    <string name="from_database">Từ Cơ Sở Dữ Liệu</string>
+    <string name="minimum_dishes_required">Yêu cầu tối thiểu 2 món ăn</string>
+    <string name="create_voting_session">Tạo Phiên Bình Chọn</string>
+    <string name="all_results">Tất Cả Kết Quả</string>
+    <string name="vote_statistics">Thống Kê Bình Chọn</string>
+    <string name="total_votes">Tổng Số Bình Chọn</string>
+    <string name="total_dishes">Tổng Số Món Ăn</string>
+
+    <!-- Vote Results Screen -->
+    <string name="share_voting_results">Kết Quả Bình Chọn</string>
+    <string name="share_winner">Người chiến thắng</string>
+    <string name="share_with">với</string>
+    <string name="share_all_results">Tất Cả Kết Quả</string>
+    <string name="share_vote_results">Chia Sẻ Kết Quả</string>
+
+    <!-- Chat Strings -->
+    <string name="chat_type_message_placeholder">Nhập tin nhắn...</string>
+    <string name="send">Gửi</string>
+    <string name="chat_loading">Đang tải...</string>
+    <string name="chat_load_more_messages">Tải thêm tin nhắn</string>
+    <string name="chat_is_typing">đang nhập</string>
+    <string name="chat_and">và</string>
+    <string name="chat_are_typing">đang nhập</string>
+    <string name="chat_and_others_are_typing">và %d người khác đang nhập</string>
+    <string name="cast_your_vote">Bình chọn</string>
+    <string name="submit_vote">Bình chọn</string>
 
 </resources>

@@ -34,8 +34,8 @@ fun SettingScreen() {
     val coroutineScope = rememberCoroutineScope()
 
     // Collect theme preferences
-    val isDarkTheme by themeManager.isDarkTheme.collectAsStateWithLifecycle(initialValue = false)
-    val useDynamicColor by themeManager.useDynamicColor.collectAsStateWithLifecycle(initialValue = true)
+    val isDarkTheme by themeManager.isDarkTheme.collectAsStateWithLifecycle(initialValue = true)
+    val useDynamicColor by themeManager.useDynamicColor.collectAsStateWithLifecycle(initialValue = false)
     val followSystemTheme by themeManager.followSystemTheme.collectAsStateWithLifecycle(initialValue = false)
 
     // Collect language preference

@@ -1,9 +1,9 @@
 package com.fxanhkhoa.what_to_eat_android.viewmodel
 
-import User
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fxanhkhoa.what_to_eat_android.data.dto.User
 import com.fxanhkhoa.what_to_eat_android.services.AuthService
 import com.fxanhkhoa.what_to_eat_android.utils.TokenManager
 import kotlinx.coroutines.flow.MutableStateFlow

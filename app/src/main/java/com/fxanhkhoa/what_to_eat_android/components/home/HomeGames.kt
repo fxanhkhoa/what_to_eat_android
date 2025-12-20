@@ -187,7 +187,7 @@ fun HomeGames(
             iconRes = R.drawable.vote_menu, // Replace with your actual drawable
             title = voteGameTitle,
             description = voteGameDesc,
-            onClick = { navController.navigate("vote_game") }
+            onClick = { navController.navigate("dish_vote_list") }
         )
     )
 

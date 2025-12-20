@@ -1,9 +1,10 @@
 package com.fxanhkhoa.what_to_eat_android.services
 
-import User
+import android.util.Log
 import com.fxanhkhoa.what_to_eat_android.BuildConfig
 import com.fxanhkhoa.what_to_eat_android.data.dto.LoginResponse
 import com.fxanhkhoa.what_to_eat_android.data.dto.RefreshTokenResponse
+import com.fxanhkhoa.what_to_eat_android.data.dto.User
 import com.fxanhkhoa.what_to_eat_android.network.AuthApiService
 import com.fxanhkhoa.what_to_eat_android.network.AuthInterceptor
 import com.fxanhkhoa.what_to_eat_android.utils.TokenManager
@@ -14,28 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-
-// Data classes
-
-data class ResultToken(val accessToken: String, val refreshToken: String)
-
-data class LoginRequest(val token: String)
-data class RefreshTokenRequest(val refreshToken: String)
-data class LogoutRequest(val refreshToken: String)
-
-interface AuthApi {
-    @POST("auth/login")
-    suspend fun login(@Body body: LoginRequest): ResultToken
-
-    @POST("auth/refresh-token")
-    suspend fun refreshToken(@Body body: RefreshTokenRequest): ResultToken
-
-    @POST("auth/logout")
-    suspend fun logout(@Body body: LogoutRequest): Any
-
-    @GET("auth/profile")
-    suspend fun getProfile(): User
-}
 
 class AuthService(private val tokenManager: TokenManager) {
     private val authApi: AuthApiService
@@ -92,12 +71,20 @@ class AuthService(private val tokenManager: TokenManager) {
     suspend fun getProfile(): Result<User> {
         return try {
             val response = authApi.getProfile()
+            Log.d("AuthService", "getProfile response code: ${response.code()}")
+            Log.d("AuthService", "getProfile response body: ${response.body()}")
+            Log.d("AuthService", "getProfile raw response: ${response.raw()}")
+
             if (response.isSuccessful && response.body() != null) {
-                Result.success(response.body()!!)
+                val user = response.body()!!
+                Log.d("AuthService", "Parsed User object: id=${user.id}, name=${user.name}, email=${user.email}")
+                Result.success(user)
             } else {
+                Log.e("AuthService", "Failed to get profile: ${response.message()}, errorBody: ${response.errorBody()?.string()}")
                 Result.failure(Exception("Failed to get profile: ${response.message()}"))
             }
         } catch (e: Exception) {
+            Log.e("AuthService", "Exception in getProfile: ${e.message}", e)
             Result.failure(e)
         }
     }

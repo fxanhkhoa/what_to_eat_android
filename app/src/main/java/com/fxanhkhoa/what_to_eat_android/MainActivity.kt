@@ -8,7 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,15 +23,26 @@ import com.fxanhkhoa.what_to_eat_android.ui.components.bottomNavItems
 import com.fxanhkhoa.what_to_eat_android.screens.*
 import com.fxanhkhoa.what_to_eat_android.screens.dish.DishListScreen
 import com.fxanhkhoa.what_to_eat_android.screens.game.GameScreen
+import com.fxanhkhoa.what_to_eat_android.screens.game.voting.VoteGameListScreen
+import com.fxanhkhoa.what_to_eat_android.screens.game.voting.VotingCreateScreen
 import com.fxanhkhoa.what_to_eat_android.screens.game.wheel_of_fortune.WheelOfFortuneScreen
 import com.fxanhkhoa.what_to_eat_android.screens.ingredient.IngredientDetailScreen
 import com.fxanhkhoa.what_to_eat_android.screens.ingredient.IngredientListScreen
+import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
+import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
+import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
+import com.fxanhkhoa.what_to_eat_android.screens.game.voting.RealTimeVoteGameView
+import kotlinx.coroutines.flow.first
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Initialize RetrofitProvider with context to enable AuthInterceptor
+        RetrofitProvider.initialize(applicationContext)
+
         setContent {
             ThemeProvider {
                 MainScreen()
@@ -43,6 +56,15 @@ fun MainScreen() {
     val navController = rememberNavController()
     var selectedItemIndex by remember { mutableIntStateOf(0) }
     val authViewModel = rememberSharedAuthViewModel()
+
+    val context = LocalContext.current
+    val localizationManager = remember { LocalizationManager(context) }
+    var language by remember { mutableStateOf(Language.ENGLISH) }
+
+    // Observe language changes
+    LaunchedEffect(Unit) {
+        language = localizationManager.currentLanguage.first()
+    }
 
     // Listen to navigation changes to sync selectedItemIndex
     LaunchedEffect(selectedItemIndex) {
@@ -132,8 +154,41 @@ fun MainScreen() {
             composable("game") {
                 GameScreen(
                     onWheelOfFortune = { navController.navigate("wheel_of_fortune") },
-                    onFlippingCard = { navController.navigate("flipping_card") }
+                    onFlippingCard = { navController.navigate("flipping_card") },
+                    onVoteGame = { navController.navigate("dish_vote_list") }
                 )
+            }
+            composable("dish_vote_list") {
+                VoteGameListScreen(
+                    authViewModel = authViewModel,
+                    navController = navController,
+                    onNavigateToLogin = {
+                        navController.navigate("login")
+                    },
+                    onNavigateBack = { navController.popBackStack() },
+                    language = language
+                )
+            }
+            composable("create_dish_vote") {
+                VotingCreateScreen(
+                    onNavigateBack = { navController.popBackStack() },
+                )
+            }
+            composable("dish_vote_game/{voteId}") { backStackEntry ->
+                val voteId = backStackEntry.arguments?.getString("voteId") ?: ""
+                if (voteId.isEmpty()) {
+                    VoteGameListScreen(
+                        authViewModel = authViewModel,
+                        navController = navController,
+                        onNavigateToLogin = {
+                            navController.navigate("login")
+                        },
+                        onNavigateBack = { navController.popBackStack() },
+                        language = language
+                    )
+                } else {
+                    RealTimeVoteGameView(voteId, onDismiss = { navController.popBackStack() })
+                }
             }
             composable("wheel_of_fortune") {
                 WheelOfFortuneScreen(

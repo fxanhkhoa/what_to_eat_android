@@ -20,11 +20,11 @@ class ThemeManager(private val context: Context) {
     }
 
     val isDarkTheme: Flow<Boolean> = context.dataStore.data.map { preferences ->
-        preferences[IS_DARK_THEME_KEY] ?: false
+        preferences[IS_DARK_THEME_KEY] ?: true
     }
 
     val useDynamicColor: Flow<Boolean> = context.dataStore.data.map { preferences ->
-        preferences[USE_DYNAMIC_COLOR_KEY] ?: true
+        preferences[USE_DYNAMIC_COLOR_KEY] ?: false
     }
 
     val followSystemTheme: Flow<Boolean> = context.dataStore.data.map { preferences ->
