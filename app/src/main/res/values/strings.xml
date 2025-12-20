@@ -30,6 +30,7 @@
     <string name="flipping_card_desc">Flip cards to reveal delicious dishes!</string>
     <string name="vote_game">Vote Game</string>
     <string name="vote_game_desc">Vote for your favorite dishes and see what others think!</string>
+    <string name="filter_vote_games">Filter Vote Games</string>
     <string name="game_section_title">Food Games</string>
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
@@ -180,6 +181,7 @@
     <string name="spin_the_wheel">Spin the Wheel</string>
     <string name="spinning">Spinning...</string>
     <string name="winner_celebration">🎉 Winner! 🎉</string>
+    <string name="winner">Winner</string>
     <string name="tap_to_view_details">Tap to view details</string>
     <string name="home">Home</string>
     <string name="search_placeholder">Search for something</string>
@@ -203,6 +205,28 @@
     <string name="grid_size_large">3x4 (12 cards)</string>
     <string name="select_grid_size">Select Grid Size</string>
 
+    <!-- Dish Search and Select View -->
+    <string name="search_and_add">Search and Add Dishes</string>
+    <string name="dishes_selected">dishes selected</string>
+    <string name="add_more_dishes">Add dishes to your vote</string>
+    <string name="try_adjusting_search_criteria">Try adjusting your search criteria</string>
+
+    <!-- Custom Dish Add View -->
+    <string name="add_custom_dish">Add Custom Dish</string>
+    <string name="custom_dish">Custom Dish</string>
+    <string name="custom_dish_header_desc">Add a dish that\'s not in our database. You can add any dish you want!</string>
+    <string name="custom_dish_title">Dish Title</string>
+    <string name="custom_dish_title_placeholder">Enter dish name</string>
+    <string name="custom_dish_url">Dish Image URL (Optional)</string>
+    <string name="custom_dish_url_placeholder">https://example.com/image.jpg</string>
+    <string name="custom_dish_url_helper">You can add a URL to an image of the dish for a better preview</string>
+    <string name="custom_dish_preview_placeholder">Enter a title to see the preview</string>
+    <string name="custom_dish_bottom_desc">Will be added to your vote</string>
+    <string name="custom_dish_alert_empty_title">Please enter a dish title</string>
+    <string name="custom_dish_alert_duplicate_title">A custom dish with this title already exists</string>
+    <string name="custom_dish_alert_invalid_url">Please enter a valid URL</string>
+    <string name="Preview">Preview</string>
+
     <!-- Contact Section -->
     <string name="contact_us">Contact Us</string>
     <string name="name">Name</string>
@@ -216,4 +240,89 @@
     <string name="message_sent_success">Message sent successfully</string>
     <string name="message_send_failed">Failed to send message</string>
     <string name="success">Success</string>
+
+    <!-- Vote Game Filter -->
+    <string name="filter_and_sort">Filter and Sort</string>
+    <string name="customize_vote_games_display">Customize how vote games are displayed</string>
+    <string name="sort_options">Sort Options</string>
+    <string name="sort_by">Sort By</string>
+    <string name="creation_date">Creation Date</string>
+    <string name="sort_by_creation_date">Sort by when vote was created</string>
+    <string name="title">Title</string>
+    <string name="sort_by_title">Sort alphabetically by title</string>
+    <string name="vote_count">Vote Count</string>
+    <string name="sort_by_vote_count">Sort by number of votes</string>
+    <string name="dish_count">Dish Count</string>
+    <string name="sort_by_dish_count">Sort by number of dishes</string>
+    <string name="sort_order">Sort Order</string>
+    <string name="newest_first">Newest First</string>
+    <string name="oldest_first">Oldest First</string>
+    <string name="quick_filters">Quick Filters</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="sort_by_vote_count_desc">Sort by votes (high to low)</string>
+    <string name="recently_created">Recently Created</string>
+    <string name="show_newest_first">Show newest votes first</string>
+    <string name="most_dishes">Most Dishes</string>
+    <string name="votes_with_most_dishes">Votes with most dishes</string>
+    <string name="alphabetical">Alphabetical</string>
+    <string name="sort_by_title_az">Sort by title (A-Z)</string>
+
+    <!-- Vote Game List Screen -->
+    <string name="search_vote_games">Search vote games...</string>
+    <string name="clear">Clear</string>
+    <string name="create_vote">Create Vote</string>
+    <string name="no_vote_games_found">No vote games found</string>
+    <string name="try_adjusting_search">Try adjusting your search or filters</string>
+    <string name="create_first_vote_game">Create your first vote game to get started</string>
+    <string name="login_required">Login Required</string>
+    <string name="login_required_message">Please login to access voting games and create your own votes</string>
+    <string name="login_to_continue">Login to Continue</string>
+    <string name="go_back">Go Back</string>
+    <string name="active">Active</string>
+    <string name="votes">votes</string>
+    <string name="view_results">View Results</string>
+    <string name="vote_now">Vote Now</string>
+    <string name="dishes_in_this_vote">Dishes in this vote</string>
+    <string name="more">more</string>
+    <string name="custom">Custom</string>
+    <string name="voting_game">Voting Game</string>
+    <string name="dishes">Dishes</string>
+    <string name="live">Live</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="reconnect">Reconnect</string>
+
+    <!-- Voting Create Screen -->
+    <string name="confirm_clear">Confirm Clear</string>
+    <string name="clear_all_dishes_confirmation">Are you sure you want to clear all selected dishes?</string>
+    <string name="add_dish_prompt">Add at least 2 dishes to create a vote. Let your friends decide!</string>
+    <string name="vote_title">Vote Title</string>
+    <string name="enter_vote_title">Enter vote title</string>
+    <string name="vote_description">Description (Optional)</string>
+    <string name="vote_description_optional">Add a description...</string>
+    <string name="from_database">From Database</string>
+    <string name="minimum_dishes_required">Minimum 2 dishes required</string>
+    <string name="create_voting_session">Create Voting Session</string>
+    <string name="all_results">All Results</string>
+    <string name="vote_statistics">Vote Statistics</string>
+    <string name="total_votes">Total Votes</string>
+    <string name="total_dishes">Total Dishes</string>
+
+    <!-- Vote Results Screen -->
+    <string name="share_voting_results">Voting Results</string>
+    <string name="share_winner">Winner</string>
+    <string name="share_with">with</string>
+    <string name="share_all_results">All Results</string>
+    <string name="share_vote_results">Share Results</string>
+
+    <!-- Chat Strings -->
+    <string name="chat_type_message_placeholder">Type a message...</string>
+    <string name="send">Send</string>
+    <string name="chat_loading">Loading...</string>
+    <string name="chat_load_more_messages">Load more messages</string>
+    <string name="chat_is_typing">is typing</string>
+    <string name="chat_and">and</string>
+    <string name="chat_are_typing">are typing</string>
+    <string name="chat_and_others_are_typing">and %d others are typing</string>
+    <string name="cast_your_vote">Cast your vote</string>
+    <string name="submit_vote">Submit Vote</string>
 </resources>

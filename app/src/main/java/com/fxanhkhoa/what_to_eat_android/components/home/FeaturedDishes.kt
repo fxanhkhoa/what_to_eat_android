@@ -248,8 +248,8 @@ private fun FeaturedDishCard(
                         brush = Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
-                                MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
+                                MaterialTheme.colorScheme.surface.copy(alpha = 0.1f),
+                                MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
                             ),
                             startY = 0f,
                             endY = 600f
