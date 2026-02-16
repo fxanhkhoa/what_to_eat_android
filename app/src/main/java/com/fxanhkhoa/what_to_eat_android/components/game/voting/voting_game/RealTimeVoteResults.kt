@@ -6,7 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,7 +20,6 @@ import com.fxanhkhoa.what_to_eat_android.model.DishVoteItem
 import com.fxanhkhoa.what_to_eat_android.model.DishVoteModel
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
-import kotlinx.coroutines.flow.first
 
 /**
  * Real-time vote results component
@@ -30,16 +30,11 @@ fun RealTimeVoteResults(
     voteGame: DishVoteModel,
     selectedDish: String?,
     dishes: List<DishModel>,
+    language: Language = Language.ENGLISH,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
-    var language by remember { mutableStateOf(Language.ENGLISH) }
-
-    // Observe language changes
-    LaunchedEffect(Unit) {
-        language = localizationManager.currentLanguage.first()
-    }
 
     // Helper function to find dish by slug
     val dishForSlug: (String) -> DishModel? = { slug ->
@@ -58,7 +53,7 @@ fun RealTimeVoteResults(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "Live Results", // TODO: Add localization
+            text = localizationManager.getString(R.string.live_results, language),
             style = MaterialTheme.typography.titleMedium
         )
 
@@ -69,7 +64,8 @@ fun RealTimeVoteResults(
                 item = item,
                 dish = dish,
                 totalVotes = totalVotes,
-                isSelected = selectedDish == item.slug
+                isSelected = selectedDish == item.slug,
+                language = language
             )
         }
     }
@@ -80,7 +76,8 @@ fun VoteResultRow(
     item: DishVoteItem,
     dish: DishModel?,
     totalVotes: Int,
-    isSelected: Boolean
+    isSelected: Boolean,
+    language: Language = Language.ENGLISH
 ) {
     val animatedProgress = animateFloatAsState(
         targetValue = if (totalVotes > 0) {
@@ -88,7 +85,8 @@ fun VoteResultRow(
         } else {
             0f
         },
-        animationSpec = tween(durationMillis = 500)
+        animationSpec = tween(durationMillis = 500),
+        label = "vote_progress"
     )
 
     Row(
@@ -99,7 +97,7 @@ fun VoteResultRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        (dish?.getTitle(Language.ENGLISH.code) ?: item.customTitle)?.let {
+        (dish?.getTitle(language.code) ?: item.customTitle)?.let {
             Text(
                 text = it,
                 style = MaterialTheme.typography.bodyLarge,

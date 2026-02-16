@@ -81,6 +81,7 @@ fun VotingSection(
                             dish = dishMap[item.slug],
                             isSelected = selectedDish == item.slug,
                             onTap = { onDishSelect(item.slug) },
+                            language = language,
                             modifier = Modifier.weight(1f)
                         )
                     }

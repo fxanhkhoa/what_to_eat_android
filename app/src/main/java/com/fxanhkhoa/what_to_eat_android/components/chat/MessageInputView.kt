@@ -35,7 +35,9 @@ fun MessageInputView(
     ) {
         OutlinedTextField(
             value = messageText,
-            onValueChange = onMessageTextChange,
+            onValueChange = { newText ->
+                onMessageTextChange(newText)
+            },
             modifier = Modifier.weight(1f),
             placeholder = {
                 Text(

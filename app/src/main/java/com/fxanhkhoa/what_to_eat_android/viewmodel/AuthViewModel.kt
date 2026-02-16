@@ -64,6 +64,22 @@ class AuthViewModel private constructor(private val tokenManager: TokenManager) 
                 authService.getProfile().fold(
                     onSuccess = { user ->
                         Log.d("AuthViewModel", "Profile fetched successfully: $user")
+
+                        // Save user info to TokenManager if not already present
+                        val currentUserInfo = tokenManager.getUserInfo()
+                        if (currentUserInfo?.id == null) {
+                            val accessToken = tokenManager.getAccessToken()
+                            val refreshToken = tokenManager.getRefreshToken()
+                            tokenManager.saveTokens(
+                                accessToken = accessToken ?: "",
+                                refreshToken = refreshToken,
+                                userId = user.id,
+                                userName = user.name,
+                                userEmail = user.email,
+                                userPhotoUrl = user.avatar
+                            )
+                        }
+
                         _user.value = user
                         _isLoggedIn.value = true
                     },
@@ -104,6 +120,17 @@ class AuthViewModel private constructor(private val tokenManager: TokenManager) 
                         authService.getProfile().fold(
                             onSuccess = { user ->
                                 Log.d("AuthViewModel", "Profile fetched after login: $user")
+
+                                // Save user info to TokenManager
+                                tokenManager.saveTokens(
+                                    accessToken = loginResponse.token,
+                                    refreshToken = loginResponse.refreshToken,
+                                    userId = user.id,
+                                    userName = user.name,
+                                    userEmail = user.email,
+                                    userPhotoUrl = user.avatar
+                                )
+
                                 _user.value = user
                                 _isLoggedIn.value = true
                             },
