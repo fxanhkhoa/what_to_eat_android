@@ -7,7 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
@@ -17,12 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.components.chat.RealTimeChatView
 import com.fxanhkhoa.what_to_eat_android.model.ChatRoomType
 import com.fxanhkhoa.what_to_eat_android.services.ChatSocketService
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
-import kotlinx.coroutines.flow.first
 
 /**
  * Live chat section component for vote games
@@ -34,16 +34,11 @@ fun LiveChatSection(
     showingChat: Boolean,
     onToggleChat: () -> Unit,
     chatSocketService: ChatSocketService,
+    language: Language = Language.ENGLISH,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
-    var language by remember { mutableStateOf(Language.ENGLISH) }
-
-    // Observe language changes
-    LaunchedEffect(Unit) {
-        language = localizationManager.currentLanguage.first()
-    }
 
     Column(
         modifier = modifier
@@ -67,13 +62,13 @@ fun LiveChatSection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Default.Chat,
-                    contentDescription = "Live Chat",
+                    imageVector = Icons.AutoMirrored.Filled.Chat,
+                    contentDescription = localizationManager.getString(R.string.live_chat, language),
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = "Live Chat",
+                    text = localizationManager.getString(R.string.live_chat, language),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold
                 )
@@ -86,7 +81,10 @@ fun LiveChatSection(
                     } else {
                         Icons.Default.KeyboardArrowUp
                     },
-                    contentDescription = if (showingChat) "Collapse" else "Expand",
+                    contentDescription = localizationManager.getString(
+                        if (showingChat) R.string.collapse else R.string.expand,
+                        language
+                    ),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }

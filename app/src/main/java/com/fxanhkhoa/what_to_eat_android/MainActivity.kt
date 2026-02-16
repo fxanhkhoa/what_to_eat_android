@@ -116,7 +116,9 @@ fun MainScreen() {
         NavHost(
             navController = navController,
             startDestination = bottomNavItems[0].route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = innerPadding.calculateBottomPadding() * 0.8f)
         ) {
             composable("home") {
                 HomeScreen(
@@ -187,7 +189,11 @@ fun MainScreen() {
                         language = language
                     )
                 } else {
-                    RealTimeVoteGameView(voteId, onDismiss = { navController.popBackStack() })
+                    RealTimeVoteGameView(
+                        voteId,
+                        onDismiss = { navController.popBackStack() },
+                        language = language
+                    )
                 }
             }
             composable("wheel_of_fortune") {

@@ -76,40 +76,65 @@ class ChatSocketService private constructor(private val context: Context) {
     private var typingTimer: Timer? = null
     private var isSubscriptionsSetup = false
 
+    // Cached user info from TokenManager
+    private var cachedUserId: String? = null
+    private var cachedUserName: String? = null
+    private var cachedUserAvatar: String? = null
+
     // MARK: - Computed Properties for User Info
     private val currentUserId: String
-        get() {
-            // Try to get from TokenManager synchronously or return anonymous
-            return "user_${System.currentTimeMillis()}" // TODO: Get from auth service
-        }
+        get() = cachedUserId ?: "anonymous_${System.currentTimeMillis()}"
 
     private val currentUserName: String
-        get() {
-            // Try to get from TokenManager or return anonymous
-            return "Anonymous" // TODO: Get from auth service
-        }
+        get() = cachedUserName ?: "Anonymous"
 
     private val currentUserAvatar: String?
-        get() {
-            return null // TODO: Get from auth service
-        }
+        get() = cachedUserAvatar
 
     init {
         observeConnectionStatus()
+        loadUserInfo()
+    }
+
+    /**
+     * Load user info from TokenManager
+     */
+    private fun loadUserInfo() {
+        scope.launch {
+            try {
+                val userInfo = tokenManager.getUserInfo()
+                cachedUserId = userInfo?.id
+                cachedUserName = userInfo?.name ?: "Anonymous"
+                cachedUserAvatar = userInfo?.photoUrl
+                Log.d(TAG, "Loaded user info - ID: $cachedUserId, Name: $cachedUserName")
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading user info", e)
+            }
+        }
     }
 
     // MARK: - Public Methods
+
+    /**
+     * Refresh user info from TokenManager
+     * Call this after login or when user profile is updated
+     */
+    fun refreshUserInfo() {
+        loadUserInfo()
+    }
 
     /**
      * Ensure socket connection is established
      */
     fun connectSocket() {
         if (!socketManager.isConnected.value) {
+            Log.d(TAG, "Connecting socket")
             socketManager.connect()
         }
 
         // Setup subscriptions if not already done and we're connected or connecting
         if (!isSubscriptionsSetup) {
+            Log.d(TAG, "Setting up subscriptions")
             ensureConnectionAndSubscriptions()
         }
     }
@@ -126,15 +151,20 @@ class ChatSocketService private constructor(private val context: Context) {
      * Join a chat room (e.g., for a specific vote game or general chat)
      */
     fun joinChatRoom(roomId: String, roomType: ChatRoomType = ChatRoomType.VOTE_GAME) {
-        val roomName = "${roomType.value}$roomId"
-        Log.i(TAG, "Joining chat room: $roomName as $currentUserName")
+        Log.i(TAG, "joinChatRoom called - roomId: $roomId, roomType: ${roomType.value}")
+        Log.i(TAG, "Current user - ID: $currentUserId, Name: $currentUserName")
 
         // Ensure socket is connected and subscriptions are setup
         ensureConnectionAndSubscriptions()
 
-        currentChatRoom?.let { leaveChatRoom(it) }
+        currentChatRoom?.let {
+            Log.i(TAG, "Leaving previous chat room: $it")
+            leaveChatRoom(it)
+        }
 
-        currentChatRoom = roomName
+        currentChatRoom = roomId
+        Log.i(TAG, "currentChatRoom set to: $currentChatRoom")
+
         val joinData = JSONObject().apply {
             put("roomId", roomId)
             put("roomType", roomType.value)
@@ -145,7 +175,7 @@ class ChatSocketService private constructor(private val context: Context) {
         }
 
         socketManager.emit("join_chat_room", joinData)
-        Log.i(TAG, "Joined chat room: $roomName as $currentUserName")
+        Log.i(TAG, "Emitted join_chat_room event for: $roomId")
     }
 
     /**
@@ -207,7 +237,13 @@ class ChatSocketService private constructor(private val context: Context) {
      * Send typing indicator
      */
     fun startTyping() {
-        val roomName = currentChatRoom ?: return
+        val roomName = currentChatRoom
+        if (roomName == null) {
+            Log.w(TAG, "Cannot start typing - currentChatRoom is null. Make sure joinChatRoom was called first.")
+            return
+        }
+
+        Log.d(TAG, "Starting typing indicator in room: $roomName as $currentUserName")
 
         val typingData = JSONObject().apply {
             put("room", roomName)
@@ -216,6 +252,8 @@ class ChatSocketService private constructor(private val context: Context) {
         }
 
         socketManager.emit("typing_start", typingData)
+
+        Log.d(TAG, "Started typing indicator in room: $roomName as $currentUserName")
 
         // Auto-stop typing after 3 seconds
         typingTimer?.cancel()
@@ -243,6 +281,7 @@ class ChatSocketService private constructor(private val context: Context) {
         }
 
         socketManager.emit("typing_stop", typingData)
+        Log.d(TAG, "Stopped typing indicator in room: $roomName as $currentUserName")
     }
 
     /**

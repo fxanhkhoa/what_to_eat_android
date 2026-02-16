@@ -71,10 +71,7 @@ fun VoteGameListScreen(
         if (isAuthenticated) {
             if (!hasLoadedAfterLogin) {
                 viewModel.refreshVoteGames()
-                hasLoadedAfterLogin = true
             }
-        } else {
-            hasLoadedAfterLogin = false
         }
     }
 

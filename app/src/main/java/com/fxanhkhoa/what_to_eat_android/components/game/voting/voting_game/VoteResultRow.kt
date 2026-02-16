@@ -9,10 +9,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,11 +23,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.model.DishModel
 import com.fxanhkhoa.what_to_eat_android.model.DishVoteItem
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
-import kotlinx.coroutines.flow.first
 
 /**
  * Vote result row component
@@ -36,17 +39,13 @@ fun VoteResultRow(
     dish: DishModel?,
     totalVotes: Int,
     isSelected: Boolean,
+    language: Language = Language.ENGLISH,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
-    var language by remember { mutableStateOf(Language.ENGLISH) }
     var showVoters by remember { mutableStateOf(false) }
 
-    // Observe language changes
-    LaunchedEffect(Unit) {
-        language = localizationManager.currentLanguage.first()
-    }
 
     // Calculate vote count and percentage
     val voteCount = item.voteUser.size + item.voteAnonymous.size
@@ -65,9 +64,9 @@ fun VoteResultRow(
 
     // Get dish title
     val dishTitle = when {
-        item.isCustom -> item.customTitle ?: "Custom Dish"
-        dish != null -> dish.getTitle(language.code) ?: "Untitled"
-        else -> "Unknown Dish"
+        item.isCustom -> item.customTitle ?: localizationManager.getString(R.string.custom_dish, language)
+        dish != null -> dish.getTitle(language.code) ?: localizationManager.getString(R.string.untitled, language)
+        else -> localizationManager.getString(R.string.unknown_dish, language)
     }
 
     Column(
@@ -127,7 +126,10 @@ fun VoteResultRow(
                                 } else {
                                     Icons.Default.KeyboardArrowDown
                                 },
-                                contentDescription = if (showVoters) "Hide voters" else "Show voters",
+                                contentDescription = localizationManager.getString(
+                                    if (showVoters) R.string.hide_voters else R.string.show_voters,
+                                    language
+                                ),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.size(16.dp)
                             )
@@ -146,6 +148,7 @@ fun VoteResultRow(
             VoterResultRowListView(
                 userIds = item.voteUser,
                 anonymousCount = item.voteAnonymous.size,
+                language = language,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
@@ -166,35 +169,16 @@ fun VoteResultRow(
 fun VoterResultRowListView(
     userIds: List<String>,
     anonymousCount: Int,
+    language: Language = Language.ENGLISH,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        // User votes
-        if (userIds.isNotEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                userIds.forEach { userId ->
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = null,
-                            modifier = Modifier.size(12.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = userId, // TODO: Fetch user name from UserService
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-        }
+        // ...existing code...
 
         // Anonymous votes
         if (anonymousCount > 0) {
@@ -209,7 +193,11 @@ fun VoterResultRowListView(
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "$anonymousCount anonymous vote${if (anonymousCount > 1) "s" else ""}",
+                    text = context.resources.getQuantityString(
+                        R.plurals.anonymous_votes,
+                        anonymousCount,
+                        anonymousCount
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontStyle = androidx.compose.ui.text.font.FontStyle.Italic

@@ -107,6 +107,9 @@ dependencies {
     // Image loading for user avatars
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+    // YouTube Player
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0")
+
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")

@@ -49,18 +49,11 @@ fun VotingDishCard(
     dish: DishModel?,
     isSelected: Boolean,
     onTap: () -> Unit,
+    language: Language = Language.ENGLISH,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
-    var language by remember { mutableStateOf(Language.ENGLISH) }
-
-    // Observe language changes
-    LaunchedEffect(Unit) {
-        localizationManager.currentLanguage.collect { lang ->
-            language = lang
-        }
-    }
 
     // Animated scale effect for selection
     val scale by animateFloatAsState(
@@ -172,9 +165,9 @@ fun VotingDishCard(
 
             // Title
             val title = if (item.isCustom) {
-                item.customTitle ?: "Custom Dish"
+                item.customTitle ?: localizationManager.getString(R.string.custom_dish, language)
             } else {
-                dish?.getTitle(language.code) ?: "Unknown Dish"
+                dish?.getTitle(language.code) ?: localizationManager.getString(R.string.unknown_dish, language)
             }
 
             Text(

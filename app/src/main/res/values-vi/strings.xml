@@ -322,5 +322,32 @@
     <string name="chat_and_others_are_typing">và %d người khác đang nhập</string>
     <string name="cast_your_vote">Bình chọn</string>
     <string name="submit_vote">Bình chọn</string>
+    <string name="live_vote_game">Trò Chơi Bình Chọn Trực Tiếp</string>
+    <string name="connected">Đã kết nối</string>
+    <string name="vote_game_not_found">Không tìm thấy trò chơi bình chọn</string>
+    <string name="live_chat">Trò Chuyện Trực Tiếp</string>
+    <string name="collapse">Thu gọn</string>
+    <string name="expand">Mở rộng</string>
+    <string name="playing_as">Đang chơi với tên %s</string>
+    <string name="player">Người chơi</string>
+    <string name="live_results">Kết Quả Trực Tiếp</string>
+    <string name="live_updates">Cập Nhật Trực Tiếp</string>
+    <plurals name="vote_count">
+        <item quantity="other">%d lượt bình chọn</item>
+    </plurals>
+    <string name="untitled">Chưa đặt tên</string>
+    <string name="show_voters">Hiện người bình chọn</string>
+    <string name="hide_voters">Ẩn người bình chọn</string>
+    <plurals name="anonymous_votes">
+        <item quantity="other">%d lượt bình chọn ẩn danh</item>
+    </plurals>
+    <string name="loading_voters">Đang tải danh sách...</string>
+    <string name="anonymous_voters">Người bình chọn ẩn danh</string>
+    <plurals name="voters_count">
+        <item quantity="other">%d người bình chọn</item>
+    </plurals>
+    <plurals name="anonymous_voters_count">
+        <item quantity="other">%d người bình chọn ẩn danh</item>
+    </plurals>
 
 </resources>

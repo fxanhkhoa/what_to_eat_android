@@ -6,7 +6,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -16,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
-import kotlinx.coroutines.flow.first
 
 /**
  * Player info header component
@@ -25,16 +25,11 @@ import kotlinx.coroutines.flow.first
 @Composable
 fun PlayerInfoHeader(
     playerName: String,
+    language: Language = Language.ENGLISH,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
-    var language by remember { mutableStateOf(Language.ENGLISH) }
-
-    // Observe language changes
-    LaunchedEffect(Unit) {
-        language = localizationManager.currentLanguage.first()
-    }
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -52,13 +47,13 @@ fun PlayerInfoHeader(
         ) {
             Icon(
                 imageVector = Icons.Default.AccountCircle,
-                contentDescription = "Player",
+                contentDescription = localizationManager.getString(R.string.player, language),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp)
             )
 
             Text(
-                text = "Playing as $playerName",
+                text = localizationManager.getString(R.string.playing_as, language).format(playerName),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface

@@ -24,7 +24,6 @@ import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
@@ -37,22 +36,18 @@ import kotlinx.coroutines.launch
 fun VoterListView(
     userIds: List<String>,
     anonymousCount: Int,
+    language: Language = Language.ENGLISH,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
     val userService = remember { UserService.getInstance(context) }
 
-    var language by remember { mutableStateOf(Language.ENGLISH) }
     var users by remember { mutableStateOf<List<UserModel>>(emptyList()) }
     var isLoading by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
 
-    // Observe language changes
-    LaunchedEffect(Unit) {
-        language = localizationManager.currentLanguage.first()
-    }
 
     // Load users when userIds change
     LaunchedEffect(userIds) {
@@ -70,8 +65,13 @@ fun VoterListView(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // Voters count header
+            val totalVoters = users.size + anonymousCount
             Text(
-                text = "${users.size + anonymousCount} voters", // TODO: Add localization
+                text = context.resources.getQuantityString(
+                    R.plurals.voters_count,
+                    totalVoters,
+                    totalVoters
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -108,7 +108,7 @@ fun VoterListView(
                         strokeWidth = 2.dp
                     )
                     Text(
-                        text = "Loading voters...", // TODO: Add localization
+                        text = localizationManager.getString(R.string.loading_voters, language),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -191,17 +191,17 @@ private fun AnonymousVoterRow(
     ) {
         Icon(
             imageVector = Icons.Default.Person,
-            contentDescription = "Anonymous voters",
+            contentDescription = localizationManager.getString(R.string.anonymous_voters, language),
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(16.dp)
         )
 
         Text(
-            text = if (anonymousCount == 1) {
-                "$anonymousCount anonymous voter" // TODO: Add localization
-            } else {
-                "$anonymousCount anonymous voters"
-            },
+            text = LocalContext.current.resources.getQuantityString(
+                R.plurals.anonymous_voters_count,
+                anonymousCount,
+                anonymousCount
+            ),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontStyle = androidx.compose.ui.text.font.FontStyle.Italic

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.components.SharedLoadingView
 import com.fxanhkhoa.what_to_eat_android.components.game.voting.voting_game.*
 import com.fxanhkhoa.what_to_eat_android.model.DishModel
@@ -22,6 +23,7 @@ import com.fxanhkhoa.what_to_eat_android.model.DishVoteModel
 import com.fxanhkhoa.what_to_eat_android.model.VoteDishDto
 import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
 import com.fxanhkhoa.what_to_eat_android.services.*
+import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
 import kotlinx.coroutines.async
@@ -43,7 +45,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun RealTimeVoteGameView(
     voteGameId: String,
-    onDismiss: () -> Unit = {}
+    onDismiss: () -> Unit = {},
+    language: Language = Language.ENGLISH
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -77,6 +80,8 @@ fun RealTimeVoteGameView(
     LaunchedEffect(user) {
         Log.d("RealTimeVoteGameView", "User state changed: id=${user?.id}, name=${user?.name}, email=${user?.email}")
         Log.d("RealTimeVoteGameView", "senderId=$senderId, senderName=$senderName")
+        // Refresh chat service user info when user changes
+        chatSocketService.refreshUserInfo()
     }
 
     // Setup real-time connection - only depends on voteGameId
@@ -146,12 +151,12 @@ fun RealTimeVoteGameView(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Live Vote Game") },
+                title = { Text(localizationManager.getString(R.string.live_vote_game, language)) },
                 navigationIcon = {
                     IconButton(onClick = onDismiss) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = localizationManager.getString(R.string.back, language)
                         )
                     }
                 },
@@ -168,7 +173,10 @@ fun RealTimeVoteGameView(
                     ) {
                         Icon(
                             imageVector = if (isConnected) Icons.Default.Wifi else Icons.Default.WifiOff,
-                            contentDescription = if (isConnected) "Connected" else "Disconnected",
+                            contentDescription = localizationManager.getString(
+                                if (isConnected) R.string.connected else R.string.disconnected,
+                                language
+                            ),
                             tint = if (isConnected) Color.Green else Color.Red
                         )
                     }
@@ -184,6 +192,7 @@ fun RealTimeVoteGameView(
             if (isLoading) {
                 SharedLoadingView(
                     localizationManager = localizationManager,
+                    language = language,
                     modifier = Modifier.align(Alignment.Center)
                 )
             } else {
@@ -206,12 +215,18 @@ fun RealTimeVoteGameView(
                         ) {
                             item {
                                 // Player Info Header
-                                PlayerInfoHeader(playerName = senderName)
+                                PlayerInfoHeader(
+                                    playerName = senderName,
+                                    language = language
+                                )
                             }
 
                             item {
                                 // Vote Game Header
-                                VoteGameHeader(voteGame = game)
+                                VoteGameHeader(
+                                    voteGame = game,
+                                    language = language
+                                )
                             }
 
                             item {
@@ -219,7 +234,8 @@ fun RealTimeVoteGameView(
                                 RealTimeVoteResults(
                                     voteGame = game,
                                     selectedDish = selectedDish,
-                                    dishes = voteDishes
+                                    dishes = voteDishes,
+                                    language = language
                                 )
                             }
 
@@ -246,7 +262,8 @@ fun RealTimeVoteGameView(
                                                 }
                                             )
                                         }
-                                    }
+                                    },
+                                    language = language
                                 )
                             }
 
@@ -256,14 +273,15 @@ fun RealTimeVoteGameView(
                                     voteGameId = voteGameId,
                                     showingChat = showingChat,
                                     onToggleChat = { showingChat = !showingChat },
-                                    chatSocketService = chatSocketService
+                                    chatSocketService = chatSocketService,
+                                    language = language
                                 )
                             }
                         }
                     }
                 } ?: run {
                     Text(
-                        text = "Vote game not found",
+                        text = localizationManager.getString(R.string.vote_game_not_found, language),
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }

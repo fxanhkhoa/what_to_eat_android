@@ -1,5 +1,6 @@
 package com.fxanhkhoa.what_to_eat_android.components.chat
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -52,6 +53,8 @@ fun RealTimeChatView(
 
     LaunchedEffect(Unit) {
         currentUserId = tokenManager.getUserInfo()?.id
+        // Refresh chat service user info to ensure it has latest data
+        chatService.refreshUserInfo()
     }
 
     val listState = rememberLazyListState()
@@ -63,6 +66,7 @@ fun RealTimeChatView(
 
     // Setup chat connection
     LaunchedEffect(roomId) {
+        Log.d("RealTimeChatView", "Setting up chat for roomId: $roomId")
         setupChatConnection(chatService, roomId, roomType)
     }
 
@@ -94,9 +98,11 @@ fun RealTimeChatView(
         if (messageText.isNotEmpty() && !isTyping) {
             isTyping = true
             chatService.startTyping()
+            Log.d("RealTimeChatView", "Start typing")
         } else if (messageText.isEmpty() && isTyping) {
             isTyping = false
             chatService.stopTyping()
+            Log.d("RealTimeChatView", "Stop typing")
         }
     }
 
@@ -178,13 +184,6 @@ fun RealTimeChatView(
             localizationManager = localizationManager,
             language = language
         )
-    }
-
-    // Cleanup on dispose
-    DisposableEffect(roomId) {
-        onDispose {
-            chatService.leaveRoom()
-        }
     }
 }
 

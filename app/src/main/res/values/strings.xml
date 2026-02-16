@@ -325,4 +325,35 @@
     <string name="chat_and_others_are_typing">and %d others are typing</string>
     <string name="cast_your_vote">Cast your vote</string>
     <string name="submit_vote">Submit Vote</string>
+    <string name="live_vote_game">Live Vote Game</string>
+    <string name="connected">Connected</string>
+    <string name="vote_game_not_found">Vote game not found</string>
+    <string name="live_chat">Live Chat</string>
+    <string name="collapse">Collapse</string>
+    <string name="expand">Expand</string>
+    <string name="playing_as">Playing as %s</string>
+    <string name="player">Player</string>
+    <string name="live_results">Live Results</string>
+    <string name="live_updates">Live Updates</string>
+    <plurals name="vote_count">
+        <item quantity="one">%d vote</item>
+        <item quantity="other">%d votes</item>
+    </plurals>
+    <string name="untitled">Untitled</string>
+    <string name="show_voters">Show voters</string>
+    <string name="hide_voters">Hide voters</string>
+    <plurals name="anonymous_votes">
+        <item quantity="one">%d anonymous vote</item>
+        <item quantity="other">%d anonymous votes</item>
+    </plurals>
+    <string name="loading_voters">Loading voters...</string>
+    <string name="anonymous_voters">Anonymous voters</string>
+    <plurals name="voters_count">
+        <item quantity="one">%d voter</item>
+        <item quantity="other">%d voters</item>
+    </plurals>
+    <plurals name="anonymous_voters_count">
+        <item quantity="one">%d anonymous voter</item>
+        <item quantity="other">%d anonymous voters</item>
+    </plurals>
 </resources>

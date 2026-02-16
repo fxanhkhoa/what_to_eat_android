@@ -4,7 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,11 +13,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.model.DishVoteItem
 import com.fxanhkhoa.what_to_eat_android.model.DishVoteModel
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
-import kotlinx.coroutines.flow.first
 
 /**
  * Vote game header component
@@ -25,16 +26,11 @@ import kotlinx.coroutines.flow.first
 @Composable
 fun VoteGameHeader(
     voteGame: DishVoteModel,
+    language: Language = Language.ENGLISH,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
-    var language by remember { mutableStateOf(Language.ENGLISH) }
-
-    // Observe language changes
-    LaunchedEffect(Unit) {
-        language = localizationManager.currentLanguage.first()
-    }
 
     // Calculate total votes
     val totalVotes = remember(voteGame.dishVoteItems) {
@@ -76,12 +72,12 @@ fun VoteGameHeader(
             ) {
                 Icon(
                     imageVector = Icons.Default.Wifi,
-                    contentDescription = "Live",
+                    contentDescription = localizationManager.getString(R.string.live, language),
                     tint = Color(0xFF4CAF50), // Green color for live indicator
                     modifier = Modifier.size(16.dp)
                 )
                 Text(
-                    text = "Live Updates", // TODO: Add localization
+                    text = localizationManager.getString(R.string.live_updates, language),
                     style = MaterialTheme.typography.bodySmall,
                     color = Color(0xFF4CAF50)
                 )
@@ -89,7 +85,11 @@ fun VoteGameHeader(
 
             // Vote count
             Text(
-                text = "$totalVotes votes", // TODO: Add localization with String.format
+                text = context.resources.getQuantityString(
+                    R.plurals.vote_count,
+                    totalVotes,
+                    totalVotes
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
