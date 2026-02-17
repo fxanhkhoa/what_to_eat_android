@@ -51,14 +51,14 @@ fun AdditionalDetailsSection(
                 ingredient.createdAt?.let { createdAt ->
                     DetailRow(
                         title = localizationManager.getString(R.string.created, language),
-                        value = DateUtil.formatDate(createdAt)
+                        value = DateUtil.formatDate(createdAt, language)
                     )
                 }
 
                 ingredient.updatedAt?.let { updatedAt ->
                     DetailRow(
                         title = localizationManager.getString(R.string.updated, language),
-                        value = DateUtil.formatDate(updatedAt)
+                        value = DateUtil.formatDate(updatedAt, language)
                     )
                 }
             }

@@ -1,5 +1,6 @@
 package com.fxanhkhoa.what_to_eat_android.utils
 
+import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -8,23 +9,33 @@ object DateUtil {
     private const val ISO_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
     private const val DISPLAY_DATE_FORMAT = "MMM dd, yyyy"
 
-    fun formatDate(dateString: String): String {
+    fun formatDate(dateString: String, language: Language? = null): String {
         return try {
             val date = parseIsoDate(dateString)
-            val displayFormat = SimpleDateFormat(DISPLAY_DATE_FORMAT, Locale.getDefault())
+            val locale = getLocaleFromLanguage(language)
+            val displayFormat = SimpleDateFormat(DISPLAY_DATE_FORMAT, locale)
             date?.let { displayFormat.format(it) } ?: dateString
         } catch (e: Exception) {
             dateString
         }
     }
 
-    fun formatDateTime(dateString: String): String {
+    fun formatDateTime(dateString: String, language: Language? = null): String {
         return try {
             val date = parseIsoDate(dateString)
-            val displayFormat = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
+            val locale = getLocaleFromLanguage(language)
+            val displayFormat = SimpleDateFormat("MMM dd, yyyy HH:mm", locale)
             date?.let { displayFormat.format(it) } ?: dateString
         } catch (e: Exception) {
             dateString
+        }
+    }
+
+    private fun getLocaleFromLanguage(language: Language?): Locale {
+        return when (language?.code) {
+            "vi" -> Locale.Builder().setLanguage("vi").setRegion("VN").build()
+            "en" -> Locale.ENGLISH
+            else -> Locale.getDefault()
         }
     }
 

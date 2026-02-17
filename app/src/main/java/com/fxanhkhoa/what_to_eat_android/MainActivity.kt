@@ -118,7 +118,10 @@ fun MainScreen() {
             startDestination = bottomNavItems[0].route,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = innerPadding.calculateBottomPadding() * 0.8f)
+                .padding(
+                    bottom = innerPadding.calculateBottomPadding() * 0.8f,
+                    top = innerPadding.calculateTopPadding(),
+                )
         ) {
             composable("home") {
                 HomeScreen(

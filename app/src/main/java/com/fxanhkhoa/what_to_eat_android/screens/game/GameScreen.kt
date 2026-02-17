@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -128,7 +127,6 @@ fun GameScreen(
             }
         }
         Spacer(modifier = Modifier.height(24.dp))
-        FeaturedSection(language = language)
     }
 }
 
@@ -175,6 +173,14 @@ private fun HeaderSection(language: Language = Language.ENGLISH) {
 
 @Composable
 private fun GameCard(item: GameMenuItem) {
+    val context = LocalContext.current
+    val localizationManager = remember { LocalizationManager(context) }
+    var language by remember { mutableStateOf(Language.ENGLISH) }
+
+    LaunchedEffect(Unit) {
+        language = localizationManager.currentLanguage.first()
+    }
+
     Card(
         onClick = item.onClick,
         modifier = Modifier
@@ -234,59 +240,11 @@ private fun GameCard(item: GameMenuItem) {
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = stringResource(R.string.play_now),
+                    text = localizationManager.getString(R.string.play_now, language),
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp
                 )
-            }
-        }
-    }
-}
-
-@Composable
-private fun FeaturedSection(language: Language = Language.ENGLISH) {
-    val context = LocalContext.current
-    val localizationManager = remember { LocalizationManager(context) }
-
-    val featureGameTitle = localizationManager.getString(
-        R.string.featured_games,
-        language
-    )
-
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(
-            text = featureGameTitle,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            shape = MaterialTheme.shapes.medium,
-            elevation = CardDefaults.cardElevation(4.dp)
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = null,
-                        tint = Color.Yellow,
-                        modifier = Modifier.size(28.dp)
-                    )
-                    Text(
-                        text = stringResource(R.string.coming_soon),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 14.sp
-                    )
-                }
             }
         }
     }

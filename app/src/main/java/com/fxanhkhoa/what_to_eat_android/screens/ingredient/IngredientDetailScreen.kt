@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.WindowInsets
 import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.components.ingredient.detail.*
 import com.fxanhkhoa.what_to_eat_android.model.Ingredient
@@ -44,6 +46,11 @@ fun IngredientDetailScreen(
     // Observe language changes
     LaunchedEffect(Unit) {
         language = localizationManager.currentLanguage.first()
+    }
+
+    // Handle system back button
+    BackHandler {
+        navController.popBackStack()
     }
 
     // Fetch ingredient by ID from service
@@ -129,7 +136,8 @@ fun IngredientDetailScreen(
                         localizationManager = localizationManager,
                         language = language
                     )
-                }
+                },
+                windowInsets = WindowInsets(0.dp)
             )
         }
     ) { paddingValues ->

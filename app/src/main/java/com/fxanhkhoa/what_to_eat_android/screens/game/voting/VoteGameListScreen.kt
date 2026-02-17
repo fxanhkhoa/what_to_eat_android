@@ -694,7 +694,7 @@ fun VoteGameCard(
 
                 // Created Date
                 Text(
-                    text = DateUtil.formatDate(voteGame.createdAt),
+                    text = DateUtil.formatDate(voteGame.createdAt, language),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

@@ -25,6 +25,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.WindowInsets
 import com.fxanhkhoa.what_to_eat_android.components.dish.*
 import com.fxanhkhoa.what_to_eat_android.model.DishModel
 import com.fxanhkhoa.what_to_eat_android.model.Ingredient
@@ -68,6 +70,11 @@ fun DishDetailScreen(
     var isLoadingIngredients by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
+
+    // Handle system back button
+    BackHandler {
+        onBackPressed()
+    }
 
     // Fetch dish by slug when screen appears
     LaunchedEffect(slug) {
@@ -195,7 +202,8 @@ fun DishDetailScreen(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
-                )
+                ),
+                windowInsets = WindowInsets(0.dp)
             )
         }
     ) { innerPadding ->

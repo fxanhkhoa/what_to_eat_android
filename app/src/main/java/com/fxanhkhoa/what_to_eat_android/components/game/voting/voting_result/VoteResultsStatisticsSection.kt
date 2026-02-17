@@ -80,7 +80,7 @@ fun VoteResultsStatisticsSection(
             // Created Date Card
             StatisticCard(
                 title = localizationManager.getString(R.string.created, language),
-                value = DateUtil.formatDate(dishVote.createdAt),
+                value = DateUtil.formatDate(dishVote.createdAt, language),
                 icon = Icons.Default.DateRange,
                 color = Color.Gray,
                 modifier = Modifier.weight(1f)
