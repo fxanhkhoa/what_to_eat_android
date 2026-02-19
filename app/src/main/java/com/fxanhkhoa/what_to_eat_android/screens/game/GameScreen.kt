@@ -118,7 +118,8 @@ fun GameScreen(
         Spacer(modifier = Modifier.height(16.dp))
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            modifier = Modifier.height(340.dp),
+            modifier = Modifier
+                .fillMaxHeight(),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -136,9 +137,9 @@ private fun HeaderSection(language: Language = Language.ENGLISH) {
     val localizationManager = remember { LocalizationManager(context) }
 
     val gameSectionTitle = localizationManager.getString(
-            R.string.game_section_title,
-            language
-        )
+        R.string.game_section_title,
+        language
+    )
 
     val gameSectionSubtitle = localizationManager.getString(
         R.string.game_section_subtitle,

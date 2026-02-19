@@ -54,7 +54,6 @@ fun WheelOfFortuneScreen(
     var rotationAngle by remember { mutableStateOf(0f) }
     var isSpinning by remember { mutableStateOf(false) }
     var selectedDish by remember { mutableStateOf<DishModel?>(null) }
-    var previewDish by remember { mutableStateOf<DishModel?>(null) }
     var showDishPicker by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(true) }
 
@@ -139,7 +138,8 @@ fun WheelOfFortuneScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
-                )
+                ),
+                windowInsets = WindowInsets(0.dp)
             )
         }
     ) { paddingValues ->
@@ -175,7 +175,6 @@ fun WheelOfFortuneScreen(
                         selectedDishes = selectedDishes.filter { it.id != dish.id }
                     },
                     onTapDish = { dish ->
-                        previewDish = dish
                         onNavigateToDishDetail(dish.slug)
                     },
                     onAddDishes = { showDishPicker = true }
@@ -193,7 +192,6 @@ fun WheelOfFortuneScreen(
                         rotationAngle = animatedRotation,
                         language = language,
                         onSectionTap = { dish ->
-                            previewDish = dish
                             onNavigateToDishDetail(dish.slug)
                         }
                     )
@@ -216,17 +214,22 @@ fun WheelOfFortuneScreen(
                                 scope.launch {
                                     kotlinx.coroutines.delay(3000)
 
+                                    // The pointer is at the top (270 degrees from 0)
+                                    // Sections start at 0 degrees (right/3 o'clock) and go clockwise
                                     val finalAngle = rotationAngle % 360f
                                     val sectionAngle = 360f / dishes.size
-                                    val pointerAngle = (360f - finalAngle) % 360f
-                                    val adjustedAngle = (pointerAngle + (sectionAngle / 2f)) % 360f
 
-                                    var selectedIndex = ((adjustedAngle / sectionAngle).toInt() - 2) % dishes.size
-                                    if (selectedIndex < 0) {
-                                        selectedIndex = dishes.size - 1
-                                    } else if (selectedIndex >= dishes.size) {
-                                        selectedIndex = selectedIndex % dishes.size
-                                    }
+                                    // Calculate which section is at the top (270 degrees)
+                                    // We need to find which section the pointer (at 270°) is pointing to
+                                    val pointerPosition = 270f
+
+                                    // Adjust for the wheel's rotation - subtract rotation to find original position
+                                    val adjustedPointerAngle = (pointerPosition - finalAngle) % 360f
+                                    val normalizedAngle = if (adjustedPointerAngle < 0f) adjustedPointerAngle + 360f else adjustedPointerAngle
+
+                                    // Calculate which section this angle falls into
+                                    var selectedIndex = (normalizedAngle / sectionAngle).toInt() % dishes.size
+                                    if (selectedIndex < 0) selectedIndex += dishes.size
 
                                     selectedDish = dishes[selectedIndex]
                                     isSpinning = false

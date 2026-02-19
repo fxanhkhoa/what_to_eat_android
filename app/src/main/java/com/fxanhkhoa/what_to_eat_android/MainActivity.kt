@@ -119,7 +119,7 @@ fun MainScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    bottom = innerPadding.calculateBottomPadding() * 0.8f,
+                    bottom = innerPadding.calculateBottomPadding(),
                     top = innerPadding.calculateTopPadding(),
                 )
         ) {

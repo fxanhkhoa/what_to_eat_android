@@ -110,7 +110,8 @@ fun VoteGameListScreen(
                             )
                         }
                     }
-                }
+                },
+                windowInsets = WindowInsets(0.dp)
             )
         }
     ) { paddingValues ->

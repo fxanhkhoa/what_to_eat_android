@@ -180,7 +180,8 @@ fun RealTimeVoteGameView(
                             tint = if (isConnected) Color.Green else Color.Red
                         )
                     }
-                }
+                },
+                windowInsets = WindowInsets(0.dp)
             )
         }
     ) { paddingValues ->

@@ -85,7 +85,8 @@ fun VotingCreateScreen(
                     ) {
                         Text(localizationManager.getString(R.string.clear_all, language))
                     }
-                }
+                },
+                windowInsets = WindowInsets(0.dp)
             )
         },
         bottomBar = {

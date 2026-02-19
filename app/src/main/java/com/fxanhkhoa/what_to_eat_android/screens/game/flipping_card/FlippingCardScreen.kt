@@ -97,7 +97,8 @@ fun FlippingCardScreen(
                             tint = colorScheme.primary
                         )
                     }
-                }
+                },
+                windowInsets = WindowInsets(0.dp)
             )
         }
     ) { paddingValues ->

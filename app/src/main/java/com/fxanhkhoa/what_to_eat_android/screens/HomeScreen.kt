@@ -38,11 +38,15 @@ import com.fxanhkhoa.what_to_eat_android.components.home.ContactSection
 import com.fxanhkhoa.what_to_eat_android.components.home.HomeBanner
 import com.fxanhkhoa.what_to_eat_android.components.home.HomeGames
 import com.fxanhkhoa.what_to_eat_android.components.home.RandomDishes
+import com.fxanhkhoa.what_to_eat_android.data.dto.QueryDishDto
+import com.fxanhkhoa.what_to_eat_android.model.DishModel
+import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -55,6 +59,13 @@ fun HomeScreen(
     var refreshTrigger by remember { mutableIntStateOf(0) } // Integer state counter to trigger refresh
     val coroutineScope = rememberCoroutineScope()
 
+    // Search-related state
+    var searchResults by remember { mutableStateOf<List<DishModel>>(emptyList()) }
+    var isSearching by remember { mutableStateOf(false) }
+    var searchJob by remember { mutableStateOf<Job?>(null) }
+
+    val dishService = remember { RetrofitProvider.dishService }
+
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
     var language by remember { mutableStateOf(Language.ENGLISH) }
@@ -62,6 +73,39 @@ fun HomeScreen(
     // Observe language changes
     LaunchedEffect(Unit) {
         language = localizationManager.currentLanguage.first()
+    }
+
+    // Handle search with debouncing
+    LaunchedEffect(searchText) {
+        // Cancel previous search job
+        searchJob?.cancel()
+
+        if (searchText.isEmpty()) {
+            searchResults = emptyList()
+            isSearching = false
+            return@LaunchedEffect
+        }
+
+        // Debounce: wait 500ms before searching
+        searchJob = coroutineScope.launch {
+            delay(500)
+            isSearching = true
+
+            try {
+                val query = QueryDishDto(
+                    page = 1,
+                    limit = 10,
+                    keyword = searchText
+                )
+                val url = query.buildSearchFuzzyUrl()
+                val result = dishService.searchFuzzy(url)
+                searchResults = result.data
+            } catch (e: Exception) {
+                searchResults = emptyList()
+            } finally {
+                isSearching = false
+            }
+        }
     }
 
     // Create pull refresh state
@@ -115,7 +159,15 @@ fun HomeScreen(
                 language = language
             )
             SearchBarResult(
-                text = searchText, modifier = Modifier.fillMaxWidth()
+                text = searchText,
+                dishes = searchResults,
+                isLoading = isSearching,
+                language = language,
+                onDishClick = { slug ->
+                    navController.navigate("dish/$slug")
+                    searchText = "" // Clear search after navigation
+                },
+                modifier = Modifier.fillMaxWidth()
             )
             val scrollState = rememberScrollState()
             Column(

@@ -22,7 +22,7 @@ fun GameBoardView(
         columns = GridCells.Fixed(3),
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(max = 600.dp),
+            .heightIn(max = 615.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(16.dp)
