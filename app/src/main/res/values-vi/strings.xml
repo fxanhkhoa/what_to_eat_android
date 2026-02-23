@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">what_to_eat_android</string>
+    <string name="app_name">Foodiary</string>
 
     <!-- Settings -->
     <string name="settings">Cài Đặt</string>

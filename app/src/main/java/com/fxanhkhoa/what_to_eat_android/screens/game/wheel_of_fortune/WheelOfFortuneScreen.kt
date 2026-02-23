@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,6 +33,7 @@ import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
 import com.fxanhkhoa.what_to_eat_android.services.DishService
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
+import com.fxanhkhoa.what_to_eat_android.utils.rememberSoundAndHapticManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -47,11 +47,12 @@ fun WheelOfFortuneScreen(
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
+    val soundAndHapticManager = rememberSoundAndHapticManager()
     var language by remember { mutableStateOf(Language.ENGLISH) }
 
     var dishes by remember { mutableStateOf<List<DishModel>>(emptyList()) }
     var selectedDishes by remember { mutableStateOf<List<DishModel>>(emptyList()) }
-    var rotationAngle by remember { mutableStateOf(0f) }
+    var rotationAngle by remember { mutableFloatStateOf(0f) }
     var isSpinning by remember { mutableStateOf(false) }
     var selectedDish by remember { mutableStateOf<DishModel?>(null) }
     var showDishPicker by remember { mutableStateOf(false) }
@@ -118,12 +119,12 @@ fun WheelOfFortuneScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("") },
+                title = { Text(localizationManager.getString(R.string.wheel_of_fortune, language)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back)
+                            contentDescription = localizationManager.getString(R.string.back, language)
                         )
                     }
                 },
@@ -131,7 +132,7 @@ fun WheelOfFortuneScreen(
                     IconButton(onClick = { showDishPicker = true }) {
                         Icon(
                             imageVector = Icons.Default.AddCircle,
-                            contentDescription = stringResource(R.string.add_dishes),
+                            contentDescription = localizationManager.getString(R.string.add_dishes, language),
                             tint = Color(0xFFF3A446)
                         )
                     }
@@ -165,12 +166,16 @@ fun WheelOfFortuneScreen(
                 verticalArrangement = Arrangement.spacedBy(30.dp)
             ) {
                 // Header
-                HeaderSection()
+                HeaderSection(
+                    language = language,
+                    localizationManager = localizationManager
+                )
 
                 // Dish Management Section
                 DishManagementSection(
                     dishes = dishes,
                     language = language,
+                    localizationManager = localizationManager,
                     onRemoveDish = { dish ->
                         selectedDishes = selectedDishes.filter { it.id != dish.id }
                     },
@@ -200,10 +205,16 @@ fun WheelOfFortuneScreen(
                     SpinButton(
                         isSpinning = isSpinning,
                         isEnabled = dishes.isNotEmpty() && !isSpinning,
+                        language = language,
+                        localizationManager = localizationManager,
                         onSpin = {
                             if (dishes.isNotEmpty() && !isSpinning) {
                                 isSpinning = true
                                 selectedDish = null
+
+                                // Play sound and haptic feedback
+                                soundAndHapticManager.playSpinSound()
+                                soundAndHapticManager.performSpinHaptic()
 
                                 // Calculate random spin
                                 val randomSpins = Random.nextInt(3, 7) * 360f
@@ -213,6 +224,9 @@ fun WheelOfFortuneScreen(
                                 // Calculate selected dish after spin
                                 scope.launch {
                                     kotlinx.coroutines.delay(3000)
+
+                                    // Stop the spinning sound
+                                    soundAndHapticManager.stopSpinSound()
 
                                     // The pointer is at the top (270 degrees from 0)
                                     // Sections start at 0 degrees (right/3 o'clock) and go clockwise
@@ -233,6 +247,9 @@ fun WheelOfFortuneScreen(
 
                                     selectedDish = dishes[selectedIndex]
                                     isSpinning = false
+
+                                    // Landing haptic feedback
+                                    soundAndHapticManager.performLandingHaptic()
                                 }
                             }
                         }
@@ -243,6 +260,7 @@ fun WheelOfFortuneScreen(
                         ResultSection(
                             dish = dish,
                             language = language,
+                            localizationManager = localizationManager,
                             onTap = { onNavigateToDishDetail(dish.slug) }
                         )
                     }
@@ -272,7 +290,10 @@ fun WheelOfFortuneScreen(
 }
 
 @Composable
-private fun HeaderSection() {
+private fun HeaderSection(
+    language: Language,
+    localizationManager: LocalizationManager
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -285,14 +306,14 @@ private fun HeaderSection() {
         )
 
         Text(
-            text = stringResource(R.string.wheel_of_fortune),
+            text = localizationManager.getString(R.string.wheel_of_fortune, language),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = stringResource(R.string.wheel_of_fortune_description),
+            text = localizationManager.getString(R.string.wheel_of_fortune_description, language),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -304,6 +325,7 @@ private fun HeaderSection() {
 private fun DishManagementSection(
     dishes: List<DishModel>,
     language: Language,
+    localizationManager: LocalizationManager,
     onRemoveDish: (DishModel) -> Unit,
     onTapDish: (DishModel) -> Unit,
     onAddDishes: () -> Unit
@@ -329,7 +351,7 @@ private fun DishManagementSection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.dishes_on_wheel),
+                    text = localizationManager.getString(R.string.dishes_on_wheel, language),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -343,7 +365,11 @@ private fun DishManagementSection(
 
             // Dishes or empty state
             if (dishes.isEmpty()) {
-                EmptyDishesState(onAddDishes = onAddDishes)
+                EmptyDishesState(
+                    onAddDishes = onAddDishes,
+                    language = language,
+                    localizationManager = localizationManager
+                )
             } else {
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -360,7 +386,11 @@ private fun DishManagementSection(
                     // Add more button
                     if (dishes.size < 7) {
                         item {
-                            AddMoreButton(onClick = onAddDishes)
+                            AddMoreButton(
+                                onClick = onAddDishes,
+                                language = language,
+                                localizationManager = localizationManager
+                            )
                         }
                     }
                 }
@@ -370,7 +400,11 @@ private fun DishManagementSection(
 }
 
 @Composable
-private fun EmptyDishesState(onAddDishes: () -> Unit) {
+private fun EmptyDishesState(
+    onAddDishes: () -> Unit,
+    language: Language,
+    localizationManager: LocalizationManager
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -386,7 +420,7 @@ private fun EmptyDishesState(onAddDishes: () -> Unit) {
         )
 
         Text(
-            text = stringResource(R.string.no_dishes_on_wheel),
+            text = localizationManager.getString(R.string.no_dishes_on_wheel, language),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -400,13 +434,17 @@ private fun EmptyDishesState(onAddDishes: () -> Unit) {
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(stringResource(R.string.add_dishes))
+            Text(localizationManager.getString(R.string.add_dishes, language))
         }
     }
 }
 
 @Composable
-private fun AddMoreButton(onClick: () -> Unit) {
+private fun AddMoreButton(
+    onClick: () -> Unit,
+    language: Language,
+    localizationManager: LocalizationManager
+) {
     Card(
         modifier = Modifier
             .size(80.dp, 100.dp)
@@ -433,7 +471,7 @@ private fun AddMoreButton(onClick: () -> Unit) {
             )
 
             Text(
-                text = stringResource(R.string.add_more),
+                text = localizationManager.getString(R.string.add_more, language),
                 style = MaterialTheme.typography.labelSmall,
                 color = Color(0xFFF3A446)
             )
@@ -475,7 +513,9 @@ private fun WheelContainer(
 private fun SpinButton(
     isSpinning: Boolean,
     isEnabled: Boolean,
-    onSpin: () -> Unit
+    onSpin: () -> Unit,
+    language: Language,
+    localizationManager: LocalizationManager
 ) {
     Button(
         onClick = onSpin,
@@ -498,7 +538,10 @@ private fun SpinButton(
         Spacer(modifier = Modifier.width(12.dp))
 
         Text(
-            text = stringResource(if (isSpinning) R.string.spinning else R.string.spin_the_wheel),
+            text = localizationManager.getString(
+                if (isSpinning) R.string.spinning else R.string.spin_the_wheel,
+                language
+            ),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
             color = Color.White
@@ -510,6 +553,7 @@ private fun SpinButton(
 private fun ResultSection(
     dish: DishModel,
     language: Language,
+    localizationManager: LocalizationManager,
     onTap: () -> Unit
 ) {
     Column(
@@ -518,7 +562,7 @@ private fun ResultSection(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.winner_celebration),
+            text = localizationManager.getString(R.string.winner_celebration, language),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             color = Color(0xFFF3A446)
@@ -587,7 +631,7 @@ private fun ResultSection(
                     )
 
                     Text(
-                        text = stringResource(R.string.tap_to_view_details),
+                        text = localizationManager.getString(R.string.tap_to_view_details, language),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
