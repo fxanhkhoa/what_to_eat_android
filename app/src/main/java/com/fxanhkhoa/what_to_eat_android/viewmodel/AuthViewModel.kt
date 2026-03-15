@@ -58,46 +58,86 @@ class AuthViewModel private constructor(private val tokenManager: TokenManager) 
      */
     private suspend fun checkExistingSession() {
         try {
-            if (tokenManager.hasValidTokens()) {
-                Log.d("AuthViewModel", "Valid tokens found, fetching profile")
-                // Call getProfile() instead of creating User directly
-                authService.getProfile().fold(
-                    onSuccess = { user ->
-                        Log.d("AuthViewModel", "Profile fetched successfully: $user")
-
-                        // Save user info to TokenManager if not already present
-                        val currentUserInfo = tokenManager.getUserInfo()
-                        if (currentUserInfo?.id == null) {
-                            val accessToken = tokenManager.getAccessToken()
-                            val refreshToken = tokenManager.getRefreshToken()
-                            tokenManager.saveTokens(
-                                accessToken = accessToken ?: "",
-                                refreshToken = refreshToken,
-                                userId = user.id,
-                                userName = user.name,
-                                userEmail = user.email,
-                                userPhotoUrl = user.avatar
-                            )
-                        }
-
-                        _user.value = user
-                        _isLoggedIn.value = true
-                    },
-                    onFailure = { exception ->
-                        // If profile fetch fails, clear tokens and reset state
-                        tokenManager.clearTokens()
-                        _isLoggedIn.value = false
-                        _user.value = null
-                    }
-                )
+            val accessToken = tokenManager.getAccessToken()
+            if (accessToken.isNullOrEmpty()) {
+                Log.d("AuthViewModel", "No access token found, user not logged in")
+                return
             }
+
+            // Access token exists but may be expired — try refresh first
+            if (tokenManager.isTokenExpired()) {
+                Log.d("AuthViewModel", "Access token expired, attempting refresh before profile fetch")
+                val refreshed = tryRefreshToken()
+                if (!refreshed) {
+                    Log.w("AuthViewModel", "Token refresh failed, clearing session")
+                    tokenManager.clearTokens()
+                    _isLoggedIn.value = false
+                    _user.value = null
+                    return
+                }
+                Log.d("AuthViewModel", "Token refreshed successfully, fetching profile")
+            }
+
+            // Token is valid — fetch profile
+            authService.getProfile().fold(
+                onSuccess = { user ->
+                    Log.d("AuthViewModel", "Profile fetched successfully: $user")
+                    val currentUserInfo = tokenManager.getUserInfo()
+                    if (currentUserInfo?.id == null) {
+                        val newAccessToken = tokenManager.getAccessToken()
+                        val newRefreshToken = tokenManager.getRefreshToken()
+                        tokenManager.saveTokens(
+                            accessToken = newAccessToken ?: "",
+                            refreshToken = newRefreshToken,
+                            userId = user.id,
+                            userName = user.name,
+                            userEmail = user.email,
+                            userPhotoUrl = user.avatar
+                        )
+                    }
+                    _user.value = user
+                    _isLoggedIn.value = true
+                },
+                onFailure = { exception ->
+                    Log.e("AuthViewModel", "Profile fetch failed: ${exception.message}")
+                    tokenManager.clearTokens()
+                    _isLoggedIn.value = false
+                    _user.value = null
+                }
+            )
         } catch (e: Exception) {
             Log.e("AuthViewModel", "Error checking existing session: ${e.message}")
-            // If there's an error, clear tokens and reset state
             tokenManager.clearTokens()
             _isLoggedIn.value = false
             _user.value = null
         }
+    }
+
+    /**
+     * Attempt to refresh the access token using the stored refresh token.
+     * Returns true if refresh succeeded, false otherwise.
+     */
+    private suspend fun tryRefreshToken(): Boolean {
+        val refreshToken = tokenManager.getRefreshToken()
+        if (refreshToken.isNullOrEmpty()) {
+            Log.w("AuthViewModel", "No refresh token stored, cannot refresh")
+            return false
+        }
+        return authService.refreshToken(refreshToken).fold(
+            onSuccess = { response ->
+                Log.d("AuthViewModel", "Token refresh succeeded")
+                // Persist both the new access token AND the new refresh token (rotation)
+                tokenManager.updateAccessToken(
+                    accessToken = response.accessToken,
+                    newRefreshToken = response.refreshToken
+                )
+                true
+            },
+            onFailure = { e ->
+                Log.e("AuthViewModel", "Token refresh failed: ${e.message}")
+                false
+            }
+        )
     }
 
     fun signInWithGoogle(idToken: String) {
@@ -185,29 +225,8 @@ class AuthViewModel private constructor(private val tokenManager: TokenManager) 
      */
     fun refreshToken() {
         viewModelScope.launch {
-            try {
-                val refreshToken = tokenManager.getRefreshToken()
-                if (refreshToken != null) {
-                    authService.refreshToken(refreshToken).fold(
-                        onSuccess = { refreshResponse ->
-                            // Update access token
-                            tokenManager.updateAccessToken(
-                                accessToken = refreshResponse.accessToken,
-                            )
-                        },
-                        onFailure = {
-                            // If refresh fails, sign out user
-                            signOut()
-                        }
-                    )
-                } else {
-                    // No refresh token available, sign out
-                    signOut()
-                }
-            } catch (e: Exception) {
-                // If refresh fails, sign out user
-                signOut()
-            }
+            val refreshed = tryRefreshToken()
+            if (!refreshed) signOut()
         }
     }
 
@@ -222,11 +241,10 @@ class AuthViewModel private constructor(private val tokenManager: TokenManager) 
      * Check if token needs refresh and refresh if needed
      */
     suspend fun ensureValidToken(): Boolean {
-        return if (tokenManager.isTokenExpired() && tokenManager.hasRefreshToken()) {
-            refreshToken()
-            tokenManager.hasValidTokens()
-        } else {
-            tokenManager.hasValidTokens()
+        return when {
+            !tokenManager.isTokenExpired() -> true
+            tokenManager.hasRefreshToken() -> tryRefreshToken()
+            else -> false
         }
     }
 
@@ -236,5 +254,12 @@ class AuthViewModel private constructor(private val tokenManager: TokenManager) 
 
     fun clearError() {
         _errorMessage.value = null
+    }
+
+    /**
+     * Update the current user in the state (called after profile update)
+     */
+    fun updateUser(user: User) {
+        _user.value = user
     }
 }

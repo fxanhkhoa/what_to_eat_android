@@ -21,6 +21,8 @@ import com.fxanhkhoa.what_to_eat_android.ui.components.FancyBottomNavigationBar
 import com.fxanhkhoa.what_to_eat_android.ui.components.TopAppBarWithUserIcon
 import com.fxanhkhoa.what_to_eat_android.ui.components.bottomNavItems
 import com.fxanhkhoa.what_to_eat_android.screens.*
+import com.fxanhkhoa.what_to_eat_android.screens.profile.EditProfileScreen
+import com.fxanhkhoa.what_to_eat_android.screens.profile.ProfileScreen
 import com.fxanhkhoa.what_to_eat_android.screens.dish.DishListScreen
 import com.fxanhkhoa.what_to_eat_android.screens.game.GameScreen
 import com.fxanhkhoa.what_to_eat_android.screens.game.voting.VoteGameListScreen
@@ -92,7 +94,7 @@ fun MainScreen() {
                     } else {
                         navController.navigate("login")
                     }
-                    // Handle unauthorized user click - could show login dialog or navigate to login
+                    // Handle unauthorized user click - could show login dialog
                     // For now, this is just a placeholder
                 }
             )
@@ -221,10 +223,26 @@ fun MainScreen() {
             composable("profile") {
                 ProfileScreen(
                     onBackPressed = { navController.popBackStack() },
-                    onNavigateToLogin = { navController.navigate("home") }
+                    onNavigateToLogin = { navController.navigate("home") },
+                    onNavigateToEditProfile = { navController.navigate("edit_profile") }
                 )
             }
-            composable("settings") { SettingScreen() }
+            composable("edit_profile") {
+                EditProfileScreen(
+                    onBackPressed = { navController.popBackStack() },
+                    onSaveSuccess = { navController.popBackStack() }
+                )
+            }
+            composable("privacy_policy") {
+                PrivacyPolicyScreen(
+                    onBackPressed = { navController.popBackStack() }
+                )
+            }
+            composable("settings") {
+                SettingScreen(
+                    onNavigateToPrivacyPolicy = { navController.navigate("privacy_policy") }
+                )
+            }
             composable("login") {
                 LoginScreen(
                     onBackPressed = { navController.popBackStack() },

@@ -1,12 +1,14 @@
 package com.fxanhkhoa.what_to_eat_android.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,7 +29,7 @@ import com.fxanhkhoa.what_to_eat_android.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingScreen() {
+fun SettingScreen(onNavigateToPrivacyPolicy: () -> Unit = {}) {
     val context = LocalContext.current
     val themeManager = remember { ThemeManager(context) }
     val localizationManager = remember { LocalizationManager(context) }
@@ -52,6 +54,7 @@ fun SettingScreen() {
     val languageText = remember(currentLanguage) { localizationManager.getString(R.string.language, currentLanguage) }
     val aboutText = remember(currentLanguage) { localizationManager.getString(R.string.about, currentLanguage) }
     val versionText = remember(currentLanguage) { localizationManager.getString(R.string.version, currentLanguage) }
+    val privacyPolicyText = remember(currentLanguage) { localizationManager.getString(R.string.privacy_policy, currentLanguage) }
 
     LazyColumn(
         modifier = Modifier
@@ -225,6 +228,37 @@ fun SettingScreen() {
                         text = "1.0.0",
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onNavigateToPrivacyPolicy() }
+                        .padding(vertical = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Filled.Security,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = privacyPolicyText,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

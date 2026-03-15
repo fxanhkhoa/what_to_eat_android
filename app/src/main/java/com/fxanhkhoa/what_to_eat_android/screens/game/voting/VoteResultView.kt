@@ -249,7 +249,7 @@ private fun generateShareText(
 
     // Winner (if exists)
     if (winner != null && winner.totalVotes > 0) {
-        val dishName = winner.displayName
+        val dishName = winner.displayName(language)
         sb.append(localizationManager.getString(R.string.share_winner, language))
         sb.append(": ")
         sb.append(dishName)
@@ -266,7 +266,7 @@ private fun generateShareText(
     sb.append(localizationManager.getString(R.string.share_all_results, language))
     sb.append(":\n")
     enrichedVoteResults.forEachIndexed { index, result ->
-        val dishName = result.displayName
+        val dishName = result.displayName(language)
         sb.append("${index + 1}. ")
         sb.append(dishName)
         sb.append(": ")

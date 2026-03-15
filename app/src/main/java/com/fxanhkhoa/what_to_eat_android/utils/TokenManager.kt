@@ -188,11 +188,16 @@ class TokenManager private constructor(private val context: Context) {
 
     /**
      * Update only the access token (useful for token refresh)
+     * Optionally persists a rotated refresh token.
      */
-    suspend fun updateAccessToken(accessToken: String, expiryTime: Long? = null) {
+    suspend fun updateAccessToken(accessToken: String, expiryTime: Long? = null, newRefreshToken: String? = null) {
         context.dataStore.edit { preferences ->
             preferences[ACCESS_TOKEN_KEY] = accessToken
             expiryTime?.let { preferences[TOKEN_EXPIRY_KEY] = it.toString() }
+            newRefreshToken?.let {
+                preferences[REFRESH_TOKEN_KEY] = it
+                Log.d("TokenManager", "Rotated refresh token saved")
+            }
         }
     }
 

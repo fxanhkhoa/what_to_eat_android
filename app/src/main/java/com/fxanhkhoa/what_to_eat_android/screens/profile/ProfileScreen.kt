@@ -1,4 +1,4 @@
-package com.fxanhkhoa.what_to_eat_android.screens
+package com.fxanhkhoa.what_to_eat_android.screens.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,20 +28,58 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
 import com.fxanhkhoa.what_to_eat_android.utils.rememberGoogleSignInHelper
+import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
+import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
+import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onNavigateToLogin: () -> Unit = {}
+    onNavigateToLogin: () -> Unit = {},
+    onNavigateToEditProfile: () -> Unit = {}
 ) {
     val authViewModel = rememberSharedAuthViewModel()
     val googleSignInHelper = rememberGoogleSignInHelper()
     val user by authViewModel.user.collectAsState()
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
+
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val localizationManager = remember { LocalizationManager(context) }
+    var currentLanguage by remember { mutableStateOf(Language.ENGLISH) }
+    LaunchedEffect(Unit) {
+        currentLanguage = localizationManager.currentLanguage.first()
+    }
+
+    // Localized strings
+    val str = remember(currentLanguage) {
+        fun s(id: Int) = localizationManager.getString(id, currentLanguage)
+        object {
+            val title                 = s(R.string.profile)
+            val sectionAccount        = s(R.string.profile_section_account)
+            val editProfile           = s(R.string.profile_edit_profile)
+            val preferences           = s(R.string.profile_preferences)
+            val privacy               = s(R.string.profile_privacy)
+            val sectionAppSettings    = s(R.string.profile_section_app_settings)
+            val notifications         = s(R.string.profile_notifications)
+            val theme                 = s(R.string.profile_theme)
+            val language              = s(R.string.profile_language)
+            val sectionSupport        = s(R.string.profile_section_support)
+            val helpCenter            = s(R.string.profile_help_center)
+            val contactUs             = s(R.string.profile_contact_us)
+            val about                 = s(R.string.about)
+            val sectionAccountActions = s(R.string.profile_section_account_actions)
+            val signOut               = s(R.string.profile_sign_out)
+            val signOutTitle          = s(R.string.profile_sign_out_confirm_title)
+            val signOutMessage        = s(R.string.profile_sign_out_confirm_message)
+            val cancel                = s(R.string.cancel)
+            val version               = s(R.string.profile_version)
+        }
+    }
 
     var showSignOutDialog by remember { mutableStateOf(false) }
 
@@ -56,13 +94,7 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = "Profile",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                },
+                title = { Text(text = str.title, fontSize = 20.sp, fontWeight = FontWeight.SemiBold) },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
                         Icon(
@@ -92,6 +124,8 @@ fun ProfileScreen(
                 UserProfileCard(
                     user = user,
                     isLoggedIn = isLoggedIn,
+                    language = currentLanguage,
+                    localizationManager = localizationManager,
                     onSignInClick = onNavigateToLogin
                 )
             }
@@ -100,11 +134,9 @@ fun ProfileScreen(
             if (isLoggedIn) {
                 item {
                     ProfileSection(
-                        title = "Account",
+                        title = str.sectionAccount,
                         items = listOf(
-                            ProfileItem("Edit Profile", Icons.Filled.Edit, onClick = {}),
-                            ProfileItem("Preferences", Icons.Filled.Settings, onClick = {}),
-                            ProfileItem("Privacy", Icons.Filled.Security, onClick = {})
+                            ProfileItem(str.editProfile, Icons.Filled.Edit, onClick = onNavigateToEditProfile),
                         )
                     )
                 }
@@ -112,11 +144,9 @@ fun ProfileScreen(
                 // App Settings Section
                 item {
                     ProfileSection(
-                        title = "App Settings",
+                        title = str.sectionAppSettings,
                         items = listOf(
-                            ProfileItem("Notifications", Icons.Filled.Notifications, onClick = {}),
-                            ProfileItem("Theme", Icons.Filled.Palette, onClick = {}),
-                            ProfileItem("Language", Icons.Filled.Language, onClick = {})
+                            ProfileItem(str.notifications, Icons.Filled.Notifications, onClick = {}),
                         )
                     )
                 }
@@ -124,11 +154,11 @@ fun ProfileScreen(
                 // Support Section
                 item {
                     ProfileSection(
-                        title = "Support",
+                        title = str.sectionSupport,
                         items = listOf(
-                            ProfileItem("Help Center", Icons.AutoMirrored.Filled.Help, onClick = {}),
-                            ProfileItem("Contact Us", Icons.Filled.Email, onClick = {}),
-                            ProfileItem("About", Icons.Filled.Info, onClick = {})
+                            ProfileItem(str.helpCenter, Icons.AutoMirrored.Filled.Help, onClick = {}),
+                            ProfileItem(str.contactUs, Icons.Filled.Email, onClick = {}),
+                            ProfileItem(str.about, Icons.Filled.Info, onClick = {})
                         )
                     )
                 }
@@ -136,10 +166,10 @@ fun ProfileScreen(
                 // Sign Out Section
                 item {
                     ProfileSection(
-                        title = "Account Actions",
+                        title = str.sectionAccountActions,
                         items = listOf(
                             ProfileItem(
-                                title = "Sign Out",
+                                title = str.signOut,
                                 icon = Icons.AutoMirrored.Filled.ExitToApp,
                                 onClick = { showSignOutDialog = true },
                                 textColor = MaterialTheme.colorScheme.error
@@ -153,7 +183,7 @@ fun ProfileScreen(
             item {
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
-                    text = "Version 1.0.0",
+                    text = str.version,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -167,26 +197,15 @@ fun ProfileScreen(
     if (showSignOutDialog) {
         AlertDialog(
             onDismissRequest = { showSignOutDialog = false },
-            title = {
-                Text("Sign Out")
-            },
-            text = {
-                Text("Are you sure you want to sign out?")
-            },
+            title = { Text(str.signOutTitle) },
+            text = { Text(str.signOutMessage) },
             confirmButton = {
-                TextButton(
-                    onClick = {
-                        showSignOutDialog = false
-                        handleSignOut()
-                    }
-                ) {
-                    Text("Sign Out", color = MaterialTheme.colorScheme.error)
+                TextButton(onClick = { showSignOutDialog = false; handleSignOut() }) {
+                    Text(str.signOut, color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showSignOutDialog = false }) {
-                    Text("Cancel")
-                }
+                TextButton(onClick = { showSignOutDialog = false }) { Text(str.cancel) }
             }
         )
     }
@@ -196,8 +215,38 @@ fun ProfileScreen(
 private fun UserProfileCard(
     user: User?,
     isLoggedIn: Boolean,
+    language: Language = Language.ENGLISH,
+    localizationManager: LocalizationManager? = null,
     onSignInClick: () -> Unit
 ) {
+    val str = remember(language) {
+        fun s(id: Int) = localizationManager?.getString(id, language) ?: ""
+        object {
+            val notSignedIn  = s(R.string.profile_not_signed_in)
+            val signInPrompt = s(R.string.profile_sign_in_prompt)
+            val signIn       = s(R.string.profile_sign_in)
+            val online       = s(R.string.profile_online)
+        }
+    }
+
+    // Format ISO dateOfBirth → locale-aware human-readable string
+    val formattedDob = remember(user?.dateOfBirth, language) {
+        user?.dateOfBirth?.takeIf { it.isNotEmpty() }?.let { raw ->
+            val locale = java.util.Locale.forLanguageTag(language.code)
+                .let { if (it.language == "en") java.util.Locale.ENGLISH else it }
+            val displayFmt = java.time.format.DateTimeFormatter.ofPattern(
+                if (language == Language.ENGLISH) "MMMM dd, yyyy" else "dd MMMM, yyyy",
+                locale
+            )
+            // Try full ISO datetime: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+            runCatching {
+                java.time.LocalDate.parse(
+                    raw.substringBefore('T').ifEmpty { raw },
+                    java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
+                ).format(displayFmt)
+            }.getOrElse { raw }
+        }
+    }
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -270,6 +319,27 @@ private fun UserProfileCard(
                     )
                 }
 
+                // Date of birth (if available), formatted in app language
+                formattedDob?.let { dob ->
+                    Row(
+                        modifier = Modifier.padding(top = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Cake,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = dob,
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
                 // User status indicator
                 Row(
                     modifier = Modifier.padding(top = 12.dp),
@@ -282,7 +352,7 @@ private fun UserProfileCard(
                             .background(Color.Green)
                     )
                     Text(
-                        text = "Online",
+                        text = str.online,
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(start = 8.dp)
@@ -291,14 +361,14 @@ private fun UserProfileCard(
             } else {
                 // User is not signed in
                 Text(
-                    text = "Not Signed In",
+                    text = str.notSignedIn,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Text(
-                    text = "Sign in to access all features",
+                    text = str.signInPrompt,
                     fontSize = 14.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp)
@@ -316,7 +386,7 @@ private fun UserProfileCard(
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Sign In")
+                    Text(str.signIn)
                 }
             }
         }

@@ -356,4 +356,82 @@
         <item quantity="one">%d anonymous voter</item>
         <item quantity="other">%d anonymous voters</item>
     </plurals>
+    <!-- Profile Screen -->
+    <string name="profile">Profile</string>
+    <string name="profile_not_signed_in">Not Signed In</string>
+    <string name="profile_sign_in_prompt">Sign in to access all features</string>
+    <string name="profile_sign_in">Sign In</string>
+    <string name="profile_online">Online</string>
+    <string name="profile_section_account">Account</string>
+    <string name="profile_edit_profile">Edit Profile</string>
+    <string name="profile_preferences">Preferences</string>
+    <string name="profile_privacy">Privacy</string>
+    <string name="profile_section_app_settings">App Settings</string>
+    <string name="profile_notifications">Notifications</string>
+    <string name="profile_theme">Theme</string>
+    <string name="profile_language">Language</string>
+    <string name="profile_section_support">Support</string>
+    <string name="profile_help_center">Help Center</string>
+    <string name="profile_contact_us">Contact Us</string>
+    <string name="profile_section_account_actions">Account Actions</string>
+    <string name="profile_sign_out">Sign Out</string>
+    <string name="profile_sign_out_confirm_title">Sign Out</string>
+    <string name="profile_sign_out_confirm_message">Are you sure you want to sign out?</string>
+    <string name="profile_version">Version 1.0.0</string>
+
+    <!-- Edit Profile Screen -->
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="edit_profile_save">Save</string>
+    <string name="edit_profile_saving">Saving…</string>
+    <string name="edit_profile_save_changes">Save Changes</string>
+    <string name="edit_profile_success">Profile updated successfully!</string>
+    <string name="edit_profile_section_personal">Personal Information</string>
+    <string name="edit_profile_full_name">Full Name</string>
+    <string name="edit_profile_email">Email</string>
+    <string name="edit_profile_section_contact">Contact</string>
+    <string name="edit_profile_phone">Phone Number</string>
+    <string name="edit_profile_address">Address</string>
+    <string name="edit_profile_section_additional">Additional Information</string>
+    <string name="edit_profile_date_of_birth">Date of Birth</string>
+    <string name="edit_profile_select_date">Select date</string>
+    <string name="edit_profile_avatar_hint">Tap the camera to change avatar</string>
+    <string name="edit_profile_avatar_dialog_title">Change Avatar</string>
+    <string name="edit_profile_avatar_dialog_prompt">Enter the URL of your avatar image:</string>
+    <string name="edit_profile_avatar_url_label">Image URL</string>
+    <string name="edit_profile_avatar_url_placeholder">https://example.com/avatar.jpg</string>
+    <string name="edit_profile_avatar_preview">Preview</string>
+    <string name="edit_profile_avatar_apply">Apply</string>
+
+    <!-- Privacy Policy Screen -->
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_last_updated">Last Updated: February 19, 2026</string>
+    <string name="privacy_policy_s1_title">1. Introduction</string>
+    <string name="privacy_policy_s1_body">Welcome to our Privacy Policy. Your privacy is critically important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our food recommendation website. Please read this policy carefully to understand our views and practices regarding your personal data.</string>
+    <string name="privacy_policy_s2_title">2. Information We Collect</string>
+    <string name="privacy_policy_s2_1_title">2.1 Personal Information</string>
+    <string name="privacy_policy_s2_1_body">We may collect personal information that you voluntarily provide to us when you register on the website, including your name, email address, date of birth, gender, and profile picture. When you use social login (Google, Facebook, Apple), we collect the information provided by these services.</string>
+    <string name="privacy_policy_s2_2_title">2.2 Usage Information</string>
+    <string name="privacy_policy_s2_2_body">We automatically collect certain information when you visit, use, or navigate the website. This includes your IP address, browser type, device information, pages viewed, time spent on pages, and interaction with features. We also track your dish preferences, ratings, favorites, and interaction history to provide personalized recommendations.</string>
+    <string name="privacy_policy_s2_3_title">2.3 Cookies and Tracking Technologies</string>
+    <string name="privacy_policy_s2_3_body">We use cookies and similar tracking technologies to track activity on our website and store certain information. Cookies are small data files stored on your device. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.</string>
+    <string name="privacy_policy_s3_title">3. How We Use Your Information</string>
+    <string name="privacy_policy_s3_body">We use the information we collect for various purposes including: providing and maintaining our service; personalizing your experience and dish recommendations; processing your transactions and managing your account; sending you updates, newsletters, and promotional materials (with your consent); analyzing usage patterns to improve our service; detecting and preventing fraud and security threats; complying with legal obligations and enforcing our terms.</string>
+    <string name="privacy_policy_s4_title">4. How We Share Your Information</string>
+    <string name="privacy_policy_s4_body">We may share your information in the following circumstances: with service providers who assist us in operating the website (e.g., hosting, analytics, payment processing); with third-party authentication services when you use social login; when required by law or to respond to legal processes; to protect our rights, property, or safety, or that of our users; in connection with a merger, sale, or acquisition of all or part of our business. We do not sell your personal information to third parties for their marketing purposes.</string>
+    <string name="privacy_policy_s5_title">5. Data Security</string>
+    <string name="privacy_policy_s5_body">We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. This includes encryption of data in transit and at rest, secure authentication mechanisms, and regular security audits. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee absolute security.</string>
+    <string name="privacy_policy_s6_title">6. Data Retention</string>
+    <string name="privacy_policy_s6_body">We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. When you delete your account, we will delete or anonymize your personal information, except where we are required to retain it for legal, accounting, or security purposes.</string>
+    <string name="privacy_policy_s7_title">7. Your Privacy Rights</string>
+    <string name="privacy_policy_s7_body">Depending on your location, you may have certain rights regarding your personal information, including: the right to access the personal information we hold about you; the right to request correction of inaccurate or incomplete data; the right to request deletion of your personal information; the right to object to or restrict certain processing activities; the right to data portability; the right to withdraw consent where processing is based on consent. To exercise these rights, please contact us using the information provided below.</string>
+    <string name="privacy_policy_s8_title">8. Children\'s Privacy</string>
+    <string name="privacy_policy_s8_body">Our service is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us so we can delete such information.</string>
+    <string name="privacy_policy_s9_title">9. Third-Party Links and Services</string>
+    <string name="privacy_policy_s9_body">Our website may contain links to third-party websites or services that are not operated by us. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services. We encourage you to review the privacy policy of every site you visit.</string>
+    <string name="privacy_policy_s10_title">10. International Data Transfers</string>
+    <string name="privacy_policy_s10_body">Your information may be transferred to and maintained on computers located outside of your jurisdiction where data protection laws may differ. If you are located outside of our operating jurisdiction and choose to provide information to us, please note that we transfer the data to our jurisdiction and process it there.</string>
+    <string name="privacy_policy_s11_title">11. Changes to This Privacy Policy</string>
+    <string name="privacy_policy_s11_body">We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the \"Last Updated\" date. You are advised to review this Privacy Policy periodically for any changes. Changes are effective when they are posted on this page.</string>
+    <string name="privacy_policy_s12_title">12. Contact Us</string>
+    <string name="privacy_policy_s12_body">If you have any questions about this Privacy Policy, please contact us through the contact form on our website. We will respond to your inquiry as soon as possible and work to address your concerns.</string>
 </resources>

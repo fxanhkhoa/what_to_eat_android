@@ -70,7 +70,7 @@ class UserService private constructor(private val context: Context) {
         @POST(PREFIX)
         suspend fun create(@Body user: CreateUserDto): Response<UserModel>
 
-        @PUT("$PREFIX/{id}")
+        @PATCH("$PREFIX/{id}")
         suspend fun update(
             @Path("id") id: String,
             @Body user: UpdateUserDto

@@ -124,7 +124,6 @@
     <string name="select_categories_to_filter_ingredients">Chọn danh mục để lọc nguyên liệu</string>
     <string name="categories_selected">Đã chọn %d danh mục</string>
     <string name="apply_filter">Áp Dụng Bộ Lọc</string>
-    <string name="cancel">Hủy</string>
     <string name="reset">Đặt Lại</string>
     <string name="ok">OK</string>
     <string name="error">Lỗi</string>
@@ -349,5 +348,83 @@
     <plurals name="anonymous_voters_count">
         <item quantity="other">%d người bình chọn ẩn danh</item>
     </plurals>
+    <!-- Profile Screen -->
+    <string name="profile">Hồ Sơ</string>
+    <string name="profile_not_signed_in">Chưa đăng nhập</string>
+    <string name="profile_sign_in_prompt">Đăng nhập để truy cập đầy đủ tính năng</string>
+    <string name="profile_sign_in">Đăng Nhập</string>
+    <string name="profile_online">Trực tuyến</string>
+    <string name="profile_section_account">Tài Khoản</string>
+    <string name="profile_edit_profile">Chỉnh Sửa Hồ Sơ</string>
+    <string name="profile_preferences">Tùy Chọn</string>
+    <string name="profile_privacy">Quyền Riêng Tư</string>
+    <string name="profile_section_app_settings">Cài Đặt Ứng Dụng</string>
+    <string name="profile_notifications">Thông Báo</string>
+    <string name="profile_theme">Giao Diện</string>
+    <string name="profile_language">Ngôn Ngữ</string>
+    <string name="profile_section_support">Hỗ Trợ</string>
+    <string name="profile_help_center">Trung Tâm Hỗ Trợ</string>
+    <string name="profile_contact_us">Liên Hệ</string>
+    <string name="profile_section_account_actions">Thao Tác Tài Khoản</string>
+    <string name="profile_sign_out">Đăng Xuất</string>
+    <string name="profile_sign_out_confirm_title">Đăng Xuất</string>
+    <string name="profile_sign_out_confirm_message">Bạn có chắc muốn đăng xuất không?</string>
+    <string name="profile_version">Phiên bản 1.0.0</string>
 
+    <!-- Edit Profile Screen -->
+    <string name="edit_profile_title">Chỉnh Sửa Hồ Sơ</string>
+    <string name="edit_profile_save">Lưu</string>
+    <string name="edit_profile_saving">Đang lưu…</string>
+    <string name="edit_profile_save_changes">Lưu Thay Đổi</string>
+    <string name="edit_profile_success">Cập nhật hồ sơ thành công!</string>
+    <string name="edit_profile_section_personal">Thông Tin Cá Nhân</string>
+    <string name="edit_profile_full_name">Họ và Tên</string>
+    <string name="edit_profile_email">Email</string>
+    <string name="edit_profile_section_contact">Liên Hệ</string>
+    <string name="edit_profile_phone">Số Điện Thoại</string>
+    <string name="edit_profile_address">Địa Chỉ</string>
+    <string name="edit_profile_section_additional">Thông Tin Thêm</string>
+    <string name="edit_profile_date_of_birth">Ngày Sinh</string>
+    <string name="edit_profile_select_date">Chọn ngày</string>
+    <string name="edit_profile_avatar_hint">Nhấn vào camera để thay ảnh đại diện</string>
+    <string name="edit_profile_avatar_dialog_title">Thay Ảnh Đại Diện</string>
+    <string name="edit_profile_avatar_dialog_prompt">Nhập URL ảnh đại diện của bạn:</string>
+    <string name="edit_profile_avatar_url_label">URL Ảnh</string>
+    <string name="edit_profile_avatar_url_placeholder">https://example.com/avatar.jpg</string>
+    <string name="edit_profile_avatar_preview">Xem trước</string>
+    <string name="edit_profile_avatar_apply">Áp Dụng</string>
+    <string name="cancel">Hủy</string>
+
+    <!-- Privacy Policy Screen -->
+    <string name="privacy_policy">Chính Sách Bảo Mật</string>
+    <string name="privacy_policy_last_updated">Cập nhật lần cuối: 19 tháng 2, 2026</string>
+    <string name="privacy_policy_s1_title">1. Giới Thiệu</string>
+    <string name="privacy_policy_s1_body">Chào mừng đến với Chính sách Bảo mật của chúng tôi. Quyền riêng tư của bạn là vô cùng quan trọng đối với chúng tôi. Chính sách Bảo mật này giải thích cách chúng tôi thu thập, sử dụng, tiết lộ và bảo vệ thông tin của bạn khi bạn sử dụng trang web gợi ý món ăn của chúng tôi. Vui lòng đọc chính sách này cẩn thận để hiểu quan điểm và thực tiễn của chúng tôi liên quan đến dữ liệu cá nhân của bạn.</string>
+    <string name="privacy_policy_s2_title">2. Thông Tin Chúng Tôi Thu Thập</string>
+    <string name="privacy_policy_s2_1_title">2.1 Thông Tin Cá Nhân</string>
+    <string name="privacy_policy_s2_1_body">Chúng tôi có thể thu thập thông tin cá nhân mà bạn tự nguyện cung cấp cho chúng tôi khi bạn đăng ký trên trang web, bao gồm tên, địa chỉ email, ngày sinh, giới tính và ảnh đại diện của bạn. Khi bạn sử dụng đăng nhập xã hội (Google, Facebook, Apple), chúng tôi thu thập thông tin do các dịch vụ này cung cấp.</string>
+    <string name="privacy_policy_s2_2_title">2.2 Thông Tin Sử Dụng</string>
+    <string name="privacy_policy_s2_2_body">Chúng tôi tự động thu thập một số thông tin nhất định khi bạn truy cập, sử dụng hoặc điều hướng trang web. Điều này bao gồm địa chỉ IP, loại trình duyệt, thông tin thiết bị, các trang đã xem, thời gian dành cho các trang và tương tác với các tính năng. Chúng tôi cũng theo dõi sở thích món ăn, đánh giá, yêu thích và lịch sử tương tác của bạn để cung cấp các đề xuất được cá nhân hóa.</string>
+    <string name="privacy_policy_s2_3_title">2.3 Cookie và Công Nghệ Theo Dõi</string>
+    <string name="privacy_policy_s2_3_body">Chúng tôi sử dụng cookie và các công nghệ theo dõi tương tự để theo dõi hoạt động trên trang web của chúng tôi và lưu trữ một số thông tin nhất định. Cookie là các tệp dữ liệu nhỏ được lưu trữ trên thiết bị của bạn. Bạn có thể hướng dẫn trình duyệt của mình từ chối tất cả cookie hoặc chỉ ra khi một cookie đang được gửi.</string>
+    <string name="privacy_policy_s3_title">3. Cách Chúng Tôi Sử Dụng Thông Tin Của Bạn</string>
+    <string name="privacy_policy_s3_body">Chúng tôi sử dụng thông tin chúng tôi thu thập cho nhiều mục đích khác nhau bao gồm: cung cấp và duy trì dịch vụ của chúng tôi; cá nhân hóa trải nghiệm và đề xuất món ăn của bạn; xử lý giao dịch và quản lý tài khoản của bạn; gửi cho bạn các cập nhật, bản tin và tài liệu quảng cáo (với sự đồng ý của bạn); phân tích các mẫu sử dụng để cải thiện dịch vụ của chúng tôi; phát hiện và ngăn chặn gian lận và các mối đe dọa bảo mật; tuân thủ các nghĩa vụ pháp lý và thực thi các điều khoản của chúng tôi.</string>
+    <string name="privacy_policy_s4_title">4. Cách Chúng Tôi Chia Sẻ Thông Tin Của Bạn</string>
+    <string name="privacy_policy_s4_body">Chúng tôi có thể chia sẻ thông tin của bạn trong các trường hợp sau: với các nhà cung cấp dịch vụ hỗ trợ chúng tôi vận hành trang web (ví dụ: lưu trữ, phân tích, xử lý thanh toán); với các dịch vụ xác thực của bên thứ ba khi bạn sử dụng đăng nhập xã hội; khi được yêu cầu bởi luật pháp hoặc để đáp ứng các quy trình pháp lý; để bảo vệ quyền, tài sản hoặc sự an toàn của chúng tôi hoặc người dùng của chúng tôi; liên quan đến sự sáp nhập, bán hoặc mua lại toàn bộ hoặc một phần hoạt động kinh doanh của chúng tôi. Chúng tôi không bán thông tin cá nhân của bạn cho các bên thứ ba cho mục đích tiếp thị của họ.</string>
+    <string name="privacy_policy_s5_title">5. Bảo Mật Dữ Liệu</string>
+    <string name="privacy_policy_s5_body">Chúng tôi thực hiện các biện pháp bảo mật kỹ thuật và tổ chức thích hợp để bảo vệ thông tin cá nhân của bạn khỏi việc truy cập, thay đổi, tiết lộ hoặc phá hủy trái phép. Điều này bao gồm mã hóa dữ liệu trong quá trình truyền và lúc nghỉ, cơ chế xác thực an toàn và kiểm tra bảo mật định kỳ. Tuy nhiên, không có phương pháp truyền qua Internet hoặc lưu trữ điện tử nào an toàn 100%, và chúng tôi không thể đảm bảo an ninh tuyệt đối.</string>
+    <string name="privacy_policy_s6_title">6. Lưu Giữ Dữ Liệu</string>
+    <string name="privacy_policy_s6_body">Chúng tôi giữ lại thông tin cá nhân của bạn trong thời gian cần thiết để thực hiện các mục đích được nêu trong Chính sách Bảo mật này, trừ khi thời gian lưu giữ dài hơn được yêu cầu hoặc cho phép bởi luật pháp. Khi bạn xóa tài khoản của mình, chúng tôi sẽ xóa hoặc ẩn danh thông tin cá nhân của bạn, ngoại trừ trường hợp chúng tôi được yêu cầu giữ lại nó vì mục đích pháp lý, kế toán hoặc bảo mật.</string>
+    <string name="privacy_policy_s7_title">7. Quyền Riêng Tư Của Bạn</string>
+    <string name="privacy_policy_s7_body">Tùy thuộc vào vị trí của bạn, bạn có thể có một số quyền nhất định liên quan đến thông tin cá nhân của bạn, bao gồm: quyền truy cập thông tin cá nhân mà chúng tôi nắm giữ về bạn; quyền yêu cầu sửa chữa dữ liệu không chính xác hoặc không đầy đủ; quyền yêu cầu xóa thông tin cá nhân của bạn; quyền phản đối hoặc hạn chế các hoạt động xử lý nhất định; quyền chuyển đổi dữ liệu; quyền rút lại sự đồng ý khi xử lý dựa trên sự đồng ý. Để thực hiện các quyền này, vui lòng liên hệ với chúng tôi bằng thông tin được cung cấp bên dưới.</string>
+    <string name="privacy_policy_s8_title">8. Quyền Riêng Tư Của Trẻ Em</string>
+    <string name="privacy_policy_s8_body">Dịch vụ của chúng tôi không dành cho trẻ em dưới 13 tuổi. Chúng tôi không cố ý thu thập thông tin cá nhân từ trẻ em dưới 13 tuổi. Nếu bạn là cha mẹ hoặc người giám hộ và tin rằng con bạn đã cung cấp thông tin cá nhân cho chúng tôi, vui lòng liên hệ với chúng tôi để chúng tôi có thể xóa thông tin đó.</string>
+    <string name="privacy_policy_s9_title">9. Liên Kết và Dịch Vụ Bên Thứ Ba</string>
+    <string name="privacy_policy_s9_body">Trang web của chúng tôi có thể chứa các liên kết đến các trang web hoặc dịch vụ của bên thứ ba không do chúng tôi vận hành. Chúng tôi không kiểm soát và không chịu trách nhiệm về nội dung, chính sách bảo mật hoặc thực tiễn của bất kỳ trang web hoặc dịch vụ bên thứ ba nào. Chúng tôi khuyến khích bạn xem xét chính sách bảo mật của mọi trang web bạn truy cập.</string>
+    <string name="privacy_policy_s10_title">10. Chuyển Giao Dữ Liệu Quốc Tế</string>
+    <string name="privacy_policy_s10_body">Thông tin của bạn có thể được chuyển đến và duy trì trên các máy tính nằm ngoài phạm vi quyền hạn của bạn, nơi luật bảo vệ dữ liệu có thể khác nhau. Nếu bạn ở ngoài phạm vi quyền hạn hoạt động của chúng tôi và chọn cung cấp thông tin cho chúng tôi, xin lưu ý rằng chúng tôi chuyển dữ liệu đến phạm vi quyền hạn của chúng tôi và xử lý nó ở đó.</string>
+    <string name="privacy_policy_s11_title">11. Thay Đổi Chính Sách Bảo Mật Này</string>
+    <string name="privacy_policy_s11_body">Chúng tôi có thể cập nhật Chính sách Bảo mật của mình theo thời gian. Chúng tôi sẽ thông báo cho bạn về bất kỳ thay đổi nào bằng cách đăng Chính sách Bảo mật mới trên trang này và cập nhật ngày \"Cập nhật lần cuối\". Bạn nên xem lại Chính sách Bảo mật này định kỳ để biết bất kỳ thay đổi nào. Các thay đổi có hiệu lực khi chúng được đăng trên trang này.</string>
+    <string name="privacy_policy_s12_title">12. Liên Hệ Với Chúng Tôi</string>
+    <string name="privacy_policy_s12_body">Nếu bạn có bất kỳ câu hỏi nào về Chính sách Bảo mật này, vui lòng liên hệ với chúng tôi qua biểu mẫu liên hệ trên trang web của chúng tôi. Chúng tôi sẽ trả lời câu hỏi của bạn càng sớm càng tốt và làm việc để giải quyết mối quan tâm của bạn.</string>
 </resources>

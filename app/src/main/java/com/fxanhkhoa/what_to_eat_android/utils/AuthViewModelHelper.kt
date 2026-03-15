@@ -11,7 +11,6 @@ import com.fxanhkhoa.what_to_eat_android.viewmodel.AuthViewModel
  */
 @Composable
 fun rememberSharedAuthViewModel(): AuthViewModel {
-    val context = LocalContext.current
     val tokenManager = rememberTokenManager()
     return remember { AuthViewModel.getInstance(tokenManager) }
 }

@@ -10,7 +10,6 @@ import java.util.Date
 data class UserModel(
     @SerializedName("_id")
     val id: String,
-    val _id: String? = null,
     val email: String,
     val password: String? = null,
     val name: String? = null,
@@ -69,7 +68,7 @@ data class UpdateUserDto(
     val id: String,
     val email: String,
     val name: String? = null,
-    val dateOfBirth: Date? = null,
+    val dateOfBirth: String? = null,
     val address: String? = null,
     val phone: String? = null,
     val googleID: String? = null,
