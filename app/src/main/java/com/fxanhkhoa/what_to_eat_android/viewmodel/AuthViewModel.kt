@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.fxanhkhoa.what_to_eat_android.data.dto.User
 import com.fxanhkhoa.what_to_eat_android.services.AuthService
 import com.fxanhkhoa.what_to_eat_android.utils.TokenManager
+import com.fxanhkhoa.what_to_eat_android.services.NotificationService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -173,6 +174,14 @@ class AuthViewModel private constructor(private val tokenManager: TokenManager) 
 
                                 _user.value = user
                                 _isLoggedIn.value = true
+
+                                // Register FCM token with the backend
+                                viewModelScope.launch {
+                                    tokenManager.getFCMToken()?.let { fcmToken ->
+                                        NotificationService.getInstance(tokenManager.context)
+                                            .registerToken(fcmToken)
+                                    }
+                                }
                             },
                             onFailure = { profileException ->
                                 Log.e("AuthViewModel", "Failed to get profile after login: ${profileException.message}")
@@ -199,6 +208,13 @@ class AuthViewModel private constructor(private val tokenManager: TokenManager) 
     fun signOut() {
         viewModelScope.launch {
             try {
+                // Unregister FCM token from backend before clearing session
+                tokenManager.getFCMToken()?.let { fcmToken ->
+                    NotificationService.getInstance(tokenManager.context)
+                        .unregisterToken(fcmToken)
+                    tokenManager.clearFCMToken()
+                }
+
                 // Call logout API if needed
                 val refreshToken = tokenManager.getRefreshToken()
                 refreshToken?.let { authService.logout(it) }

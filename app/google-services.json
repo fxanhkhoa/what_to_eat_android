@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "500870159993",
+    "project_id": "what-to-eat-no-firebase",
+    "storage_bucket": "what-to-eat-no-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500870159993:android:7db3122a490c6835137ea8",
+        "android_client_info": {
+          "package_name": "com.fxanhkhoa.what_to_eat_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "500870159993-95slkr86hsjh4i07tgosrk1bulgjavvr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfyk3ulmdnSXsTRSYasNSFOOOk24tAaNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500870159993-95slkr86hsjh4i07tgosrk1bulgjavvr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "500870159993-cdu569hdjqi0pkutogtet3kqc7bj0dkr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fxanhkhoa.what-to-eat-ios"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

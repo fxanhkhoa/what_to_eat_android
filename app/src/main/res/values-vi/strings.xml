@@ -178,7 +178,7 @@
     <string name="spin_the_wheel">Quay Vòng</string>
     <string name="spinning">Đang Quay…</string>
     <string name="winner_celebration">🎉 Món Chiến Thắng! 🎉</string>
-    <string name="winner">Chiến Thắng</string>
+    <string name="winner">Món Chiến Thắng</string>
     <string name="tap_to_view_details">Nhấn để xem chi tiết</string>
     <string name="home">Trang Chủ</string>
     <string name="search_placeholder">Tìm kiếm</string>
@@ -305,7 +305,7 @@
 
     <!-- Vote Results Screen -->
     <string name="share_voting_results">Kết Quả Bình Chọn</string>
-    <string name="share_winner">Người chiến thắng</string>
+    <string name="share_winner">Món chiến thắng</string>
     <string name="share_with">với</string>
     <string name="share_all_results">Tất Cả Kết Quả</string>
     <string name="share_vote_results">Chia Sẻ Kết Quả</string>

@@ -25,6 +25,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import com.fxanhkhoa.what_to_eat_android.ui.localization.*
 import com.fxanhkhoa.what_to_eat_android.ui.theme.*
+import com.fxanhkhoa.what_to_eat_android.data.dto.NotificationPreferences
+import com.fxanhkhoa.what_to_eat_android.data.dto.UpdateNotificationPreferencesDto
+import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
+import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedNotificationViewModel
 import com.fxanhkhoa.what_to_eat_android.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,6 +38,16 @@ fun SettingScreen(onNavigateToPrivacyPolicy: () -> Unit = {}) {
     val themeManager = remember { ThemeManager(context) }
     val localizationManager = remember { LocalizationManager(context) }
     val coroutineScope = rememberCoroutineScope()
+
+    // Notification preferences
+    val authViewModel = rememberSharedAuthViewModel()
+    val isLoggedIn by authViewModel.isLoggedIn.collectAsStateWithLifecycle(initialValue = false)
+    val notificationViewModel = rememberSharedNotificationViewModel()
+    val notificationPrefs by notificationViewModel.preferences.collectAsStateWithLifecycle(initialValue = null)
+
+    LaunchedEffect(isLoggedIn) {
+        if (isLoggedIn) notificationViewModel.loadPreferences()
+    }
 
     // Collect theme preferences
     val isDarkTheme by themeManager.isDarkTheme.collectAsStateWithLifecycle(initialValue = true)
@@ -210,6 +224,145 @@ fun SettingScreen(onNavigateToPrivacyPolicy: () -> Unit = {}) {
             }
         }
 
+        // Notifications Section (only shown when logged in)
+        if (isLoggedIn) {
+            item {
+                SettingsCard(title = "Notifications") {
+                    val prefs = notificationPrefs
+
+                    // Helper to send a partial update
+                    fun patch(block: UpdateNotificationPreferencesDto.() -> UpdateNotificationPreferencesDto) {
+                        notificationViewModel.updatePreferences(
+                            UpdateNotificationPreferencesDto().block()
+                        )
+                    }
+
+                    // ── Per-type toggles ─────────────────────────────────────
+                    NotificationToggleRow(
+                        icon = Icons.Filled.Chat,
+                        label = "Chat Notifications",
+                        description = "Messages from other users",
+                        checked = prefs?.chatEnabled ?: true,
+                        enabled = prefs != null,
+                        onCheckedChange = { enabled ->
+                            notificationViewModel.updatePreferences(
+                                UpdateNotificationPreferencesDto(chatEnabled = enabled)
+                            )
+                        }
+                    )
+
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
+                    NotificationToggleRow(
+                        icon = Icons.Filled.Notifications,
+                        label = "Activity Notifications",
+                        description = "Votes, game results and app activity",
+                        checked = prefs?.activityEnabled ?: true,
+                        enabled = prefs != null,
+                        onCheckedChange = { enabled ->
+                            notificationViewModel.updatePreferences(
+                                UpdateNotificationPreferencesDto(activityEnabled = enabled)
+                            )
+                        }
+                    )
+
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
+                    NotificationToggleRow(
+                        icon = Icons.Filled.Campaign,
+                        label = "Marketing Notifications",
+                        description = "Promotions, tips and new features",
+                        checked = prefs?.marketingEnabled ?: true,
+                        enabled = prefs != null,
+                        onCheckedChange = { enabled ->
+                            notificationViewModel.updatePreferences(
+                                UpdateNotificationPreferencesDto(marketingEnabled = enabled)
+                            )
+                        }
+                    )
+
+                    // ── Quiet hours ───────────────────────────────────────────
+                    if (prefs != null) {
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                        Text(
+                            text = "Quiet Hours",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+
+                        var quietStart by remember { mutableStateOf(prefs.quietHoursStart ?: "") }
+                        var quietEnd   by remember { mutableStateOf(prefs.quietHoursEnd   ?: "") }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = quietStart,
+                                onValueChange = { quietStart = it },
+                                label = { Text("From", fontSize = 12.sp) },
+                                placeholder = { Text("22:00", fontSize = 12.sp) },
+                                modifier = Modifier.weight(1f),
+                                singleLine = true,
+                                trailingIcon = {
+                                    if (quietStart.isNotBlank()) {
+                                        IconButton(onClick = {
+                                            quietStart = ""
+                                            notificationViewModel.updatePreferences(
+                                                UpdateNotificationPreferencesDto(quietHoursStart = "")
+                                            )
+                                        }) {
+                                            Icon(Icons.Filled.Clear, contentDescription = "Clear", modifier = Modifier.size(16.dp))
+                                        }
+                                    }
+                                }
+                            )
+
+                            OutlinedTextField(
+                                value = quietEnd,
+                                onValueChange = { quietEnd = it },
+                                label = { Text("Until", fontSize = 12.sp) },
+                                placeholder = { Text("08:00", fontSize = 12.sp) },
+                                modifier = Modifier.weight(1f),
+                                singleLine = true,
+                                trailingIcon = {
+                                    if (quietEnd.isNotBlank()) {
+                                        IconButton(onClick = {
+                                            quietEnd = ""
+                                            notificationViewModel.updatePreferences(
+                                                UpdateNotificationPreferencesDto(quietHoursEnd = "")
+                                            )
+                                        }) {
+                                            Icon(Icons.Filled.Clear, contentDescription = "Clear", modifier = Modifier.size(16.dp))
+                                        }
+                                    }
+                                }
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Button(
+                            onClick = {
+                                notificationViewModel.updatePreferences(
+                                    UpdateNotificationPreferencesDto(
+                                        quietHoursStart = quietStart.ifBlank { null },
+                                        quietHoursEnd   = quietEnd.ifBlank { null }
+                                    )
+                                )
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Save Quiet Hours")
+                        }
+                    }
+                }
+            }
+        }
+
         // About Section
         item {
             SettingsCard(
@@ -337,6 +490,54 @@ private fun ThemeOption(
             text = text,
             fontSize = 16.sp,
             color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun NotificationToggleRow(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    description: String,
+    checked: Boolean,
+    enabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Column {
+                Text(text = label, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    text = description,
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            enabled = enabled,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colorScheme.primary,
+                checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+            )
         )
     }
 }

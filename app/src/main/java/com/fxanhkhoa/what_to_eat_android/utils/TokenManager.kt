@@ -17,7 +17,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.exceptions.JWTDecodeException
 import java.util.Date
 
-class TokenManager private constructor(private val context: Context) {
+class TokenManager private constructor(internal val context: Context) {
 
     companion object {
         @Volatile
@@ -40,6 +40,7 @@ class TokenManager private constructor(private val context: Context) {
         private val USER_NAME_KEY = stringPreferencesKey("user_name")
         private val USER_PHOTO_URL_KEY = stringPreferencesKey("user_photo_url")
         private val TOKEN_EXPIRY_KEY = stringPreferencesKey("token_expiry")
+        private val FCM_TOKEN_KEY = stringPreferencesKey("fcm_token")
     }
 
     /**
@@ -213,7 +214,18 @@ class TokenManager private constructor(private val context: Context) {
             preferences.remove(USER_NAME_KEY)
             preferences.remove(USER_PHOTO_URL_KEY)
             preferences.remove(TOKEN_EXPIRY_KEY)
+            // Note: FCM_TOKEN_KEY is intentionally left so FCMService can still unregister it
         }
+    }
+
+    /**
+     * Clear FCM token from local storage (call after successful unregistration)
+     */
+    suspend fun clearFCMToken() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(FCM_TOKEN_KEY)
+        }
+        Log.d("TokenManager", "FCM token cleared")
     }
 
     /**
@@ -225,6 +237,28 @@ class TokenManager private constructor(private val context: Context) {
             "Bearer $accessToken"
         } else null
     }
+
+    /**
+     * Save FCM device token
+     */
+    suspend fun saveFCMToken(token: String) {
+        context.dataStore.edit { preferences ->
+            preferences[FCM_TOKEN_KEY] = token
+        }
+        Log.d("TokenManager", "FCM token saved")
+    }
+
+    /**
+     * Get stored FCM device token
+     */
+    suspend fun getFCMToken(): String? =
+        context.dataStore.data.first()[FCM_TOKEN_KEY]
+
+    /**
+     * Check if authorization header exists (access token is present, ignoring expiry)
+     */
+    suspend fun hasAccessToken(): Boolean =
+        !getAccessToken().isNullOrEmpty()
 
     /**
      * Check if refresh token exists

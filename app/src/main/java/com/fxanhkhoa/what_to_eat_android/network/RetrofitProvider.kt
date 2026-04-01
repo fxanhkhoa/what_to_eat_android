@@ -55,4 +55,7 @@ object RetrofitProvider {
 
     val dishVoteService: DishVoteService
         get() = createService<DishVoteService>()
+
+    val notificationService: NotificationApiService
+        get() = createService<NotificationApiService>()
 }

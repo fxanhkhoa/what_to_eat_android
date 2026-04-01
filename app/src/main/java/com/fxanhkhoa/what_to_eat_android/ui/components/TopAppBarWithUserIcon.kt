@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,6 +19,114 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
+import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedNotificationViewModel
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarWithUserIcon(
+    modifier: Modifier = Modifier,
+    title: String = "What to Eat",
+    onUserIconClick: () -> Unit = {},
+    onNotificationClick: () -> Unit = {}
+) {
+    val authViewModel = rememberSharedAuthViewModel()
+    val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
+    val user by authViewModel.user.collectAsState()
+
+    val notificationViewModel = rememberSharedNotificationViewModel()
+    val unreadCount by notificationViewModel.unreadCount.collectAsState()
+
+    TopAppBar(
+        title = {
+            Text(
+                text = title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        },
+        actions = {
+            // ── Bell icon with unread badge ──────────────────────────────
+            if (isLoggedIn) {
+                BadgedBox(
+                    badge = {
+                        if (unreadCount > 0) {
+                            Badge {
+                                Text(
+                                    text = if (unreadCount > 99) "99+" else unreadCount.toString(),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            }
+                        }
+                    },
+                    modifier = Modifier.padding(end = 4.dp)
+                ) {
+                    IconButton(onClick = onNotificationClick) {
+                        Icon(
+                            imageVector = Icons.Filled.Notifications,
+                            contentDescription = "Notifications",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(26.dp)
+                        )
+                    }
+                }
+            }
+
+            // ── User avatar / account icon ───────────────────────────────
+            Box(
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(
+                        color = if (isLoggedIn) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                        } else {
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+                        },
+                        shape = CircleShape
+                    )
+                    .clickable { onUserIconClick() },
+                contentAlignment = Alignment.Center
+            ) {
+                if (isLoggedIn && user != null) {
+                    val initials = user?.name?.split(" ")
+                        ?.mapNotNull { it.firstOrNull()?.toString() }
+                        ?.take(2)?.joinToString("") ?: "U"
+                    val avatarUrl = user?.avatar
+                    if (avatarUrl.isNullOrEmpty()) {
+                        Text(
+                            text = initials,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    } else {
+                        Image(
+                            painter = rememberAsyncImagePainter(avatarUrl),
+                            contentDescription = "User Avatar",
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clip(CircleShape)
+                        )
+                    }
+                } else {
+                    Icon(
+                        imageVector = if (isLoggedIn) Icons.Filled.Person else Icons.Filled.AccountCircle,
+                        contentDescription = if (isLoggedIn) "User Profile" else "Login",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface
+        ),
+        modifier = modifier
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
