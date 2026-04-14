@@ -136,9 +136,9 @@ class IngredientListViewModel : ViewModel() {
             return
         }
         if (append) {
-            _ingredients.value = _ingredients.value + response.data
+            _ingredients.value = _ingredients.value + response.data.orEmpty()
         } else {
-            _ingredients.value = response.data
+            _ingredients.value = response.data.orEmpty()
         }
         _hasMorePages.value = currentPage * itemsPerPage < response.count
         _isLoading.value = false

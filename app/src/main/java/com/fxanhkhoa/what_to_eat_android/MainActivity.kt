@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fxanhkhoa.what_to_eat_android.screens.game.flipping_card.FlippingCardScreen
 import com.fxanhkhoa.what_to_eat_android.screens.dish.DishDetailScreen
@@ -32,6 +33,8 @@ import com.fxanhkhoa.what_to_eat_android.ui.components.bottomNavItems
 import com.fxanhkhoa.what_to_eat_android.screens.*
 import com.fxanhkhoa.what_to_eat_android.screens.profile.EditProfileScreen
 import com.fxanhkhoa.what_to_eat_android.screens.profile.ProfileScreen
+import com.fxanhkhoa.what_to_eat_android.screens.user_dish_collection.UserDishCollectionListScreen
+import com.fxanhkhoa.what_to_eat_android.screens.user_dish_collection.UserDishCollectionFormScreen
 import com.fxanhkhoa.what_to_eat_android.screens.dish.DishListScreen
 import com.fxanhkhoa.what_to_eat_android.screens.game.GameScreen
 import com.fxanhkhoa.what_to_eat_android.screens.game.voting.VoteGameListScreen
@@ -48,9 +51,9 @@ import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
 import com.fxanhkhoa.what_to_eat_android.screens.game.voting.RealTimeVoteGameView
 import com.fxanhkhoa.what_to_eat_android.services.FCMService
 import com.google.firebase.messaging.FirebaseMessaging
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.first
 
 class MainActivity : ComponentActivity() {
 
@@ -159,12 +162,38 @@ fun MainScreen(initialDeepLinkRoute: String? = null) {
 
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
-    var language by remember { mutableStateOf(Language.ENGLISH) }
+    val language by localizationManager.currentLanguage.collectAsStateWithLifecycle(initialValue = Language.ENGLISH)
 
-    // Observe language changes
-    LaunchedEffect(Unit) {
-        language = localizationManager.currentLanguage.first()
+    // Observe current navigation route for dynamic title
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+
+    val screenTitle = remember(currentRoute, language) {
+        when (currentRoute) {
+            "home"                           -> "Foodairy"
+            "dish", "dish/{slug}"            -> localizationManager.getString(R.string.dishes, language)
+            "ingredient"                     -> localizationManager.getString(R.string.ingredients, language)
+            "ingredient_detail/{ingredientId}" -> localizationManager.getString(R.string.ingredient, language)
+            "game"                           -> localizationManager.getString(R.string.game_section_title, language)
+            "dish_vote_list"                 -> localizationManager.getString(R.string.vote_game, language)
+            "create_dish_vote"               -> localizationManager.getString(R.string.create_vote, language)
+            "dish_vote_game/{voteId}"        -> localizationManager.getString(R.string.voting_game, language)
+            "wheel_of_fortune"               -> localizationManager.getString(R.string.wheel_of_fortune, language)
+            "flipping_card"                  -> localizationManager.getString(R.string.flipping_card, language)
+            "profile"                        -> localizationManager.getString(R.string.profile, language)
+            "edit_profile"                   -> localizationManager.getString(R.string.edit_profile_title, language)
+            "user_dish_lists"                -> localizationManager.getString(R.string.my_dish_lists, language)
+            "user_dish_list_create"          -> localizationManager.getString(R.string.create_collection, language)
+            "user_dish_list_edit/{id}"       -> localizationManager.getString(R.string.edit_collection, language)
+            "privacy_policy"                 -> localizationManager.getString(R.string.privacy_policy, language)
+            "settings"                       -> localizationManager.getString(R.string.settings, language)
+            "login"                          -> localizationManager.getString(R.string.login, language)
+            "notifications"                  -> localizationManager.getString(R.string.profile_notifications, language)
+            else                             -> "What to Eat"
+        }
     }
+
+    // Observe language changes (kept for passing language param downstream)
 
     // Navigate to deep-link from system notification tap (app was in background)
     LaunchedEffect(initialDeepLinkRoute) {
@@ -209,7 +238,7 @@ fun MainScreen(initialDeepLinkRoute: String? = null) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBarWithUserIcon(
-                title = "What to Eat",
+                title = screenTitle,
                 onUserIconClick = {
                     if (authViewModel.isLoggedIn.value) {
                         navController.navigate("profile")
@@ -346,11 +375,33 @@ fun MainScreen(initialDeepLinkRoute: String? = null) {
                         }
                     )
                 }
+                composable("user_dish_lists") {
+                    UserDishCollectionListScreen(
+                        onNavigateBack = { navController.popBackStack() },
+                        onNavigateToCreate = { navController.navigate("user_dish_list_create") },
+                        onNavigateToEdit = { id -> navController.navigate("user_dish_list_edit/$id") },
+                        onNavigateToLogin = { navController.navigate("login") }
+                    )
+                }
+                composable("user_dish_list_create") {
+                    UserDishCollectionFormScreen(
+                        collectionId = null,
+                        onNavigateBack = { navController.popBackStack() }
+                    )
+                }
+                composable("user_dish_list_edit/{id}") { backStackEntry ->
+                    val id = backStackEntry.arguments?.getString("id") ?: ""
+                    UserDishCollectionFormScreen(
+                        collectionId = id.takeIf { it.isNotEmpty() },
+                        onNavigateBack = { navController.popBackStack() }
+                    )
+                }
                 composable("profile") {
                     ProfileScreen(
                         onBackPressed = { navController.popBackStack() },
                         onNavigateToLogin = { navController.navigate("home") },
-                        onNavigateToEditProfile = { navController.navigate("edit_profile") }
+                        onNavigateToEditProfile = { navController.navigate("edit_profile") },
+                        onNavigateToMyLists = { navController.navigate("user_dish_lists") }
                     )
                 }
                 composable("edit_profile") {

@@ -1,6 +1,5 @@
 package com.fxanhkhoa.what_to_eat_android.components.game.voting
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,8 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.CollectionsBookmark
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Circle
 import androidx.compose.material3.*
@@ -23,7 +22,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,10 +33,21 @@ import coil.compose.AsyncImage
 import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.data.dto.QueryDishDto
 import com.fxanhkhoa.what_to_eat_android.model.DishModel
+import com.fxanhkhoa.what_to_eat_android.model.UserDishCollectionModel
+import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
+import com.fxanhkhoa.what_to_eat_android.services.DishService
+import com.fxanhkhoa.what_to_eat_android.services.UserDishCollectionService
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
+import com.fxanhkhoa.what_to_eat_android.utils.TokenManager
 import com.fxanhkhoa.what_to_eat_android.viewmodel.DishListViewModel
 import com.fxanhkhoa.what_to_eat_android.viewmodel.VotingGameCreateViewModel
+import kotlinx.coroutines.launch
+
+private enum class VotingPickerMode {
+    ALL_DISHES,
+    MY_LISTS,
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,22 +55,49 @@ fun DishSearchAndSelectView(
     votingViewModel: VotingGameCreateViewModel,
     onDismiss: () -> Unit,
     language: Language = Language.ENGLISH,
+    startOnMyLists: Boolean = false,
     dishViewModel: DishListViewModel = viewModel()
 ) {
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
     val colorScheme = MaterialTheme.colorScheme
+    val dishService = remember { RetrofitProvider.createService<DishService>() }
+    val collectionService = remember { RetrofitProvider.createService<UserDishCollectionService>() }
+    val tokenManager = remember { TokenManager.getInstance(context) }
 
     var searchText by remember { mutableStateOf("") }
     var selectedDishSlugs by remember { mutableStateOf(setOf<String>()) }
+    var pickerMode by remember {
+        mutableStateOf(if (startOnMyLists) VotingPickerMode.MY_LISTS else VotingPickerMode.ALL_DISHES)
+    }
+    var collections by remember { mutableStateOf<List<UserDishCollectionModel>>(emptyList()) }
+    var isCollectionLoading by remember { mutableStateOf(false) }
+    var isApplyingCollection by remember { mutableStateOf(false) }
+    var collectionError by remember { mutableStateOf<String?>(null) }
 
     val dishes by dishViewModel.dishes.collectAsStateWithLifecycle()
     val isLoading by dishViewModel.isLoading.collectAsStateWithLifecycle()
     val selectedVoteDishes by votingViewModel.selectedDishes.collectAsStateWithLifecycle()
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         val query = QueryDishDto(page = 1, limit = 10)
         dishViewModel.loadDishes(query)
+
+        val userId = tokenManager.getUserInfo()?.id
+        if (userId.isNullOrBlank()) {
+            collectionError = context.getString(R.string.wheel_picker_login_required)
+        } else {
+            isCollectionLoading = true
+            try {
+                val response = collectionService.findAll(mapOf("userId" to userId))
+                collections = response.data.orEmpty()
+            } catch (_: Exception) {
+                collectionError = context.getString(R.string.wheel_picker_list_load_failed)
+            } finally {
+                isCollectionLoading = false
+            }
+        }
     }
 
     LaunchedEffect(searchText) {
@@ -77,40 +116,42 @@ fun DishSearchAndSelectView(
                     }
                 },
                 actions = {
-                    TextButton(
-                        onClick = {
-                            // Add selected dishes
-                            selectedDishSlugs.forEach { slug ->
-                                dishes.firstOrNull { it.slug == slug }?.let { dish ->
-                                    votingViewModel.addDish(dish)
+                    if (pickerMode == VotingPickerMode.ALL_DISHES) {
+                        TextButton(
+                            onClick = {
+                                selectedDishSlugs.forEach { slug ->
+                                    dishes.firstOrNull { it.slug == slug }?.let { dish ->
+                                        votingViewModel.addDish(dish)
+                                    }
                                 }
-                            }
-                            selectedDishSlugs = setOf()
-                            onDismiss()
-                        },
-                        enabled = selectedDishSlugs.isNotEmpty()
-                    ) {
-                        Text(localizationManager.getString(R.string.done, language))
+                                selectedDishSlugs = setOf()
+                                onDismiss()
+                            },
+                            enabled = selectedDishSlugs.isNotEmpty()
+                        ) {
+                            Text(localizationManager.getString(R.string.done, language))
+                        }
                     }
                 }
             )
         },
         bottomBar = {
-            BottomActionBar(
-                selectedCount = selectedDishSlugs.size,
-                onAddDishes = {
-                    // Add selected dishes
-                    selectedDishSlugs.forEach { slug ->
-                        dishes.firstOrNull { it.slug == slug }?.let { dish ->
-                            votingViewModel.addDish(dish)
+            if (pickerMode == VotingPickerMode.ALL_DISHES) {
+                BottomActionBar(
+                    selectedCount = selectedDishSlugs.size,
+                    onAddDishes = {
+                        selectedDishSlugs.forEach { slug ->
+                            dishes.firstOrNull { it.slug == slug }?.let { dish ->
+                                votingViewModel.addDish(dish)
+                            }
                         }
-                    }
-                    selectedDishSlugs = setOf()
-                    onDismiss()
-                },
-                language = language,
-                localizationManager = localizationManager
-            )
+                        selectedDishSlugs = setOf()
+                        onDismiss()
+                    },
+                    language = language,
+                    localizationManager = localizationManager
+                )
+            }
         }
     ) { paddingValues ->
         Column(
@@ -118,107 +159,151 @@ fun DishSearchAndSelectView(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Search Bar
-            SearchBar(
-                searchText = searchText,
-                onSearchTextChanged = { searchText = it },
-                language = language,
-                localizationManager = localizationManager,
-                colorScheme = colorScheme
-            )
-
-            // Dish List
-            when {
-                isLoading -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
+            // Mode tabs
+            TabRow(selectedTabIndex = pickerMode.ordinal) {
+                Tab(
+                    selected = pickerMode == VotingPickerMode.ALL_DISHES,
+                    onClick = { pickerMode = VotingPickerMode.ALL_DISHES },
+                    text = { Text(stringResource(R.string.wheel_picker_tab_all_dishes)) }
+                )
+                Tab(
+                    selected = pickerMode == VotingPickerMode.MY_LISTS,
+                    onClick = { pickerMode = VotingPickerMode.MY_LISTS },
+                    text = { Text(stringResource(R.string.wheel_picker_tab_my_lists)) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.CollectionsBookmark,
+                            contentDescription = null
+                        )
                     }
-                }
-                dishes.isEmpty() -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                )
+            }
+
+            if (pickerMode == VotingPickerMode.ALL_DISHES) {
+                // Search Bar
+                SearchBar(
+                    searchText = searchText,
+                    onSearchTextChanged = { searchText = it },
+                    language = language,
+                    localizationManager = localizationManager,
+                    colorScheme = colorScheme
+                )
+
+                // Dish List
+                when {
+                    isLoading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_launcher_foreground),
-                                contentDescription = null,
-                                modifier = Modifier.size(60.dp),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-
-                            Text(
-                                text = localizationManager.getString(R.string.no_dishes_found, language),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-
-                            Text(
-                                text = localizationManager.getString(R.string.try_adjusting_search_criteria, language),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            CircularProgressIndicator()
                         }
                     }
-                }
-                else -> {
-                    LazyColumn(
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        items(dishes, key = { it.id }) { dish ->
-                            val isSelected = selectedDishSlugs.contains(dish.slug)
-                            val isAlreadyAdded = selectedVoteDishes.any {
-                                !it.isCustom && it.slug == dish.slug
-                            }
+                    dishes.isEmpty() -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_launcher_foreground),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(60.dp),
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
 
-                            DishSelectableRow(
-                                dish = dish,
-                                isSelected = isSelected,
-                                isAlreadyAdded = isAlreadyAdded,
-                                onToggle = {
-                                    if (!isAlreadyAdded) {
-                                        selectedDishSlugs = if (isSelected) {
-                                            selectedDishSlugs - dish.slug
-                                        } else {
-                                            selectedDishSlugs + dish.slug
+                                Text(
+                                    text = localizationManager.getString(R.string.no_dishes_found, language),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+
+                                Text(
+                                    text = localizationManager.getString(R.string.try_adjusting_search_criteria, language),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                    else -> {
+                        LazyColumn(
+                            contentPadding = PaddingValues(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(dishes, key = { it.id }) { dish ->
+                                val isSelected = selectedDishSlugs.contains(dish.slug)
+                                val isAlreadyAdded = selectedVoteDishes.any {
+                                    !it.isCustom && it.slug == dish.slug
+                                }
+
+                                DishSelectableRow(
+                                    dish = dish,
+                                    isSelected = isSelected,
+                                    isAlreadyAdded = isAlreadyAdded,
+                                    onToggle = {
+                                        if (!isAlreadyAdded) {
+                                            selectedDishSlugs = if (isSelected) {
+                                                selectedDishSlugs - dish.slug
+                                            } else {
+                                                selectedDishSlugs + dish.slug
+                                            }
                                         }
-                                    }
-                                },
-                                language = language,
-                                localizationManager = localizationManager,
-                                colorScheme = colorScheme
-                            )
+                                    },
+                                    language = language,
+                                    localizationManager = localizationManager,
+                                    colorScheme = colorScheme
+                                )
 
-                            // Load more when reaching last item
-                            if (dish == dishes.lastOrNull()) {
-                                LaunchedEffect(dish) {
-                                    dishViewModel.loadMoreDishes()
+                                // Load more when reaching last item
+                                if (dish == dishes.lastOrNull()) {
+                                    LaunchedEffect(dish) {
+                                        dishViewModel.loadMoreDishes()
+                                    }
                                 }
                             }
-                        }
 
-                        // Loading indicator at bottom
-                        if (isLoading && dishes.isNotEmpty()) {
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator()
+                            // Loading indicator at bottom
+                            if (isLoading && dishes.isNotEmpty()) {
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        CircularProgressIndicator()
+                                    }
                                 }
                             }
                         }
                     }
                 }
+            } else {
+                // My Lists tab — bulk-add collection dishes to the vote
+                VotingCollectionPickerSection(
+                    collections = collections,
+                    isLoading = isCollectionLoading,
+                    isApplyingCollection = isApplyingCollection,
+                    errorMessage = collectionError,
+                    onApplyCollection = { collection ->
+                        if (collection.dishSlugs.orEmpty().isEmpty()) return@VotingCollectionPickerSection
+                        coroutineScope.launch {
+                            isApplyingCollection = true
+                            collection.dishSlugs.orEmpty().distinct().forEach { slug ->
+                                runCatching { dishService.findBySlug(slug) }
+                                    .getOrNull()
+                                    ?.let { votingViewModel.addDish(it) }
+                            }
+                            isApplyingCollection = false
+                            onDismiss()
+                        }
+                    },
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
     }
@@ -419,7 +504,7 @@ private fun BottomActionBar(
         shadowElevation = 8.dp
     ) {
         Column {
-            Divider()
+            HorizontalDivider()
 
             Row(
                 modifier = Modifier
@@ -570,3 +655,119 @@ fun NumberOfCardsEditor(
         }
     }
 }
+
+@Composable
+private fun VotingCollectionPickerSection(
+    collections: List<UserDishCollectionModel>,
+    isLoading: Boolean,
+    isApplyingCollection: Boolean,
+    errorMessage: String?,
+    onApplyCollection: (UserDishCollectionModel) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+        when {
+            isLoading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            !errorMessage.isNullOrBlank() -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = errorMessage,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(24.dp)
+                    )
+                }
+            }
+
+            collections.isEmpty() -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = stringResource(R.string.wheel_picker_no_lists),
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(24.dp)
+                    )
+                }
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(collections, key = { it.id }) { collection ->
+                        val isDisabled = isApplyingCollection || collection.dishSlugs.orEmpty().isEmpty()
+
+                        Card(
+                            shape = RoundedCornerShape(14.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable(enabled = !isDisabled) { onApplyCollection(collection) }
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Text(
+                                        text = collection.name,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                    Text(
+                                        text = stringResource(
+                                            R.string.voting_picker_list_dish_count,
+                                            collection.dishSlugs.orEmpty().size
+                                        ),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+
+                                Button(
+                                    onClick = { onApplyCollection(collection) },
+                                    enabled = !isDisabled,
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = if (isDisabled) {
+                                            MaterialTheme.colorScheme.surfaceVariant
+                                        } else {
+                                            MaterialTheme.colorScheme.primary
+                                        }
+                                    )
+                                ) {
+                                    if (isApplyingCollection) {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(16.dp),
+                                            strokeWidth = 2.dp,
+                                            color = MaterialTheme.colorScheme.onPrimary
+                                        )
+                                    } else {
+                                        Text(stringResource(R.string.wheel_picker_apply_list))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

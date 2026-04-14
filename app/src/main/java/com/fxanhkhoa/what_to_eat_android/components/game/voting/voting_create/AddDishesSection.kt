@@ -6,7 +6,9 @@ import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CollectionsBookmark
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
@@ -21,10 +23,11 @@ import com.fxanhkhoa.what_to_eat_android.R
 fun AddDishesSection(
     onSearchAndAdd: () -> Unit,
     onAddCustomDish: () -> Unit,
+    onFromMyLists: () -> Unit = {},
     language: Language = Language.ENGLISH
 ) {
     val context = LocalContext.current
-    val localizationManager = LocalizationManager(context)
+    val localizationManager = remember { LocalizationManager(context) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -90,6 +93,30 @@ fun AddDishesSection(
                         )
                     }
                 }
+            }
+
+            // From My Lists button (full-width)
+            OutlinedButton(
+                onClick = onFromMyLists,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.secondary
+                ),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.CollectionsBookmark,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = localizationManager.getString(R.string.from_my_lists, language),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium
+                )
             }
         }
     }

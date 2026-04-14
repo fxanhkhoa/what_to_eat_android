@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fxanhkhoa.what_to_eat_android.R
@@ -247,9 +246,12 @@ fun FlippingCardScreen(
         )
     }
 
-    // Dish picker dialog
+    // Dish picker bottom sheet
     if (showDishPicker) {
-        Dialog(onDismissRequest = { showDishPicker = false }) {
+        ModalBottomSheet(
+            onDismissRequest = { showDishPicker = false },
+            containerColor = MaterialTheme.colorScheme.surface
+        ) {
             FlippingCardDishPickerView(
                 selectedDishes = selectedDishes,
                 onDishesSelected = { newDishes ->

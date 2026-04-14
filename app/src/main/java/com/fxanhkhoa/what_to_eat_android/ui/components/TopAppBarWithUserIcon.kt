@@ -25,7 +25,7 @@ import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedNotificationViewMod
 @Composable
 fun TopAppBarWithUserIcon(
     modifier: Modifier = Modifier,
-    title: String = "What to Eat",
+    title: String = "Foodairy",
     onUserIconClick: () -> Unit = {},
     onNotificationClick: () -> Unit = {}
 ) {

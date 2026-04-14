@@ -19,6 +19,21 @@ enum class DifficultyLevel(val rawValue: String) {
             HARD -> "difficulty_hard"
         }
 
+    fun getDisplayName(
+        language: com.fxanhkhoa.what_to_eat_android.ui.localization.Language,
+        localizationManager: com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
+    ): String {
+        return try {
+            when (this) {
+                EASY -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.difficulty_easy, language)
+                MEDIUM -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.difficulty_medium, language)
+                HARD -> localizationManager.getString(com.fxanhkhoa.what_to_eat_android.R.string.difficulty_hard, language)
+            }
+        } catch (e: Exception) {
+            displayName
+        }
+    }
+
     val colorRes: Int
         get() = when (this) {
             EASY -> android.R.color.holo_green_light

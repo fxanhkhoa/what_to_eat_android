@@ -113,7 +113,9 @@ fun DishFilterBottomSheet(
                     selectedLevels = tempFilters.difficultLevels,
                     onSelectionChange = { selected ->
                         tempFilters = tempFilters.copy(difficultLevels = selected)
-                    }
+                    },
+                    language = language,
+                    localizationManager = localizationManager
                 )
             }
             
@@ -129,6 +131,7 @@ fun DishFilterBottomSheet(
                             preparationTimeTo = to
                         )
                     },
+                    minutesText = minutesText,
                     noMinimumText = noMinimumText,
                     noMaximumText = noMaximumText,
                     resetRangeText = resetRangeText
@@ -146,6 +149,7 @@ fun DishFilterBottomSheet(
                             cookingTimeTo = to
                         )
                     },
+                    minutesText = minutesText,
                     noMinimumText = noMinimumText,
                     noMaximumText = noMaximumText,
                     resetRangeText = resetRangeText
@@ -244,6 +248,8 @@ private fun DifficultyLevelFilter(
     title: String,
     selectedLevels: List<String>,
     onSelectionChange: (List<String>) -> Unit,
+    language: Language,
+    localizationManager: LocalizationManager,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -260,6 +266,7 @@ private fun DifficultyLevelFilter(
         ) {
             items(DifficultyLevel.entries) { level ->
                 val isSelected = selectedLevels.contains(level.displayName)
+                val localizedName = level.getDisplayName(language, localizationManager)
 
                 // Get colors from the enum
                 val levelColor = Color(context.getColor(level.colorRes))
@@ -299,7 +306,7 @@ private fun DifficultyLevelFilter(
                         )
 
                         Text(
-                            text = level.displayName,
+                            text = localizedName,
                             style = MaterialTheme.typography.bodySmall,
                             color = if (isSelected) Color.White else MaterialTheme.colorScheme.primary
                         )
@@ -316,6 +323,7 @@ private fun TimeRangeFilter(
     fromValue: Int?,
     toValue: Int?,
     onRangeChange: (Int?, Int?) -> Unit,
+    minutesText: String,
     noMinimumText: String,
     noMaximumText: String,
     resetRangeText: String,
@@ -341,12 +349,12 @@ private fun TimeRangeFilter(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = if (fromValue != null) "${fromValue}min" else noMinimumText,
+                text = if (fromValue != null) "$fromValue $minutesText" else noMinimumText,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = if (toValue != null) "${toValue}min" else noMaximumText,
+                text = if (toValue != null) "$toValue $minutesText" else noMaximumText,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -361,7 +369,7 @@ private fun TimeRangeFilter(
                 onRangeChange(newFrom, newTo)
             },
             valueRange = minTime..maxTime,
-            steps = 47, // 240 minutes / 5 minute steps = 48 steps
+            steps = 47,
             modifier = Modifier.padding(vertical = 8.dp),
             colors = SliderDefaults.colors(
                 thumbColor = MaterialTheme.colorScheme.onSurface,
@@ -377,12 +385,12 @@ private fun TimeRangeFilter(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "${minTime.toInt()}min",
+                text = "${minTime.toInt()} $minutesText",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = "${maxTime.toInt()}min",
+                text = "${maxTime.toInt()} $minutesText",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

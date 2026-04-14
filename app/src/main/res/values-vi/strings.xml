@@ -162,7 +162,33 @@
     <!-- Wheel Dish Picker -->
     <string name="pick_dishes_for_wheel">Chọn Món Cho Vòng Quay</string>
     <string name="pick_dishes_for_cards">Chọn Món Cho Thẻ Bài</string>
+    <string name="wheel_picker_tab_all_dishes">Tất cả món</string>
+    <string name="wheel_picker_tab_my_lists">Danh sách của tôi</string>
+    <string name="wheel_picker_apply_list">Áp dụng</string>
+    <string name="wheel_picker_no_lists">Không tìm thấy danh sách món. Hãy tạo danh sách trên web trước, rồi áp dụng tại đây.</string>
+    <string name="wheel_picker_login_required">Bạn cần đăng nhập để tải danh sách món của mình.</string>
+    <string name="wheel_picker_list_load_failed">Hiện không thể tải danh sách món của bạn.</string>
+    <string name="wheel_picker_list_dish_count">%1$d món trong danh sách • áp dụng tối đa %2$d</string>
     <string name="selected_dishes">Món Đã Chọn</string>
+
+    <!-- User Dish Collections -->
+    <string name="my_dish_lists">Danh sách món của tôi</string>
+    <string name="no_collections_yet">Chưa có danh sách nào</string>
+    <string name="create_collection">Tạo danh sách</string>
+    <string name="edit_collection">Chỉnh sửa danh sách</string>
+    <string name="delete_collection">Xóa</string>
+    <string name="delete_collection_confirm">Bạn có chắc chắn muốn xóa danh sách này không?</string>
+    <string name="collection_name">Tên</string>
+    <string name="collection_name_required">Tên là bắt buộc</string>
+    <string name="collection_description">Mô tả</string>
+    <string name="collection_occasion">Dịp</string>
+    <string name="collection_icon">Biểu tượng</string>
+    <string name="collection_color">Màu sắc</string>
+    <string name="collection_is_public">Công khai</string>
+    <string name="collection_dishes">Món ăn</string>
+    <string name="search_dishes_hint">Tìm món để thêm…</string>
+    <string name="save_collection">Lưu</string>
+    <string name="login_to_view_lists">Vui lòng đăng nhập để xem và quản lý danh sách món của bạn.</string>
     <string name="no_dishes_selected">Chưa chọn món nào. Nhấn vào món bên dưới để thêm.</string>
     <string name="done">Xong</string>
     <string name="difficulty_easy">Dễ</string>
@@ -207,6 +233,8 @@
     <string name="dishes_selected">món đã chọn</string>
     <string name="add_more_dishes">Thêm món vào bình chọn</string>
     <string name="try_adjusting_search_criteria">Thử điều chỉnh tiêu chí tìm kiếm</string>
+    <string name="voting_picker_list_dish_count">%1$d món — nhấn Áp dụng để thêm tất cả</string>
+    <string name="from_my_lists">Từ Danh Sách Của Tôi</string>
 
     <!-- Custom Dish Add View -->
     <string name="add_custom_dish">Thêm Món Tùy Chỉnh</string>
@@ -348,6 +376,13 @@
     <plurals name="anonymous_voters_count">
         <item quantity="other">%d người bình chọn ẩn danh</item>
     </plurals>
+    <!-- Login Screen -->
+    <string name="login">Đăng Nhập</string>
+    <string name="welcome_title">Chào mừng đến với\nWhat to Eat</string>
+    <string name="welcome_subtitle">Khám phá các công thức ngon và quản lý nguyên liệu của bạn một cách dễ dàng</string>
+    <string name="continue_with_google">Tiếp tục với Google</string>
+    <string name="terms_privacy_agreement">Bằng cách tiếp tục, bạn đồng ý với Điều khoản Dịch vụ và Chính sách Bảo mật của chúng tôi</string>
+
     <!-- Profile Screen -->
     <string name="profile">Hồ Sơ</string>
     <string name="profile_not_signed_in">Chưa đăng nhập</string>

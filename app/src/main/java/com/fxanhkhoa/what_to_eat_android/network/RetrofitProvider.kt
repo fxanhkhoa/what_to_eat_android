@@ -3,6 +3,7 @@ package com.fxanhkhoa.what_to_eat_android.network
 import android.content.Context
 import com.fxanhkhoa.what_to_eat_android.services.DishService
 import com.fxanhkhoa.what_to_eat_android.services.DishVoteService
+import com.fxanhkhoa.what_to_eat_android.services.UserDishCollectionService
 import com.fxanhkhoa.what_to_eat_android.utils.TokenManager
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -58,4 +59,7 @@ object RetrofitProvider {
 
     val notificationService: NotificationApiService
         get() = createService<NotificationApiService>()
+
+    val userDishCollectionService: UserDishCollectionService
+        get() = createService<UserDishCollectionService>()
 }

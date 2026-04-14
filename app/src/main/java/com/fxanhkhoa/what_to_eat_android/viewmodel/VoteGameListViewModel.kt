@@ -83,7 +83,7 @@ class VoteGameListViewModel : ViewModel() {
                     keyword = filter.keyword
                 )
 
-                _voteGames.value = response.data
+                _voteGames.value = response.data.orEmpty()
                 _hasMorePages.value = response.count >= pageSize
             } catch (e: Exception) {
                 _errorMessage.value = when (e) {
@@ -128,7 +128,7 @@ class VoteGameListViewModel : ViewModel() {
                     keyword = filter.keyword
                 )
 
-                _voteGames.value = _voteGames.value + response.data
+                _voteGames.value = _voteGames.value + response.data.orEmpty()
                 _hasMorePages.value = response.count >= pageSize
                 _currentPage.value = nextPage
             } catch (e: Exception) {

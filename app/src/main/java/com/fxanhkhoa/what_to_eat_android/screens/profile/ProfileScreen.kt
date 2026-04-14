@@ -41,7 +41,8 @@ fun ProfileScreen(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     onNavigateToLogin: () -> Unit = {},
-    onNavigateToEditProfile: () -> Unit = {}
+    onNavigateToEditProfile: () -> Unit = {},
+    onNavigateToMyLists: () -> Unit = {}
 ) {
     val authViewModel = rememberSharedAuthViewModel()
     val googleSignInHelper = rememberGoogleSignInHelper()
@@ -62,6 +63,7 @@ fun ProfileScreen(
             val title                 = s(R.string.profile)
             val sectionAccount        = s(R.string.profile_section_account)
             val editProfile           = s(R.string.profile_edit_profile)
+            val myDishLists            = s(R.string.my_dish_lists)
             val preferences           = s(R.string.profile_preferences)
             val privacy               = s(R.string.profile_privacy)
             val sectionAppSettings    = s(R.string.profile_section_app_settings)
@@ -137,6 +139,7 @@ fun ProfileScreen(
                         title = str.sectionAccount,
                         items = listOf(
                             ProfileItem(str.editProfile, Icons.Filled.Edit, onClick = onNavigateToEditProfile),
+                            ProfileItem(str.myDishLists, Icons.Filled.Bookmarks, onClick = onNavigateToMyLists),
                         )
                     )
                 }

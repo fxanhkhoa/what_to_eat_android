@@ -18,6 +18,7 @@ data class BaseModel(
 )
 
 data class APIPagination<T>(
-    val data: List<T>,
-    val count: Int
+    // Gson may produce null even for non-nullable Kotlin types; callers must use .orEmpty()
+    val data: List<T> = emptyList(),
+    val count: Int = 0
 )

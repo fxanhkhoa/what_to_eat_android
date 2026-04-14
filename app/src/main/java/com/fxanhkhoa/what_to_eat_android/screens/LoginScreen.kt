@@ -14,14 +14,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
-import com.fxanhkhoa.what_to_eat_android.utils.rememberGoogleSignInHelper
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.fxanhkhoa.what_to_eat_android.R
+import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
+import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import com.fxanhkhoa.what_to_eat_android.utils.GoogleSignInResult
+import com.fxanhkhoa.what_to_eat_android.utils.rememberGoogleSignInHelper
+import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,6 +37,17 @@ fun LoginScreen(
     onBackPressed: () -> Unit = {},
     onLoginSuccess: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+    val localizationManager = remember { LocalizationManager(context) }
+    val currentLanguage by localizationManager.currentLanguage.collectAsStateWithLifecycle(initialValue = Language.ENGLISH)
+
+    // Localized strings
+    val loginText = remember(currentLanguage) { localizationManager.getString(R.string.login, currentLanguage) }
+    val welcomeTitleText = remember(currentLanguage) { localizationManager.getString(R.string.welcome_title, currentLanguage) }
+    val welcomeSubtitleText = remember(currentLanguage) { localizationManager.getString(R.string.welcome_subtitle, currentLanguage) }
+    val continueWithGoogleText = remember(currentLanguage) { localizationManager.getString(R.string.continue_with_google, currentLanguage) }
+    val termsPrivacyText = remember(currentLanguage) { localizationManager.getString(R.string.terms_privacy_agreement, currentLanguage) }
+
     val authViewModel = rememberSharedAuthViewModel()
     val googleSignInHelper = rememberGoogleSignInHelper()
     val isLoading by authViewModel.isLoading.collectAsState()
@@ -43,15 +60,12 @@ fun LoginScreen(
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         when (val signInResult = googleSignInHelper.handleSignInResult(task)) {
             is GoogleSignInResult.Success -> {
-                // Use the actual idToken from Google Sign-In
                 authViewModel.signInWithGoogle(signInResult.idToken)
             }
             is GoogleSignInResult.Error -> {
                 authViewModel.setError(signInResult.message)
             }
-            GoogleSignInResult.Cancelled -> {
-                // User cancelled the sign-in
-            }
+            GoogleSignInResult.Cancelled -> { /* User cancelled */ }
         }
     }
 
@@ -64,11 +78,9 @@ fun LoginScreen(
         }
     }
 
-    // Show error message if any
+    // Clear error after showing it
     errorMessage?.let { message ->
         LaunchedEffect(message) {
-            // You can show a snackbar or toast here
-            // For now, we'll just clear the error after showing it
             authViewModel.clearError()
         }
     }
@@ -76,12 +88,12 @@ fun LoginScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("") },
+                title = { Text(loginText) },
                 navigationIcon = {
                     IconButton(onClick = onBackPressed) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = loginText,
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
@@ -105,7 +117,7 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // App Logo/Icon placeholder
+                // App Logo
                 Box(
                     modifier = Modifier
                         .size(120.dp)
@@ -113,7 +125,7 @@ fun LoginScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = painterResource(id = com.fxanhkhoa.what_to_eat_android.R.drawable.what_to_eat_high_resolution_logo_transparent),
+                        painter = painterResource(id = R.drawable.what_to_eat_high_resolution_logo_transparent),
                         contentDescription = "App Logo",
                         modifier = Modifier.size(100.dp)
                     )
@@ -123,7 +135,7 @@ fun LoginScreen(
 
                 // Welcome Text
                 Text(
-                    text = "Welcome to\nWhat to Eat",
+                    text = welcomeTitleText,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
@@ -134,7 +146,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Discover delicious recipes and manage your ingredients with ease",
+                    text = welcomeSubtitleText,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -145,8 +157,8 @@ fun LoginScreen(
 
                 // Google Sign In Button
                 GoogleSignInButton(
+                    text = continueWithGoogleText,
                     onClick = {
-                        // Launch Google Sign-In intent to get real idToken
                         val signInIntent = googleSignInHelper.getSignInIntent()
                         googleSignInLauncher.launch(signInIntent)
                     },
@@ -154,7 +166,7 @@ fun LoginScreen(
                     enabled = !isLoading
                 )
 
-                // Show loading indicator
+                // Loading indicator
                 if (isLoading) {
                     Spacer(modifier = Modifier.height(16.dp))
                     CircularProgressIndicator(
@@ -163,7 +175,7 @@ fun LoginScreen(
                     )
                 }
 
-                // Show error message
+                // Error message
                 errorMessage?.let { message ->
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
@@ -178,7 +190,7 @@ fun LoginScreen(
 
                 // Terms and Privacy
                 Text(
-                    text = "By continuing, you agree to our Terms of Service and Privacy Policy",
+                    text = termsPrivacyText,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -194,12 +206,12 @@ fun LoginScreen(
 fun GoogleSignInButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    text: String = stringResource(R.string.continue_with_google)
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier
-            .height(56.dp),
+        modifier = modifier.height(56.dp),
         enabled = enabled,
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
@@ -219,18 +231,14 @@ fun GoogleSignInButton(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Google Logo placeholder (you can replace with actual Google logo)
             Box(
                 modifier = Modifier
                     .size(24.dp)
-                    .background(
-                        Color.Transparent,
-                        RoundedCornerShape(4.dp)
-                    ),
+                    .background(Color.Transparent, RoundedCornerShape(4.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = com.fxanhkhoa.what_to_eat_android.R.drawable.google_logo),
+                    painter = painterResource(id = R.drawable.google_logo),
                     contentDescription = "Google Logo",
                     modifier = Modifier.size(18.dp)
                 )
@@ -239,7 +247,7 @@ fun GoogleSignInButton(
             Spacer(modifier = Modifier.width(12.dp))
 
             Text(
-                text = "Continue with Google",
+                text = text,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color(0xFF3C4043)

@@ -34,6 +34,7 @@ fun VotingCreateScreen(
     val voteTitle by viewModel.voteTitle.collectAsState()
     val voteDescription by viewModel.voteDescription.collectAsState()
     val selectedDishes by viewModel.selectedDishes.collectAsState()
+    val dishCache by viewModel.dishCache.collectAsState()
     val isCreating by viewModel.isCreating.collectAsState()
     val showSuccess by viewModel.showSuccess.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
@@ -41,6 +42,7 @@ fun VotingCreateScreen(
     var showClearAlert by remember { mutableStateOf(false) }
     var showAddDishSheet by remember { mutableStateOf(false) }
     var showCustomDishSheet by remember { mutableStateOf(false) }
+    var showMyListsSheet by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
@@ -126,6 +128,7 @@ fun VotingCreateScreen(
             item {
                 SelectedDishesSection(
                     dishes = selectedDishes,
+                    dishCache = dishCache,
                     onRemoveDish = { index -> viewModel.removeDish(index) },
                     language = language
                 )
@@ -136,6 +139,7 @@ fun VotingCreateScreen(
                 AddDishesSection(
                     onSearchAndAdd = { showAddDishSheet = true },
                     onAddCustomDish = { showCustomDishSheet = true },
+                    onFromMyLists = { showMyListsSheet = true },
                     language = language
                 )
             }
@@ -187,6 +191,20 @@ fun VotingCreateScreen(
             CustomDishAddView(
                 viewModel = viewModel,
                 onDismiss = { showCustomDishSheet = false }
+            )
+        }
+    }
+
+    // My Lists Bottom Sheet — opens DishSearchAndSelectView pre-selected on My Lists tab
+    if (showMyListsSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showMyListsSheet = false }
+        ) {
+            DishSearchAndSelectView(
+                votingViewModel = viewModel,
+                onDismiss = { showMyListsSheet = false },
+                language = language,
+                startOnMyLists = true
             )
         }
     }

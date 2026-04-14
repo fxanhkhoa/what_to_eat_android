@@ -99,7 +99,7 @@ fun HomeScreen(
                 )
                 val url = query.buildSearchFuzzyUrl()
                 val result = dishService.searchFuzzy(url)
-                searchResults = result.data
+                searchResults = result.data!!
             } catch (e: Exception) {
                 searchResults = emptyList()
             } finally {

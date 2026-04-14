@@ -28,6 +28,10 @@ class VotingGameCreateViewModel : ViewModel() {
     private val _selectedDishes = MutableStateFlow<List<DishVoteItem>>(emptyList())
     val selectedDishes: StateFlow<List<DishVoteItem>> = _selectedDishes.asStateFlow()
 
+    // Cache full DishModel per slug so the UI can show real images and localized names
+    private val _dishCache = MutableStateFlow<Map<String, DishModel>>(emptyMap())
+    val dishCache: StateFlow<Map<String, DishModel>> = _dishCache.asStateFlow()
+
     private val _isCreating = MutableStateFlow(false)
     val isCreating: StateFlow<Boolean> = _isCreating.asStateFlow()
 
@@ -79,6 +83,7 @@ class VotingGameCreateViewModel : ViewModel() {
         )
 
         _selectedDishes.value = _selectedDishes.value + dishVoteItem
+        _dishCache.value = _dishCache.value + (dish.slug to dish)
     }
 
     fun addCustomDish(title: String, url: String? = null) {
@@ -116,6 +121,7 @@ class VotingGameCreateViewModel : ViewModel() {
 
     fun clearAllDishes() {
         _selectedDishes.value = emptyList()
+        _dishCache.value = emptyMap()
     }
 
     fun createVote() {
@@ -170,6 +176,7 @@ class VotingGameCreateViewModel : ViewModel() {
         _voteTitle.value = ""
         _voteDescription.value = ""
         _selectedDishes.value = emptyList()
+        _dishCache.value = emptyMap()
         _showSuccess.value = false
         _createdVote.value = null
     }
