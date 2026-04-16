@@ -23,8 +23,15 @@ class LocalizationManager(private val context: Context) {
     }
 
     val currentLanguage: Flow<Language> = context.localizationDataStore.data.map { preferences ->
-        val languageCode = preferences[LANGUAGE_KEY] ?: Language.ENGLISH.code
-        Language.entries.find { it.code == languageCode } ?: Language.ENGLISH
+        val savedCode = preferences[LANGUAGE_KEY]
+        if (savedCode != null) {
+            // Use the explicitly saved preference
+            Language.entries.find { it.code == savedCode } ?: Language.ENGLISH
+        } else {
+            // No preference saved yet — match against the device locale, fallback to English
+            val deviceLanguage = Locale.getDefault().language          // e.g. "vi", "en", "fr"
+            Language.entries.find { it.code == deviceLanguage } ?: Language.ENGLISH
+        }
     }
 
     suspend fun setLanguage(language: Language) {

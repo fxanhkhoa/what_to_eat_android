@@ -50,6 +50,7 @@ import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedNotificationViewMod
 import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
 import com.fxanhkhoa.what_to_eat_android.screens.game.voting.RealTimeVoteGameView
 import com.fxanhkhoa.what_to_eat_android.services.FCMService
+import com.fxanhkhoa.what_to_eat_android.utils.OnboardingPreferenceManager
 import com.google.firebase.messaging.FirebaseMessaging
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -109,9 +110,31 @@ class MainActivity : ComponentActivity() {
         // Handle deep-link route from a system-notification tap
         val deepLinkFromNotification = intent?.getStringExtra(FCMService.EXTRA_DEEP_LINK)
 
+        val onboardingManager = OnboardingPreferenceManager(applicationContext)
+
         setContent {
             ThemeProvider {
-                MainScreen(initialDeepLinkRoute = deepLinkFromNotification)
+                val hasSeenOnboarding by onboardingManager.hasSeenOnboarding
+                    .collectAsStateWithLifecycle(initialValue = null)
+
+                when (hasSeenOnboarding) {
+                    null -> {
+                        // Still loading from DataStore – show animated splash
+                        SplashScreen()
+                    }
+                    false -> {
+                        OnboardingScreen(
+                            onFinish = {
+                                lifecycleScope.launch {
+                                    onboardingManager.markOnboardingComplete()
+                                }
+                            }
+                        )
+                    }
+                    else -> {
+                        MainScreen(initialDeepLinkRoute = deepLinkFromNotification)
+                    }
+                }
             }
         }
     }

@@ -384,6 +384,20 @@
         <item quantity="one">%d anonymous voter</item>
         <item quantity="other">%d anonymous voters</item>
     </plurals>
+    <!-- Splash Screen -->
+    <string name="splash_tagline">What should we eat today?</string>
+
+    <!-- Onboarding Screen -->
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_get_started">Get Started 🚀</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_page1_title">Discover Delicious\nDishes</string>
+    <string name="onboarding_page1_desc">Browse hundreds of mouth-watering dishes from around the world. Find your next favourite meal with ease.</string>
+    <string name="onboarding_page2_title">Play &amp; Decide\nWhat to Eat</string>
+    <string name="onboarding_page2_desc">Can\'t decide? Spin the Wheel of Fortune, flip cards, or vote with friends — let the game choose your meal!</string>
+    <string name="onboarding_page3_title">Build Your\nPersonal Collection</string>
+    <string name="onboarding_page3_desc">Save dishes you love into custom lists. Your personal food diary, always at your fingertips.</string>
+
     <!-- Login Screen -->
     <string name="login">Login</string>
     <string name="welcome_title">Welcome to\nWhat to Eat</string>

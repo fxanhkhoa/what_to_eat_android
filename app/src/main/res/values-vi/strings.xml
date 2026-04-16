@@ -376,6 +376,20 @@
     <plurals name="anonymous_voters_count">
         <item quantity="other">%d người bình chọn ẩn danh</item>
     </plurals>
+    <!-- Splash Screen -->
+    <string name="splash_tagline">Hôm nay ăn gì nhỉ?</string>
+
+    <!-- Onboarding Screen -->
+    <string name="onboarding_next">Tiếp theo</string>
+    <string name="onboarding_get_started">Bắt đầu 🚀</string>
+    <string name="onboarding_skip">Bỏ qua</string>
+    <string name="onboarding_page1_title">Khám Phá\nMón Ăn Ngon</string>
+    <string name="onboarding_page1_desc">Duyệt qua hàng trăm món ăn hấp dẫn từ khắp nơi trên thế giới. Tìm bữa ăn yêu thích tiếp theo của bạn dễ dàng.</string>
+    <string name="onboarding_page2_title">Chơi &amp; Quyết Định\nHôm Nay Ăn Gì</string>
+    <string name="onboarding_page2_desc">Không biết chọn gì? Quay vòng may mắn, lật thẻ bài hoặc bình chọn cùng bạn bè — để trò chơi quyết định!</string>
+    <string name="onboarding_page3_title">Xây Dựng\nBộ Sưu Tập Cá Nhân</string>
+    <string name="onboarding_page3_desc">Lưu những món bạn yêu thích vào danh sách tùy chỉnh. Nhật ký ẩm thực cá nhân, luôn trong tầm tay.</string>
+
     <!-- Login Screen -->
     <string name="login">Đăng Nhập</string>
     <string name="welcome_title">Chào mừng đến với\nWhat to Eat</string>
