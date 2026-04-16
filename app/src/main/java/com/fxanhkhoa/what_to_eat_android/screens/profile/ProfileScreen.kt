@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import com.fxanhkhoa.what_to_eat_android.data.dto.User
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -29,8 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.fxanhkhoa.what_to_eat_android.R
+import com.fxanhkhoa.what_to_eat_android.data.dto.UpdateNotificationPreferencesDto
 import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedAuthViewModel
 import com.fxanhkhoa.what_to_eat_android.utils.rememberGoogleSignInHelper
+import com.fxanhkhoa.what_to_eat_android.utils.rememberSharedNotificationViewModel
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import kotlinx.coroutines.flow.first
@@ -48,6 +51,13 @@ fun ProfileScreen(
     val googleSignInHelper = rememberGoogleSignInHelper()
     val user by authViewModel.user.collectAsState()
     val isLoggedIn by authViewModel.isLoggedIn.collectAsState()
+
+    val notificationViewModel = rememberSharedNotificationViewModel()
+    val notificationPrefs by notificationViewModel.preferences.collectAsState(initial = null)
+
+    LaunchedEffect(isLoggedIn) {
+        if (isLoggedIn) notificationViewModel.loadPreferences()
+    }
 
     val context = androidx.compose.ui.platform.LocalContext.current
     val localizationManager = remember { LocalizationManager(context) }
@@ -144,13 +154,14 @@ fun ProfileScreen(
                     )
                 }
 
-                // App Settings Section
+                // App Settings / Notifications Section
                 item {
-                    ProfileSection(
+                    NotificationsCard(
                         title = str.sectionAppSettings,
-                        items = listOf(
-                            ProfileItem(str.notifications, Icons.Filled.Notifications, onClick = {}),
-                        )
+                        prefs = notificationPrefs,
+                        language = currentLanguage,
+                        localizationManager = localizationManager,
+                        onUpdatePrefs = { notificationViewModel.updatePreferences(it) }
                     )
                 }
 
@@ -483,3 +494,184 @@ data class ProfileItem(
     val textColor: androidx.compose.ui.graphics.Color? = null,
     val iconColor: androidx.compose.ui.graphics.Color? = null
 )
+
+@Composable
+private fun NotificationsCard(
+    title: String,
+    prefs: com.fxanhkhoa.what_to_eat_android.data.dto.NotificationPreferences?,
+    language: Language = Language.ENGLISH,
+    localizationManager: LocalizationManager? = null,
+    onUpdatePrefs: (UpdateNotificationPreferencesDto) -> Unit
+) {
+    fun s(id: Int) = localizationManager?.getString(id, language) ?: ""
+
+    Column {
+        Text(
+            text = title,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp)
+        )
+
+        Card(
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                NotificationToggleRow(
+                    icon = Icons.AutoMirrored.Filled.Chat,
+                    label = s(R.string.notif_chat_label),
+                    description = s(R.string.notif_chat_description),
+                    checked = prefs?.chatEnabled ?: true,
+                    onCheckedChange = { onUpdatePrefs(UpdateNotificationPreferencesDto(chatEnabled = it)) }
+                )
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
+                NotificationToggleRow(
+                    icon = Icons.Filled.Notifications,
+                    label = s(R.string.notif_activity_label),
+                    description = s(R.string.notif_activity_description),
+                    checked = prefs?.activityEnabled ?: true,
+                    onCheckedChange = { onUpdatePrefs(UpdateNotificationPreferencesDto(activityEnabled = it)) }
+                )
+
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
+                NotificationToggleRow(
+                    icon = Icons.Filled.Campaign,
+                    label = s(R.string.notif_marketing_label),
+                    description = s(R.string.notif_marketing_description),
+                    checked = prefs?.marketingEnabled ?: true,
+                    onCheckedChange = { onUpdatePrefs(UpdateNotificationPreferencesDto(marketingEnabled = it)) }
+                )
+
+                if (prefs != null) {
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                    Text(
+                        text = s(R.string.notif_quiet_hours),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+
+                    var quietStart by remember(prefs.quietHoursStart) {
+                        mutableStateOf(prefs.quietHoursStart ?: "")
+                    }
+                    var quietEnd by remember(prefs.quietHoursEnd) {
+                        mutableStateOf(prefs.quietHoursEnd ?: "")
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        OutlinedTextField(
+                            value = quietStart,
+                            onValueChange = { quietStart = it },
+                            label = { Text(s(R.string.notif_quiet_from), fontSize = 12.sp) },
+                            placeholder = { Text("22:00", fontSize = 12.sp) },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            trailingIcon = {
+                                if (quietStart.isNotBlank()) {
+                                    IconButton(onClick = {
+                                        quietStart = ""
+                                        onUpdatePrefs(UpdateNotificationPreferencesDto(quietHoursStart = ""))
+                                    }) {
+                                        Icon(Icons.Filled.Clear, contentDescription = "Clear", modifier = Modifier.size(16.dp))
+                                    }
+                                }
+                            }
+                        )
+                        OutlinedTextField(
+                            value = quietEnd,
+                            onValueChange = { quietEnd = it },
+                            label = { Text(s(R.string.notif_quiet_until), fontSize = 12.sp) },
+                            placeholder = { Text("08:00", fontSize = 12.sp) },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true,
+                            trailingIcon = {
+                                if (quietEnd.isNotBlank()) {
+                                    IconButton(onClick = {
+                                        quietEnd = ""
+                                        onUpdatePrefs(UpdateNotificationPreferencesDto(quietHoursEnd = ""))
+                                    }) {
+                                        Icon(Icons.Filled.Clear, contentDescription = "Clear", modifier = Modifier.size(16.dp))
+                                    }
+                                }
+                            }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(
+                        onClick = {
+                            onUpdatePrefs(
+                                UpdateNotificationPreferencesDto(
+                                    quietHoursStart = quietStart.ifBlank { null },
+                                    quietHoursEnd = quietEnd.ifBlank { null }
+                                )
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(s(R.string.notif_quiet_save))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun NotificationToggleRow(
+    icon: ImageVector,
+    label: String,
+    description: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Column {
+                Text(text = label, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    text = description,
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colorScheme.primary,
+                checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+            )
+        )
+    }
+}

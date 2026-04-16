@@ -414,6 +414,18 @@
     <string name="profile_sign_out_confirm_message">Are you sure you want to sign out?</string>
     <string name="profile_version">Version 1.0.0</string>
 
+    <!-- Notification preferences -->
+    <string name="notif_chat_label">Chat Notifications</string>
+    <string name="notif_chat_description">Messages from other users</string>
+    <string name="notif_activity_label">Activity Notifications</string>
+    <string name="notif_activity_description">Votes, game results and app activity</string>
+    <string name="notif_marketing_label">Marketing Notifications</string>
+    <string name="notif_marketing_description">Promotions, tips and new features</string>
+    <string name="notif_quiet_hours">Quiet Hours</string>
+    <string name="notif_quiet_from">From</string>
+    <string name="notif_quiet_until">Until</string>
+    <string name="notif_quiet_save">Save Quiet Hours</string>
+
     <!-- Edit Profile Screen -->
     <string name="edit_profile_title">Edit Profile</string>
     <string name="edit_profile_save">Save</string>

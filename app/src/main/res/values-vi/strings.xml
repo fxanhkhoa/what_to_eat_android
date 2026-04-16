@@ -462,4 +462,16 @@
     <string name="privacy_policy_s11_body">Chúng tôi có thể cập nhật Chính sách Bảo mật của mình theo thời gian. Chúng tôi sẽ thông báo cho bạn về bất kỳ thay đổi nào bằng cách đăng Chính sách Bảo mật mới trên trang này và cập nhật ngày \"Cập nhật lần cuối\". Bạn nên xem lại Chính sách Bảo mật này định kỳ để biết bất kỳ thay đổi nào. Các thay đổi có hiệu lực khi chúng được đăng trên trang này.</string>
     <string name="privacy_policy_s12_title">12. Liên Hệ Với Chúng Tôi</string>
     <string name="privacy_policy_s12_body">Nếu bạn có bất kỳ câu hỏi nào về Chính sách Bảo mật này, vui lòng liên hệ với chúng tôi qua biểu mẫu liên hệ trên trang web của chúng tôi. Chúng tôi sẽ trả lời câu hỏi của bạn càng sớm càng tốt và làm việc để giải quyết mối quan tâm của bạn.</string>
+
+    <!-- Notification preferences -->
+    <string name="notif_chat_label">Thông Báo Trò Chuyện</string>
+    <string name="notif_chat_description">Tin nhắn từ người dùng khác</string>
+    <string name="notif_activity_label">Thông Báo Hoạt Động</string>
+    <string name="notif_activity_description">Bình chọn, kết quả trò chơi và hoạt động ứng dụng</string>
+    <string name="notif_marketing_label">Thông Báo Quảng Cáo</string>
+    <string name="notif_marketing_description">Khuyến mãi, mẹo và tính năng mới</string>
+    <string name="notif_quiet_hours">Giờ Yên Tĩnh</string>
+    <string name="notif_quiet_from">Từ</string>
+    <string name="notif_quiet_until">Đến</string>
+    <string name="notif_quiet_save">Lưu Giờ Yên Tĩnh</string>
 </resources>
