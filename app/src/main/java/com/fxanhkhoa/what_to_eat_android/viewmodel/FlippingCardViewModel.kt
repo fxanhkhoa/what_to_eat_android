@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.fxanhkhoa.what_to_eat_android.model.DishModel
 import com.fxanhkhoa.what_to_eat_android.network.RetrofitProvider
 import com.fxanhkhoa.what_to_eat_android.services.DishService
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -54,6 +55,9 @@ class FlippingCardViewModel : ViewModel() {
     // Game configuration
     private val _numberOfCards = MutableStateFlow(12) // Default: 3x4 grid
     val numberOfCards: StateFlow<Int> = _numberOfCards.asStateFlow()
+
+    private val _shuffleVersion = MutableStateFlow(0)
+    val shuffleVersion: StateFlow<Int> = _shuffleVersion.asStateFlow()
 
     // MARK: - Public Methods
 
@@ -119,20 +123,34 @@ class FlippingCardViewModel : ViewModel() {
             return
         }
 
-        // Flip the selected card
+        // Flip the card immediately so the animation starts
         val cardIndex = _cards.value.indexOfFirst { it.id == card.id }
         if (cardIndex != -1) {
             val updatedCards = _cards.value.toMutableList()
             updatedCards[cardIndex] = updatedCards[cardIndex].copy(isFlipped = true)
             _cards.value = updatedCards
             _selectedDish.value = card.dish
-            _gameState.value = GameState.COMPLETED
+
+            // Wait for the flip animation (800ms) to finish before showing the reveal dialog
+            viewModelScope.launch {
+                delay(850)
+                _gameState.value = GameState.COMPLETED
+            }
         }
     }
 
     fun startNewGame() {
         resetGame()
         loadDishes()
+    }
+
+    fun shuffleCards() {
+        if (_gameState.value != GameState.PLAYING) return
+        _shuffleVersion.value++
+        // Reset all cards to unflipped and re-shuffle
+        _selectedDish.value = null
+        _cards.value = _cards.value.map { it.copy(isFlipped = false) }.shuffled()
+        _gameState.value = GameState.PLAYING
     }
 
     fun clearError() {

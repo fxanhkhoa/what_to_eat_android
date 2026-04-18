@@ -221,6 +221,7 @@
     <string name="unknown_dish">Unknown Dish</string>
     <string name="choose_your_destiny">Choose your destiny...</string>
     <string name="new_game">New Game</string>
+    <string name="shuffle">Shuffle</string>
     <string name="dish_revealed">Dish Revealed!</string>
     <string name="your_random_dish_is">Your random dish is...</string>
     <string name="try_again">Try Again</string>

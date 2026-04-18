@@ -16,7 +16,8 @@ fun GameBoardView(
     cards: List<GameCard>,
     onCardTapped: (GameCard) -> Unit,
     language: Language,
-    localizationManager: LocalizationManager
+    localizationManager: LocalizationManager,
+    shuffleVersion: Int = 0
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -32,9 +33,10 @@ fun GameBoardView(
                 card = card,
                 onTapped = { onCardTapped(card) },
                 language = language,
-                localizationManager = localizationManager
+                localizationManager = localizationManager,
+                cardIndex = cards.indexOf(card),
+                shuffleVersion = shuffleVersion
             )
         }
     }
 }
-

@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -25,27 +24,64 @@ import com.fxanhkhoa.what_to_eat_android.R
 import com.fxanhkhoa.what_to_eat_android.ui.localization.Language
 import com.fxanhkhoa.what_to_eat_android.ui.localization.LocalizationManager
 import com.fxanhkhoa.what_to_eat_android.viewmodel.GameCard
+import kotlinx.coroutines.delay
 
 @Composable
 fun DishCardView(
     card: GameCard,
     onTapped: () -> Unit,
     language: Language,
-    localizationManager: LocalizationManager
+    localizationManager: LocalizationManager,
+    cardIndex: Int = 0,
+    shuffleVersion: Int = 0
 ) {
     val colorScheme = MaterialTheme.colorScheme
     var isPressed by remember { mutableStateOf(false) }
+
+    // Staggered entrance animation
+    var visible by remember { mutableStateOf(false) }
+    val entranceScale by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 350,
+            delayMillis = cardIndex * 60,
+            easing = FastOutSlowInEasing
+        ),
+        label = "entrance_scale"
+    )
+    val entranceAlpha by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 300,
+            delayMillis = cardIndex * 60,
+            easing = LinearOutSlowInEasing
+        ),
+        label = "entrance_alpha"
+    )
+    LaunchedEffect(card.id) {
+        visible = true
+    }
+
+    // Shuffle animation: each card scales down then back up with staggered delay
+    var shuffleScale by remember { mutableStateOf(1f) }
+    val animatedShuffleScale by animateFloatAsState(
+        targetValue = shuffleScale,
+        animationSpec = tween(durationMillis = 200, easing = FastOutSlowInEasing),
+        label = "shuffle_scale"
+    )
+    LaunchedEffect(shuffleVersion) {
+        if (shuffleVersion > 0) {
+            delay((cardIndex * 40).toLong())
+            shuffleScale = 0.75f
+            delay(200)
+            shuffleScale = 1f
+        }
+    }
 
     val rotation by animateFloatAsState(
         targetValue = if (card.isFlipped) 0f else 180f,
         animationSpec = tween(durationMillis = 800, easing = FastOutSlowInEasing),
         label = "card_rotation"
-    )
-
-    val scale by animateFloatAsState(
-        targetValue = if (isPressed) 0.95f else 1f,
-        animationSpec = tween(durationMillis = 100),
-        label = "card_scale"
     )
 
     val dishTitle = card.dish.getTitle(language.code)
@@ -55,8 +91,11 @@ fun DishCardView(
         modifier = Modifier
             .fillMaxWidth()
             .height(140.dp)
-            .scale(scale)
             .graphicsLayer {
+                val s = entranceScale * animatedShuffleScale * (if (isPressed) 0.95f else 1f)
+                scaleX = s
+                scaleY = s
+                alpha = entranceAlpha
                 rotationY = rotation
                 cameraDistance = 12f * density
             }

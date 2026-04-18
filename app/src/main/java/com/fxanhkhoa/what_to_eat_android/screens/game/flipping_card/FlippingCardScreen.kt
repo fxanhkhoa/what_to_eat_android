@@ -64,6 +64,7 @@ fun FlippingCardScreen(
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val selectedDish by viewModel.selectedDish.collectAsStateWithLifecycle()
     val numberOfCards by viewModel.numberOfCards.collectAsStateWithLifecycle()
+    val shuffleVersion by viewModel.shuffleVersion.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.loadDishes()
@@ -166,13 +167,15 @@ fun FlippingCardScreen(
                                 viewModel.cardTapped(card)
                             },
                             language = language,
-                            localizationManager = localizationManager
+                            localizationManager = localizationManager,
+                            shuffleVersion = shuffleVersion
                         )
 
                         // Action button
                         GameActionsView(
                             gameState = gameState,
                             onNewGame = { viewModel.startNewGame() },
+                            onShuffle = { viewModel.shuffleCards() },
                             language = language,
                             localizationManager = localizationManager
                         )

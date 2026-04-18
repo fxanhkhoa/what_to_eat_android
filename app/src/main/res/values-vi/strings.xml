@@ -218,6 +218,7 @@
     <string name="unknown_dish">Món Không Rõ</string>
     <string name="choose_your_destiny">Chọn món ăn ngẫu nhiên...</string>
     <string name="new_game">Trò Chơi Mới</string>
+    <string name="shuffle">Xáo Bài</string>
     <string name="dish_revealed">Đã Khám Phá Món Ăn!</string>
     <string name="your_random_dish_is">Món ngẫu nhiên của bạn là...</string>
     <string name="try_again">Thử Lại</string>

@@ -1,5 +1,10 @@
 package com.fxanhkhoa.what_to_eat_android.components.game.flipping_card
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -49,6 +54,16 @@ fun DishRevealView(
             .clickable(onClick = {}),
         contentAlignment = Alignment.Center
     ) {
+        AnimatedVisibility(
+            visible = true,
+            enter = fadeIn() + scaleIn(
+                initialScale = 0.7f,
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessMedium
+                )
+            )
+        ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -186,6 +201,7 @@ fun DishRevealView(
                     modifier = Modifier.size(20.dp)
                 )
             }
-        }
-    }
+        } // end inner Box
+        } // end AnimatedVisibility
+    } // end outer Box
 }
