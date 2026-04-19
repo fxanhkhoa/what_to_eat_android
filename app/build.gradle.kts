@@ -13,8 +13,8 @@ android {
         applicationId = "com.fxanhkhoa.what_to_eat_android"
         minSdk = 28
         targetSdk = 36
-        versionCode = 6
-        versionName = "6"
+        versionCode = 7
+        versionName = "7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
